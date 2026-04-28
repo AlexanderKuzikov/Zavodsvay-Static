@@ -1,0 +1,25 @@
+"Управление записями домена - zavodsvay.ru"
+
+"Имя";"TTL, сек";"Тип";"Значение";"Дополнительно";
+"zavodsvay.ru.";"3600";"A (адрес Internet v4)";"91.236.136.105";"";
+"ftp.zavodsvay.ru.";"3600";"A (адрес Internet v4)";"91.236.136.105";"";
+"mail.zavodsvay.ru.";"3600";"A (адрес Internet v4)";"91.236.136.105";"";
+"smtp.zavodsvay.ru.";"3600";"A (адрес Internet v4)";"91.236.136.105";"";
+"pop.zavodsvay.ru.";"3600";"A (адрес Internet v4)";"91.236.136.105";"";
+"www.gefest.zavodsvay.ru.";"3600";"A (адрес Internet v4)";"91.236.136.105";"";
+"gefest.zavodsvay.ru.";"3600";"A (адрес Internet v4)";"91.236.136.105";"";
+"zavodsvay.ru.";"3600";"AAAA (адрес Internet v6)";"2a0a:8d80:0:9123::135";"";
+"ftp.zavodsvay.ru.";"3600";"AAAA (адрес Internet v6)";"2a0a:8d80:0:9123::135";"";
+"mail.zavodsvay.ru.";"3600";"AAAA (адрес Internet v6)";"2a0a:8d80:0:9123::135";"";
+"smtp.zavodsvay.ru.";"3600";"AAAA (адрес Internet v6)";"2a0a:8d80:0:9123::135";"";
+"pop.zavodsvay.ru.";"3600";"AAAA (адрес Internet v6)";"2a0a:8d80:0:9123::135";"";
+"gefest.zavodsvay.ru.";"3600";"AAAA (адрес Internet v6)";"2a0a:8d80:0:9123::135";"";
+"www.gefest.zavodsvay.ru.";"3600";"AAAA (адрес Internet v6)";"2a0a:8d80:0:9123::135";"";
+"zavodsvay.ru.";"3600";"MX (почтовый сервер)";"amail.kompleks-s.ru.";"priority = 5";
+"zavodsvay.ru.";"3600";"NS (сервер имён)";"ns1.webhost1.com.";"";
+"zavodsvay.ru.";"3600";"NS (сервер имён)";"ns2.webhost1.com.";"";
+"zavodsvay.ru.";"3600";"NS (сервер имён)";"ns3.webhost1.org.";"";
+"zavodsvay.ru.";"3600";"NS (сервер имён)";"ns4.webhost1.org.";"";
+"zavodsvay.ru.";"3600";"SOA (начальная запись зоны)";"tech.webhost1.com.";"mname = ns1.webhost1.com.; serial = 2024100828";
+"zavodsvay.ru.";"3600";"TXT (текстовая запись)";"v=spf1 redirect=_spf.mail.ru";"";
+"zavodsvay.ru.";"3600";"TXT (текстовая запись)";"v=spf1 ip4:193.169.110.59 ip4:91.236.136.40 ip4:91.236.136.119 a mx ~all";"";
