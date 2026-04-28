@@ -1,0 +1,11 @@
+{
+  "phone": {
+    "label": "+7 (342) 20-99-800",
+    "href": "+73422099800"
+  },
+  "email": "info@zavodsvay.ru",
+  "address": "г. Пермь, ул. Монастырская, 14, офис 502",
+  "telegram": { "url": "https://t.me/zavodsvay" },
+  "whatsapp": { "url": "https://wa.me/73420000000" },
+  "vk": { "url": "https://vk.com/zavodsvay" }
+}

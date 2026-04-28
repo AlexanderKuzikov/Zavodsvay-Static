@@ -1,0 +1,423 @@
+<style>
+  /* ══════════════════════════════════════════
+   Калькулятор фундамента на винтовых сваях
+   Все стили изолированы префиксом .svai-
+   ══════════════════════════════════════════ */
+
+  .svai-wrap {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #222;
+    max-width: 780px;
+    margin: 0 auto;
+    line-height: 1.4;
+  }
+
+  .svai-wrap h2 {
+    font-size: clamp(18px, 4vw, 26px);
+    color: #04538A;
+    margin: 0 0 18px;
+  }
+
+  /* ── Картинка ── */
+  .svai-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 24px;
+    border-radius: 4px;
+  }
+
+  /* ── Строка формы ── */
+  .svai-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    min-height: 46px;
+    box-sizing: border-box;
+  }
+
+  .svai-row:nth-child(odd) {
+    background: #04538A;
+    color: #fff;
+  }
+
+  .svai-row:nth-child(even) {
+    background: #fff;
+    color: #222;
+  }
+
+  .svai-row__label {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .svai-row__ctrl {
+    flex-shrink: 0;
+  }
+
+  .svai-row select {
+    padding: 6px 8px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    font-size: 13px;
+    background: #fff;
+    color: #222;
+    min-width: 120px;
+    max-width: 280px;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+
+  /* ── Кнопка ── */
+  .svai-btn {
+    display: inline-block;
+    margin: 18px 0;
+    padding: 10px 28px;
+    background: #FFD700;
+    border: 2px solid #c8a800;
+    border-radius: 3px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #222;
+    cursor: pointer;
+    transition: background .15s;
+  }
+
+  .svai-btn:hover {
+    background: #f0c800;
+  }
+
+  .svai-btn:active {
+    background: #dbb400;
+  }
+
+  /* ── Результаты ── */
+  .svai-results {
+    border: 1px solid #c8dcea;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .svai-res-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid #d8e8f2;
+  }
+
+  .svai-res-row:last-child {
+    border-bottom: none;
+  }
+
+  .svai-res-row:nth-child(odd) {
+    background: #e4eff8;
+  }
+
+  .svai-res-row:nth-child(even) {
+    background: #f4f9fd;
+  }
+
+  .svai-res-row__label {
+    flex: 1;
+    font-weight: bold;
+    color: #04538A;
+  }
+
+  .svai-res-row__val {
+    font-weight: bold;
+    color: #04538A;
+    font-size: 16px;
+    white-space: nowrap;
+    text-align: right;
+    min-width: 80px;
+  }
+
+  /* ── Адаптив ── */
+  @media (max-width: 540px) {
+    .svai-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 10px 12px;
+    }
+
+    .svai-row select {
+      width: 100%;
+      max-width: 100%;
+      min-width: unset;
+      font-size: 15px;
+      /* удобнее на тач */
+    }
+
+    .svai-res-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+      padding: 10px 12px;
+    }
+
+    .svai-res-row__val {
+      text-align: left;
+      font-size: 17px;
+    }
+  }
+</style>
+
+<div class="svai-wrap">
+  <h1>Расчёт фундамента на винтовых сваях</h1>
+  <img class="svai-img" src="../assets/img/calc.webp" alt="Схема дома с параметрами расчёта фундамента">
+
+  <!-- ── Форма ── -->
+  <div id="svaiForm">
+
+    <div class="svai-row">
+      <label class="svai-row__label" for="svai_a">Введите длину дома (в метрах)</label>
+      <div class="svai-row__ctrl">
+        <select id="svai_a" onchange="svaiCalc()"></select>
+      </div>
+    </div>
+
+    <div class="svai-row">
+      <label class="svai-row__label" for="svai_b">Введите ширину дома (в метрах)</label>
+      <div class="svai-row__ctrl">
+        <select id="svai_b" onchange="svaiCalc()"></select>
+      </div>
+    </div>
+
+    <div class="svai-row">
+      <label class="svai-row__label" for="svai_v">Выберите высоту потолков (в метрах)</label>
+      <div class="svai-row__ctrl">
+        <select id="svai_v" onchange="svaiCalc()">
+          <option value="1">1</option>
+          <option value="2" selected>2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="svai-row">
+      <label class="svai-row__label" for="svai_g">Выберите кол-во этажей</label>
+      <div class="svai-row__ctrl">
+        <select id="svai_g" onchange="svaiCalc()">
+          <option value="1">1</option>
+          <option value="2" selected>2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="svai-row">
+      <label class="svai-row__label" for="svai_d">Выберите кол-во внутренних несущих стен</label>
+      <div class="svai-row__ctrl">
+        <select id="svai_d" onchange="svaiCalc()">
+          <option value="1">1</option>
+          <option value="2" selected>2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="svai-row">
+      <label class="svai-row__label" for="svai_e">Выберите кровлю</label>
+      <div class="svai-row__ctrl">
+        <select id="svai_e" onchange="svaiCalc()">
+          <option value="30" selected>профлист</option>
+          <option value="50">рубероид</option>
+          <option value="60">шифер</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="svai-row">
+      <label class="svai-row__label" for="svai_j">Выберите материал дома</label>
+      <div class="svai-row__ctrl">
+        <select id="svai_j" onchange="svaiCalc()">
+          <option value="50" selected>каркасная стена толщиной 150 мм с утеплителем</option>
+          <option value="100">бревно и брус</option>
+          <option value="800">пено или газобетон</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="svai-row">
+      <label class="svai-row__label" for="svai_z">Выберите тип перекрытий</label>
+      <div class="svai-row__ctrl">
+        <select id="svai_z" onchange="svaiCalc()">
+          <option value="150" selected>деревянные балки и утеплитель плотностью 200 кг/м³</option>
+          <option value="300">деревянные балки и утеплитель плотностью 500 кг/м³</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="svai-row">
+      <label class="svai-row__label" for="svai_i">Выберите тип винтовой сваи</label>
+      <div class="svai-row__ctrl">
+        <select id="svai_i" onchange="svaiCalc()">
+          <option value="1" selected>ВСГ-1 73/250</option>
+          <option value="2">ВСГ-1 89/300</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="svai-row">
+      <label class="svai-row__label" for="svai_k">Выберите тип грунта</label>
+      <div class="svai-row__ctrl">
+        <select id="svai_k" onchange="svaiCalc()">
+          <option value="1" selected>Крупный гравелистый песок</option>
+          <option value="2">Песок средней крупности</option>
+          <option value="3">Мелкий маловлажный песок</option>
+          <option value="4">Мелкий песок, насыщенный влагой</option>
+          <option value="5">Супеси сухие</option>
+          <option value="6">Супеси, насыщенные влагой</option>
+          <option value="7">Суглинки сухие</option>
+          <option value="8">Суглинки, насыщенные влагой</option>
+          <option value="9">Глины сухие</option>
+          <option value="10">Глины, насыщенные влагой</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="svai-row">
+      <label class="svai-row__label" for="svai_k1">Грунт</label>
+      <div class="svai-row__ctrl">
+        <select id="svai_k1" onchange="svaiCalc()">
+          <option value="1" selected>Плотный</option>
+          <option value="2">Средней плотности</option>
+        </select>
+      </div>
+    </div>
+
+  </div><!-- /svaiForm -->
+
+  <button type="button" class="svai-btn" onclick="svaiCalc()">Пересчитать</button>
+
+  <!-- ── Результаты ── -->
+  <div class="svai-results">
+    <div class="svai-res-row">
+      <span class="svai-res-row__label">Нагрузка ветровая, снежного покрова, кг</span>
+      <span class="svai-res-row__val" id="svai_out_l">—</span>
+    </div>
+    <div class="svai-res-row">
+      <span class="svai-res-row__label">Расчётный вес дома, кг</span>
+      <span class="svai-res-row__val" id="svai_out_r">—</span>
+    </div>
+    <div class="svai-res-row">
+      <span class="svai-res-row__label">Рекомендуемое кол-во свай, шт</span>
+      <span class="svai-res-row__val" id="svai_out_s">—</span>
+    </div>
+    <div class="svai-res-row">
+      <span class="svai-res-row__label">Несущая способность винтового фундамента, кг</span>
+      <span class="svai-res-row__val" id="svai_out_t">—</span>
+    </div>
+    <div class="svai-res-row">
+      <span class="svai-res-row__label">Запас несущей способности, кг</span>
+      <span class="svai-res-row__val" id="svai_out_z">—</span>
+    </div>
+  </div>
+
+</div><!-- /svai-wrap -->
+
+<script>
+  (function () {
+    'use strict';
+
+    /* ── Таблица несущей способности свай, кг ──
+       Индексы строк: тип грунта (k) 1–10
+       Индексы столбцов (idx):
+         0 = ВСГ-1 73/250, Плотный
+         1 = ВСГ-1 73/250, Средней плотности
+         2 = ВСГ-1 89/300, Плотный
+         3 = ВСГ-1 89/300, Средней плотности
+    */
+    var BEARING = [
+      [6378, 5888, 9185, 8478],  /* 1  Крупный гравелистый песок       */
+      [5888, 5397, 8478, 7772],  /* 2  Песок средней крупности          */
+      [2453, 1963, 3533, 2826],  /* 3  Мелкий маловлажный песок         */
+      [1472, 981, 2120, 1413],  /* 4  Мелкий песок, насыщенный влагой  */
+      [2453, 1963, 3533, 2826],  /* 5  Супеси сухие                     */
+      [1472, 981, 2120, 1413],  /* 6  Супеси, насыщенные влагой        */
+      [1963, 1472, 2826, 2120],  /* 7  Суглинки сухие                   */
+      [1472, 491, 2120, 707],  /* 8  Суглинки, насыщенные влагой      */
+      [2944, 1227, 4239, 1766],  /* 9  Глины сухие                      */
+      [1963, 491, 2826, 707],  /* 10 Глины, насыщенные влагой         */
+    ];
+
+    /* Генерация select для длины и ширины (1–100, default 6) */
+    function buildSelect(id, count, def) {
+      var sel = document.getElementById(id);
+      for (var n = 1; n <= count; n++) {
+        var opt = document.createElement('option');
+        opt.value = n;
+        opt.textContent = n;
+        if (n === def) opt.selected = true;
+        sel.appendChild(opt);
+      }
+    }
+
+    function val(id) {
+      return parseInt(document.getElementById(id).value, 10);
+    }
+
+    function out(id, text) {
+      document.getElementById(id).textContent = text;
+    }
+
+    function svaiCalc() {
+      var a = val('svai_a');
+      var b = val('svai_b');
+      var v = val('svai_v');
+      var g = val('svai_g');
+      var d = val('svai_d');
+      var e = val('svai_e');
+      var j = val('svai_j');
+      var z = val('svai_z');
+      var i = val('svai_i');
+      var k = val('svai_k');
+      var k1 = val('svai_k1');
+
+      /* Индекс в таблице несущей способности */
+      var idx = (i === 1) ? (k1 === 1 ? 0 : 1)
+        : (k1 === 1 ? 2 : 3);
+      var kBearing = BEARING[k - 1][idx];
+
+      /* Составляющие веса — формулы оригинала */
+      var l = (a + 1) * b * 1.3 * 200;          /* ветер + снег            */
+      var m = (a + b) * 2 * v * g * j;           /* внешние стены           */
+      var n = a * v * g * d * j;                 /* внутренние несущие стены */
+      var o = a * b * (g + 1) * z;               /* перекрытия              */
+      var p = (a + 1) * b * 1.3 * e;             /* кровля                  */
+      var r = l + m + n + o + p;                 /* расчётный вес дома      */
+      var s = (r * 1.3) / kBearing;              /* кол-во свай (raw)       */
+      var t = kBearing * s;                       /* несущая = r * 1.3       */
+      var zapas = t / p;                          /* запас                   */
+
+      out('svai_out_l', l.toFixed(2));
+      out('svai_out_r', r.toFixed(2));
+      out('svai_out_s', Math.round(s).toString());
+      out('svai_out_t', t.toFixed(2));
+      out('svai_out_z', zapas.toFixed(2));
+    }
+
+    /* Инициализация */
+    buildSelect('svai_a', 100, 6);
+    buildSelect('svai_b', 100, 6);
+    svaiCalc();
+
+    /* Экспортируем для onchange-атрибутов */
+    window.svaiCalc = svaiCalc;
+  }());
+</script>

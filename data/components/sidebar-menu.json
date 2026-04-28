@@ -1,0 +1,39 @@
+{
+  "title": "Статьи",
+  "items": [
+    { "label": "История винтовых свай", "url": "/articles/history/" },
+
+    { "label": "Виды винтовых свай", "url": "/articles/vidy/" },
+    { "label": "Сравнение свай со сварной и литой лопастью", "url": "/articles/nakon/" },
+    { "label": "Сравнение ВСГ-1 89/300 и ВС-1 108/300", "url": "/articles/sravnenie/" },
+    { "label": "Бетонирование винтовой сваи", "url": "/articles/beton/" },
+
+    { "label": "Несущая способность винтовых свай в разных типах грунтов", "url": "/articles/grunt/" },
+    { "label": "Размещение винтовых свай в фундаменте", "url": "/articles/razmeshenie-svay/" },
+    { "label": "Расчёт диаметра лопасти винтовой сваи при проектировании свайного поля", "url": "/articles/raschet/" },
+    { "label": "Испытания винтовых свай", "url": "/articles/ispytaniy/" },
+    { "label": "Пробное завинчивание винтовой сваи", "url": "/articles/probnoe/" },
+    { "label": "Ростверк свайно-винтового фундамента", "url": "/articles/rostverk/" },
+
+    { "label": "Технология строительства фундамента на винтовых сваях", "url": "/articles/tehnologiy/" },
+    { "label": "Преимущества фундамента на винтовых сваях", "url": "/articles/preimushestva/" },
+
+    { "label": "Фундамент для бани", "url": "/articles/bania/" },
+    { "label": "Фундамент для каркасного дома", "url": "/articles/karkasny/" },
+    { "label": "Фундамент для дома из бруса", "url": "/articles/brus/" },
+    { "label": "Фундамент для дома из бревна", "url": "/articles/brevno/" },
+    { "label": "Фундамент для дома из пенобетона", "url": "/articles/penobeton/" },
+    { "label": "Фундамент для ангара", "url": "/articles/angar/" },
+
+    { "label": "Ручной монтаж фундамента на винтовых сваях", "url": "/articles/ruchnoy/" },
+    { "label": "Машинный монтаж фундамента на винтовых сваях", "url": "/articles/mashin/" },
+    { "label": "Фундамент зимой", "url": "/articles/zima/" },
+    { "label": "Аренда ямобура", "url": "/articles/arenda-yamobura/" },
+
+    { "label": "Подпорные стены, пирсы и причалы", "url": "/articles/podpornaystena/" },
+
+    { "label": "Типичные ошибки при заказе фундамента на винтовых сваях", "url": "/articles/oshibki/" },
+    { "label": "Негативные отзывы о винтовых сваях", "url": "/articles/otzyvy/" },
+    { "label": "Калькулятор фундамента на винтовых сваях", "url": "/calc/" }
+  ]
+}

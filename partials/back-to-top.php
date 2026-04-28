@@ -1,0 +1,1 @@
+<button id="back-to-top" aria-label="Наверх">&#8679;</button>
