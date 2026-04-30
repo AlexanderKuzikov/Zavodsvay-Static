@@ -5,7 +5,8 @@
 [![Nginx](https://img.shields.io/badge/Nginx-PHP--FPM-009639?logo=nginx&logoColor=white)](https://nginx.org/)
 [![Site](https://img.shields.io/badge/site-zavodsvay.ru-brightgreen)](https://zavodsvay.ru)
 
-**Продакшн:** [zavodsvay.ru](https://zavodsvay.ru)
+**Продакшн:** [zavodsvay.ru](https://zavodsvay.ru)  
+**Контекст разработки (для AI и детали):** [CONTEXT.md](CONTEXT.md)
 
 Корпоративный сайт производителя винтовых свай. Реализован как zero-dependency PHP micro-framework с файловым роутингом — без фреймворков, без сборщиков, без npm. Целевое состояние — полностью статический HTML после build-фазы.
 
