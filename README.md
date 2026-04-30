@@ -6,7 +6,7 @@
 [![Site](https://img.shields.io/badge/site-zavodsvay.ru-brightgreen)](https://zavodsvay.ru)
 
 **Продакшн:** [zavodsvay.ru](https://zavodsvay.ru)  
-**Контекст разработки (для AI и детали):** [CONTEXT.md](CONTEXT.md)
+**Контекст разработки (для AI и деталей):** [CONTEXT.md](CONTEXT.md)
 
 Корпоративный сайт производителя винтовых свай. Реализован как zero-dependency PHP micro-framework с файловым роутингом — без фреймворков, без сборщиков, без npm. Целевое состояние — полностью статический HTML после build-фазы.
 
@@ -22,7 +22,7 @@ index.php           # Точка входа, файловый роутер
 │   ├── prices/     # Цены
 │   ├── calc/       # Калькулятор
 │   ├── montage/    # Монтаж
-│   ├── articles/   # Статьи
+│   ├── articles/   # Статьи (28 страниц)
 │   ├── contacts/   # Контакты
 │   ├── map/        # Карта дилеров
 │   ├── document/   # Документация
@@ -32,6 +32,8 @@ index.php           # Точка входа, файловый роутер
 ├── assets/         # CSS, JS, изображения
 ├── data/           # JSON-данные (закрыты от прямого доступа)
 ├── video/          # Видеоматериалы
+├── sitemap.xml     # 37 URL (9 основных + 28 статей)
+├── robots.txt      # Yandex/Googlebot/*, Sitemap-директива
 └── .htaccess       # Rewrite rules, gzip, кэширование статики
 ```
 
@@ -88,7 +90,7 @@ local (Laragon) → GitHub (main) → FTP → zavodsvay.ru
 
 - [ ] GitHub Actions → автодеплой по FTP при пуше в `main`
 - [ ] Вынос динамики (форма, калькулятор) в отдельный API endpoint
-- [ ] `build.php` — генерация чистого статического HTML в `/dist/`
+- [ ] `build.php` — генерация чистого статического HTML в `/dist/` + динамический sitemap.xml
 - [ ] Переход на pure static: Nginx без PHP
 
 ## Автор

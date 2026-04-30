@@ -21,17 +21,20 @@
 ### Что реализовано
 - Файловый PHP-роутер, layouts (main, home, wide), partials
 - Все основные страницы: index, catalog, prices, calc, montage, articles, contacts, map, document, 404
+- 28 страниц статей в `pages/articles/{slug}/`
 - Адаптивная верстка на нативном CSS (один файл `assets/css/template.css`)
 - Гамбургер-меню, коллапсируемый sidebar на мобиле
 - Hero-видео на главной (`video/gefest01.mp4`)
 - WebP-изображения с srcset (`assets/img/start/` — 6 размеров)
 - Система классов для изображений в тексте (`content-image-wrapper` + BEM-модификаторы)
 - Вставка `SvaiGrunt` на главную страницу с адаптивным srcset
+- `sitemap.xml` — 37 URL (9 основных + 28 статей)
+- `robots.txt` — Yandex/Googlebot/*, Disallow внутренних директорий, Sitemap-директива
 
 ### В работе / ближайшие задачи
 - [ ] Наполнение каталога продукции с изображениями
 - [ ] GitHub Actions → автодеплой по FTP
-- [ ] `build.php` — статическая генерация `/dist/`
+- [ ] `build.php` — статическая генерация `/dist/` (при реализации — генерировать sitemap.xml динамически из структуры `pages/`)
 
 ---
 
@@ -39,7 +42,7 @@
 
 ### Файл: `assets/css/template.css`
 
-Единственный CSS-файл проекта. Структура секций:
+Единственный CSS-файл проекта (~18 КБ). Разбивать нецелесообразно до появления сборщика (`build.php`). Структура секций:
 1. Шрифты (`@font-face`)
 2. Базовые стили (body, .main-layout-container)
 3. Header
@@ -50,8 +53,8 @@
 8. Icons
 9. Back to Top
 10. Video
-11. **Изображения в тексте** (добавлено 2026-04-30)
-12. **Media Queries** (добавлено/расширено 2026-04-30)
+11. Изображения в тексте
+12. Media Queries
 
 ### Медиазапросы — договорённости
 
@@ -72,10 +75,29 @@
 .content-image-wrapper--right   — float right, 45% ширины
 .content-image-wrapper--full    — полная ширина, clear both
 .content-image-wrapper--center  — 60%, auto margin, без float
-.content-clearfix               — сброс float после блока с обтеканием
+.content-clearfix               — сброс float после последнего абзаца с обтеканием
 ```
 
 На `≤768px` все float-модификаторы → `width: 100%`, `float: none`.
+
+---
+
+## SEO-файлы
+
+### sitemap.xml
+- 9 основных страниц + 28 статей = **37 URL**
+- Статьи: `priority 0.6`, `changefreq yearly`
+- `/prices/` — `changefreq weekly` (цены меняются)
+- **TODO при добавлении новой статьи:** добавить URL вручную в `sitemap.xml` до реализации `build.php`
+
+### robots.txt
+```
+User-agent: * / Yandex / Googlebot
+Allow: /
+Disallow: /data/ /layouts/ /partials/
+Crawl-delay: 5.0  (только Yandex)
+Sitemap: https://zavodsvay.ru/sitemap.xml
+```
 
 ---
 
@@ -99,8 +121,8 @@
 `sizes="(max-width: 1024px) 100vw, 48%"` — полная ширина на планшете/мобиле, правая половина на десктопе.
 
 ### Соглашение по именованию
-Новые наборы изображений: `{Name}x{width}.webp` (пример: `SvaiGruntx640.webp`).
-Максимальный размер без суффикса: `{Name}{width}.webp` (пример: `SvaiGrunt2000.webp`) — исторически сложилось, новые лучше делать единообразно.
+Новые наборы: `{Name}x{width}.webp` (пример: `SvaiGruntx640.webp`).
+Максимальный размер без суффикса: `{Name}{width}.webp` — исторически, новые лучше делать единообразно.
 
 ---
 
@@ -112,7 +134,7 @@
 - `layouts/wide.php` — без sidebar
 
 ### Структура страницы
-Каждая страница в `pages/{slug}/index.php` определяет переменные и подключает layout:
+Каждая страница в `pages/{slug}/index.php`:
 ```php
 $title = "...";
 $meta_description = "...";
@@ -135,3 +157,5 @@ include __DIR__ . '/../../layouts/main.php';
 | 2026-04-30 | `<figure>` + `<picture>` + `<figcaption>` — стандарт вставки изображений в текст |
 | 2026-04-30 | `content-clearfix` ставится после последнего абзаца, обтекающего изображение |
 | 2026-04-30 | FullHD/4K медиазапросы не добавляем — max-width: 1200px достаточно |
+| 2026-04-30 | CSS не разбиваем на файлы до появления `build.php` |
+| 2026-04-30 | sitemap.xml обновляется вручную при добавлении статей; при `build.php` — генерировать динамически |
