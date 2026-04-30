@@ -5,9 +5,14 @@
  */
 
 $uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
-
-// Убираем возможные query параметры
 $uri = explode('?', $uri)[0];
+$uri = rtrim($uri, '/');
+
+// Блокируем прямой доступ к pages/
+if (strpos($uri, 'pages/') === 0) {
+    http_response_code(403);
+    exit;
+}
 
 // Главная страница
 if ($uri === '' || $uri === 'index.php') {
