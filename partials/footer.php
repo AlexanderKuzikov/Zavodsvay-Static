@@ -23,7 +23,9 @@ $footer = json_decode(file_get_contents(__DIR__ . '/../data/components/footer.js
             </p>
         </div>
         <div class="footer-copyright">
-            <p><?= htmlspecialchars($footer['copyright']) ?></p>
+            <p>© 2012 – <span id="footer-year"></span> <?= htmlspecialchars($footer['copyright_company']) ?></p>
+            <p><?= htmlspecialchars($footer['copyright_rights']) ?></p>
         </div>
     </div>
 </footer>
+<script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>

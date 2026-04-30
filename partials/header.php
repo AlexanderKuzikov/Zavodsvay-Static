@@ -7,10 +7,10 @@ $currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
 ?>
 <header>
     <div class="header-content-wrapper">
-        <div class="header-logo">
+        <a href="/" class="header-logo" aria-label="Завод винтовых свай Гефест — на главную">
             <img src="/assets/img/logocircletrans180.webp" alt="Завод винтовых свай Гефест">
             <span>Завод винтовых свай<br>«Гефест»</span>
-        </div>
+        </a>
         <button class="hamburger-menu-toggle" aria-label="Открыть меню">
             <span class="hamburger-icon"></span>
             <span class="hamburger-icon"></span>
