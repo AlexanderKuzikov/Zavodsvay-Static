@@ -670,7 +670,8 @@ footer ul li a:hover {
     clear: both;
 }
 
-/* === MEDIA QUERIES (MOBILE) === */
+/* === MEDIA QUERIES === */
+
 @media (max-width: 1024px) {
     .content-image-wrapper--left,
     .content-image-wrapper--right {
@@ -785,22 +786,17 @@ footer ul li a:hover {
         min-width: auto;
         box-sizing: border-box;
         display: block;
-        align-items: auto;
     }
 
     nav ul li a {
+        display: block;
         padding: 10px 15px;
         text-align: center;
         white-space: normal;
         overflow: visible;
         text-overflow: clip;
-        display: block;
-        white-space: balance;
         line-height: 1.2;
         font-size: 1.1em;
-        display: block;
-        align-items: auto;
-        justify-content: auto;
         flex-grow: 0;
     }
 
@@ -836,10 +832,9 @@ footer ul li a:hover {
     }
 
     .sidebar-menu-list ul li a {
-        white-space: balance;
-        line-height: 1.2;
-        word-wrap: break-word;
         white-space: normal;
+        word-wrap: break-word;
+        line-height: 1.2;
         font-size: 1em;
     }
 
@@ -909,7 +904,6 @@ footer ul li a:hover {
 
     footer ul li a {
         text-wrap: balance;
-        white-space: balance;
         display: inline-block;
     }
 
