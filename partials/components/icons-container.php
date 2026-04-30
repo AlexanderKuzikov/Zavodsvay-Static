@@ -15,11 +15,6 @@ $contacts = json_decode(file_get_contents(__DIR__ . '/../../data/components/cont
         <svg aria-hidden="true"><use href="#icon-telegram"></use></svg>
     </a>
     <?php endif; ?>
-    <?php if (!empty($contacts['whatsapp'])): ?>
-    <a href="<?= htmlspecialchars($contacts['whatsapp']['url']) ?>" class="icon-link" aria-label="WhatsApp" target="_blank" rel="noopener">
-        <svg aria-hidden="true"><use href="#icon-whatsapp"></use></svg>
-    </a>
-    <?php endif; ?>
     <?php if (!empty($contacts['vk'])): ?>
     <a href="<?= htmlspecialchars($contacts['vk']['url']) ?>" class="icon-link" aria-label="VK" target="_blank" rel="noopener">
         <svg aria-hidden="true"><use href="#icon-vk"></use></svg>
