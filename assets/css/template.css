@@ -123,6 +123,11 @@ header {
     color: #fff;
 }
 
+.header-logo:link,
+.header-logo:visited {
+    color: #fff;
+}
+
 .header-logo img {
     height: 40px;
     margin-right: 10px;
@@ -205,6 +210,11 @@ nav ul li a {
     user-select: none;
 }
 
+nav ul li a:link,
+nav ul li a:visited {
+    color: #fff;
+}
+
 nav ul li a:hover {
     background-color: #f7b267;
     color: #0a2342;
@@ -282,6 +292,11 @@ nav ul li a:hover {
     user-select: text;
 }
 
+.contact-block a:link,
+.contact-block a:visited {
+    color: #0a2342;
+}
+
 .contact-block a:hover {
     text-decoration: underline;
 }
@@ -338,6 +353,11 @@ nav ul li a:hover {
     line-height: 1.2;
     font-size: clamp(0.9em, 0.8vw + 0.2em, 1em);
     user-select: none;
+}
+
+.sidebar-menu-list ul li a:link,
+.sidebar-menu-list ul li a:visited {
+    color: #333;
 }
 
 .sidebar-menu-list ul li a:hover {
@@ -493,6 +513,11 @@ footer ul li a {
     display: inline-block;
 }
 
+footer ul li a:link,
+footer ul li a:visited {
+    color: #fff;
+}
+
 footer ul li a:hover {
     color: #f7b267;
 }
@@ -501,6 +526,11 @@ footer ul li a:hover {
     color: #fff;
     text-decoration: none;
     transition: color 0.3s ease;
+}
+
+.footer-info a:link,
+.footer-info a:visited {
+    color: #fff;
 }
 
 .footer-info a:hover {
@@ -590,12 +620,6 @@ footer ul li a:hover {
     max-width: 100%;
     height: auto;
     display: block;
-}
-
-/* === LINK COLOR FIX (mobile browsers override tel:/mailto:) === */
-a[href^="tel:"],
-a[href^="mailto:"] {
-    color: inherit;
 }
 
 /* === MEDIA QUERIES (MOBILE) === */

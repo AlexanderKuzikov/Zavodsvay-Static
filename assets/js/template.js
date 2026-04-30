@@ -52,8 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    let lastWidth = window.innerWidth;
     const handleResize = () => {
-        if (window.innerWidth > mobileBreakpoint) {
+        const currentWidth = window.innerWidth;
+        if (currentWidth === lastWidth) return;
+        lastWidth = currentWidth;
+
+        if (currentWidth > mobileBreakpoint) {
             if (nav) nav.classList.remove('menu-open');
             if (hamburgerToggle) hamburgerToggle.classList.remove('is-active');
             if (sidebarList) sidebarList.classList.add('sidebar-open');
