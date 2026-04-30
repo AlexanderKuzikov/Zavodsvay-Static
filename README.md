@@ -1,5 +1,10 @@
 # Завод винтовых свай «Гефест» — сайт
 
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white)](https://www.php.net/)
+[![Nginx](https://img.shields.io/badge/Nginx-PHP--FPM-009639?logo=nginx&logoColor=white)](https://nginx.org/)
+[![Site](https://img.shields.io/badge/site-zavodsvay.ru-brightgreen)](https://zavodsvay.ru)
+
 **Продакшн:** [zavodsvay.ru](https://zavodsvay.ru)
 
 Корпоративный сайт производителя винтовых свай. Реализован как zero-dependency PHP micro-framework с файловым роутингом — без фреймворков, без сборщиков, без npm. Целевое состояние — полностью статический HTML после build-фазы.
@@ -61,7 +66,9 @@ include __DIR__ . '/../../layouts/main.php';
 ```bash
 # Клонировать репо в папку www
 git clone https://github.com/AlexanderKuzikov/Zavodsvay-Static D:\laragon\www\Zavodsvay-Static
+```
 
+```powershell
 # Или создать символическую ссылку если репо уже клонирован
 New-Item -ItemType SymbolicLink -Path "D:\laragon\www\Zavodsvay-Static" -Target "D:\GitHub\Zavodsvay-Static"
 ```
@@ -83,6 +90,14 @@ local (Laragon) → GitHub (main) → FTP → zavodsvay.ru
 - [ ] `build.php` — генерация чистого статического HTML в `/dist/`
 - [ ] Переход на pure static: Nginx без PHP
 
+## Автор
+
+**Alexander Kuzikov** — [github.com/AlexanderKuzikov](https://github.com/AlexanderKuzikov)
+
+## Лицензия
+
+Распространяется под лицензией [Apache License 2.0](LICENSE).
+
 ---
 
-© 2024 — Завод винтовых свай «Гефест»
+© 2012 — 2026 Завод винтовых свай «Гефест»
