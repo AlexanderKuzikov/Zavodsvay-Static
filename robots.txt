@@ -1,2 +1,20 @@
+User-agent: *
+Allow: /
+Disallow: /data/
+Disallow: /layouts/
+Disallow: /partials/
+
 User-agent: Yandex
+Allow: /
+Disallow: /data/
+Disallow: /layouts/
+Disallow: /partials/
 Crawl-delay: 5.0
+
+User-agent: Googlebot
+Allow: /
+Disallow: /data/
+Disallow: /layouts/
+Disallow: /partials/
+
+Sitemap: https://zavodsvay.ru/sitemap.xml
