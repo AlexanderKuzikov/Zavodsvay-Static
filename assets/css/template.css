@@ -592,6 +592,12 @@ footer ul li a:hover {
     display: block;
 }
 
+/* === LINK COLOR FIX (mobile browsers override tel:/mailto:) === */
+a[href^="tel:"],
+a[href^="mailto:"] {
+    color: inherit;
+}
+
 /* === MEDIA QUERIES (MOBILE) === */
 @media (max-width: 768px) {
     .main-layout-container {

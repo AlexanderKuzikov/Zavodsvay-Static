@@ -23,23 +23,31 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sidebarTitle && sidebarList) {
         let touchStartY = 0;
         let touchStartX = 0;
+        let isScrolling = false;
 
         sidebarTitle.addEventListener('touchstart', (e) => {
             touchStartY = e.touches[0].clientY;
             touchStartX = e.touches[0].clientX;
+            isScrolling = false;
+        }, { passive: true });
+
+        sidebarTitle.addEventListener('touchmove', (e) => {
+            const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
+            const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
+            if (deltaY > 10 || deltaX > 10) {
+                isScrolling = true;
+            }
         }, { passive: true });
 
         sidebarTitle.addEventListener('touchend', (e) => {
-            const deltaY = Math.abs(e.changedTouches[0].clientY - touchStartY);
-            const deltaX = Math.abs(e.changedTouches[0].clientX - touchStartX);
-            if (deltaY < 10 && deltaX < 10) {
+            if (!isScrolling) {
                 e.preventDefault();
                 toggleSidebarMenu();
             }
         });
 
         sidebarTitle.addEventListener('click', (e) => {
-            if (e.detail === 0) return; // синтетический click после touch — пропускаем
+            if ('ontouchstart' in window) return;
             toggleSidebarMenu();
         });
     }
