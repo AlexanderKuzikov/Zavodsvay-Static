@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Library — Zavodsvay</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f1117;
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1a1d27;
+      border-bottom: 1px solid #2a2d3a;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header h1 { font-size: 18px; font-weight: 600; color: #fff; }
+    header span { font-size: 13px; color: #666; }
+
+    .toolbar {
+      padding: 16px 24px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: opacity .15s;
+    }
+    .btn:hover { opacity: .85; }
+    .btn:disabled { opacity: .4; cursor: default; }
+    .btn-primary { background: #4f7ef8; color: #fff; }
+    .btn-success { background: #22c55e; color: #fff; }
+    .btn-danger  { background: #ef4444; color: #fff; }
+    .btn-ghost   { background: #2a2d3a; color: #ccc; }
+
+    .stats { margin-left: auto; font-size: 13px; color: #666; }
+
+    .search {
+      padding: 8px 12px;
+      background: #1a1d27;
+      border: 1px solid #2a2d3a;
+      border-radius: 6px;
+      color: #e0e0e0;
+      font-size: 13px;
+      width: 220px;
+    }
+    .search:focus { outline: none; border-color: #4f7ef8; }
+
+    .filter-select {
+      padding: 8px 10px;
+      background: #1a1d27;
+      border: 1px solid #2a2d3a;
+      border-radius: 6px;
+      color: #e0e0e0;
+      font-size: 13px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      padding: 0 24px 32px;
+    }
+
+    .card {
+      background: #1a1d27;
+      border: 1px solid #2a2d3a;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color .15s, transform .15s;
+    }
+    .card:hover { border-color: #4f7ef8; transform: translateY(-2px); }
+    .card.pending { border-color: #f59e0b; }
+
+    .card-thumb {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      background: #12141e;
+      display: block;
+    }
+    .card-thumb-placeholder {
+      width: 100%;
+      height: 140px;
+      background: #12141e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #444;
+      font-size: 12px;
+    }
+
+    .card-body { padding: 10px 12px; }
+    .card-key { font-size: 12px; font-weight: 600; color: #fff; word-break: break-all; }
+    .card-meta { font-size: 11px; color: #666; margin-top: 4px; }
+    .card-alt { font-size: 11px; color: #9ca3af; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+    .badge-ok      { background: #14532d; color: #86efac; }
+    .badge-pending { background: #451a03; color: #fcd34d; }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.7);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: #1a1d27;
+      border: 1px solid #2a2d3a;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 18px 20px 14px;
+      border-bottom: 1px solid #2a2d3a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-header h2 { font-size: 15px; font-weight: 600; word-break: break-all; }
+    .modal-close { background: none; border: none; color: #666; cursor: pointer; font-size: 20px; line-height: 1; }
+    .modal-close:hover { color: #fff; }
+
+    .modal-thumb {
+      width: 100%;
+      max-height: 240px;
+      object-fit: cover;
+      display: block;
+      background: #12141e;
+    }
+
+    .modal-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+
+    .field label { display: block; font-size: 12px; color: #9ca3af; margin-bottom: 6px; font-weight: 500; }
+    .field input, .field textarea {
+      width: 100%;
+      background: #12141e;
+      border: 1px solid #2a2d3a;
+      border-radius: 6px;
+      color: #e0e0e0;
+      padding: 9px 11px;
+      font-size: 13px;
+      font-family: inherit;
+      resize: vertical;
+    }
+    .field input:focus, .field textarea:focus { outline: none; border-color: #4f7ef8; }
+
+    .field-info { font-size: 11px; color: #555; margin-top: 4px; }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #f59e0b;
+      cursor: pointer;
+    }
+    .checkbox-row input { width: 15px; height: 15px; cursor: pointer; accent-color: #f59e0b; }
+
+    .modal-footer {
+      padding: 14px 20px;
+      border-top: 1px solid #2a2d3a;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .log-box {
+      background: #0a0b0f;
+      border: 1px solid #2a2d3a;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 11px;
+      font-family: monospace;
+      color: #86efac;
+      max-height: 140px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      display: none;
+    }
+    .log-box.visible { display: block; }
+
+    .toast {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: #1a1d27;
+      border: 1px solid #2a2d3a;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 13px;
+      color: #e0e0e0;
+      z-index: 300;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all .2s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { border-color: #22c55e; color: #86efac; }
+    .toast.error   { border-color: #ef4444; color: #fca5a5; }
+
+    .empty { text-align: center; padding: 80px 24px; color: #444; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🖼️ Media Library</h1>
+  <span id="subtitle">Zavodsvay-Static</span>
+</header>
+
+<div class="toolbar">
+  <button class="btn btn-primary" id="btnScan">🔍 Сканировать source/</button>
+  <button class="btn btn-success" id="btnProcess">⚡ Нарезать всё</button>
+  <input class="search" id="search" type="text" placeholder="Поиск по ключу или alt...">
+  <select class="filter-select" id="filterStatus">
+    <option value="all">Все</option>
+    <option value="pending">Не обработанные</option>
+    <option value="done">Обработанные</option>
+    <option value="noalt">Без alt</option>
+  </select>
+  <span class="stats" id="stats"></span>
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="empty" id="empty" style="display:none">Ничего не найдено</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalKey"></h2>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <img class="modal-thumb" id="modalThumb" src="" alt="">
+    <div class="modal-body">
+      <div class="field">
+        <label>alt (до 120 символов)</label>
+        <input type="text" id="inputAlt" maxlength="120" placeholder="Описание изображения...">
+        <div class="field-info" id="altCounter"></div>
+      </div>
+      <div class="field">
+        <label>caption (подпись)</label>
+        <textarea id="inputCaption" rows="2" placeholder="Подпись под изображением..."></textarea>
+      </div>
+      <div class="field">
+        <div id="modalInfo" style="font-size:12px; color:#666; line-height:1.7;"></div>
+      </div>
+      <label class="checkbox-row">
+        <input type="checkbox" id="chkRegenerate">
+        Перегенерировать WebP при сохранении
+      </label>
+      <div class="log-box" id="logBox"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="modalCancel">Отмена</button>
+      <button class="btn btn-primary" id="modalSave">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  let media = {};
+  let currentKey = null;
+
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+  const stats = document.getElementById('stats');
+  const search = document.getElementById('search');
+  const filterStatus = document.getElementById('filterStatus');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const toast = document.getElementById('toast');
+
+  async function api(method, url, body) {
+    const res = await fetch(url, {
+      method,
+      headers: body ? { 'Content-Type': 'application/json' } : {},
+      body: body ? JSON.stringify(body) : undefined
+    });
+    return res.json();
+  }
+
+  function showToast(msg, type = '') {
+    toast.textContent = msg;
+    toast.className = 'toast show ' + type;
+    setTimeout(() => { toast.className = 'toast'; }, 3000);
+  }
+
+  async function loadMedia() {
+    media = await api('GET', '/api/media');
+    renderGrid();
+  }
+
+  function renderGrid() {
+    const q = search.value.toLowerCase();
+    const f = filterStatus.value;
+
+    let entries = Object.entries(media);
+
+    if (q) entries = entries.filter(([k, d]) =>
+      k.toLowerCase().includes(q) || (d.alt || '').toLowerCase().includes(q)
+    );
+    if (f === 'pending') entries = entries.filter(([, d]) => !d.generated);
+    if (f === 'done')    entries = entries.filter(([, d]) => d.generated);
+    if (f === 'noalt')   entries = entries.filter(([, d]) => !d.alt);
+
+    const total = Object.keys(media).length;
+    const pending = Object.values(media).filter(d => !d.generated).length;
+    stats.textContent = `Всего: ${total} | Не обработано: ${pending}`;
+
+    grid.innerHTML = '';
+    if (entries.length === 0) { empty.style.display = ''; return; }
+    empty.style.display = 'none';
+
+    for (const [key, data] of entries) {
+      const card = document.createElement('div');
+      card.className = 'card' + (data.generated ? '' : ' pending');
+
+      const thumbSrc = data.generated && data.widths && data.widths.length
+        ? `/assets/img/${data.dir ? data.dir + '/' : ''}${key}-${data.widths[0]}.webp`
+        : `/api/thumb/${key}`;
+
+      card.innerHTML = `
+        <img class="card-thumb" src="${thumbSrc}" alt="${key}" loading="lazy"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div class="card-thumb-placeholder" style="display:none">Нет файла</div>
+        <div class="card-body">
+          <div class="card-key">${key}</div>
+          <div class="card-meta">${data.orig_width ? data.orig_width + '&times;' + data.orig_height + 'px &nbsp;·&nbsp; ' : ''}${(data.widths || []).join(', ')}w</div>
+          <div class="card-alt">${data.alt || '<span style="color:#555">без alt</span>'}</div>
+          <span class="badge ${data.generated ? 'badge-ok' : 'badge-pending'}">${data.generated ? '✓ готово' : '⧗ ожидает'}</span>
+        </div>
+      `;
+      card.addEventListener('click', () => openModal(key));
+      grid.appendChild(card);
+    }
+  }
+
+  function openModal(key) {
+    currentKey = key;
+    const data = media[key];
+
+    document.getElementById('modalKey').textContent = key;
+    document.getElementById('inputAlt').value = data.alt || '';
+    document.getElementById('inputCaption').value = data.caption || '';
+    document.getElementById('chkRegenerate').checked = false;
+    document.getElementById('logBox').className = 'log-box';
+    document.getElementById('logBox').textContent = '';
+
+    updateAltCounter();
+
+    const info = [];
+    if (data.file)       info.push(`📂 ${data.file}`);
+    if (data.orig_width) info.push(`📌 Оригинал: ${data.orig_width}×${data.orig_height}px`);
+    if (data.widths)     info.push(`✂️ Размеры: ${data.widths.join(', ')}px`);
+    document.getElementById('modalInfo').innerHTML = info.join('<br>');
+
+    const thumb = document.getElementById('modalThumb');
+    thumb.src = data.generated && data.widths && data.widths.length
+      ? `/assets/img/${data.dir ? data.dir + '/' : ''}${key}-${data.widths[0]}.webp`
+      : `/api/thumb/${key}`;
+
+    modalOverlay.classList.add('open');
+  }
+
+  function updateAltCounter() {
+    const val = document.getElementById('inputAlt').value;
+    document.getElementById('altCounter').textContent = `${val.length} / 120 символов`;
+  }
+
+  document.getElementById('inputAlt').addEventListener('input', updateAltCounter);
+
+  function closeModal() {
+    modalOverlay.classList.remove('open');
+    currentKey = null;
+  }
+
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalCancel').addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+
+  document.getElementById('modalSave').addEventListener('click', async () => {
+    if (!currentKey) return;
+    const btn = document.getElementById('modalSave');
+    btn.disabled = true;
+    btn.textContent = 'Сохраняю...';
+
+    const body = {
+      alt: document.getElementById('inputAlt').value,
+      caption: document.getElementById('inputCaption').value,
+      regenerate: document.getElementById('chkRegenerate').checked
+    };
+
+    const result = await api('POST', `/api/media/${currentKey}`, body);
+
+    if (result.logs && result.logs.length) {
+      const lb = document.getElementById('logBox');
+      lb.textContent = result.logs.join('\n');
+      lb.className = 'log-box visible';
+    }
+
+    if (result.ok) {
+      media[currentKey] = result.entry;
+      showToast('✅ Сохранено', 'success');
+      renderGrid();
+      closeModal();
+    } else {
+      showToast('❌ ' + (result.error || 'Ошибка'), 'error');
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Сохранить';
+  });
+
+  document.getElementById('btnScan').addEventListener('click', async () => {
+    const btn = document.getElementById('btnScan');
+    btn.disabled = true;
+    const res = await api('GET', '/api/scan');
+    showToast(`Скан: +${res.added} новых, всего ${res.total}`, 'success');
+    await loadMedia();
+    btn.disabled = false;
+  });
+
+  document.getElementById('btnProcess').addEventListener('click', async () => {
+    const btn = document.getElementById('btnProcess');
+    btn.disabled = true;
+    btn.textContent = 'Нарезаю...';
+    const res = await api('POST', '/api/process');
+    showToast(`Готово: ${res.ok}, ошибок: ${res.fail}`, res.fail ? 'error' : 'success');
+    await loadMedia();
+    btn.disabled = false;
+    btn.textContent = '⚡ Нарезать всё';
+  });
+
+  search.addEventListener('input', renderGrid);
+  filterStatus.addEventListener('change', renderGrid);
+
+  loadMedia();
+</script>
+</body>
+</html>

@@ -4,9 +4,11 @@
   "description": "Dev-инструменты медиапайплайна Zavodsvay-Static (не деплоятся на хостинг)",
   "type": "module",
   "scripts": {
-    "media": "node process-media.js"
+    "media": "node process-media.js",
+    "ui": "node server.js"
   },
   "dependencies": {
-    "sharp": "^0.33.3"
+    "sharp": "^0.33.3",
+    "express": "^4.19.2"
   }
 }
