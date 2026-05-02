@@ -22,5 +22,29 @@
     "alt": "Логотип Гефест",
     "caption": "",
     "generated": true
+  },
+  "data_179": {
+    "file": "source/data_179.jpg",
+    "dir": "",
+    "widths": [
+      320
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 455,
+    "orig_height": 481
+  },
+  "data_180": {
+    "file": "source/data_180.jpg",
+    "dir": "",
+    "widths": [
+      320
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 336,
+    "orig_height": 370
   }
 }
