@@ -1,128 +1,121 @@
-# Завод винтовых свай «Гефест» — сайт
+# Zavodsvay-Static
 
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php&logoColor=white)](https://www.php.net/)
-[![Nginx](https://img.shields.io/badge/Nginx-PHP--FPM-009639?logo=nginx&logoColor=white)](https://nginx.org/)
-[![Site](https://img.shields.io/badge/site-zavodsvay.ru-brightgreen)](https://zavodsvay.ru)
-
-**Продакшн:** [zavodsvay.ru](https://zavodsvay.ru)  
-**Контекст разработки (для AI и деталей):** [CONTEXT.md](CONTEXT.md)
-
-Корпоративный сайт производителя винтовых свай. Реализован как zero-dependency PHP micro-framework с файловым роутингом — без фреймворков, без сборщиков, без npm. Целевое состояние — полностью статический HTML после build-фазы.
-
-Проект является **первым production-кейсом** генератора статических сайтов [WebForge](https://github.com/AlexanderKuzikov/WebForge). Текущая pre-static PHP-версия — рабочая среда разработки и прямой источник контента до реализации полного WebForge-пайплайна.
+Производственный сайт завода свайных фундаментов **«Гефест»** (Пермь).  
+Первый production-кейс [WebForge](https://github.com/AlexanderKuzikov/WebForge).
 
 ---
 
 ## Архитектура
 
+**Текущий режим:** pre-static PHP-сайт без фреймворков и зависимостей на хостинге.
+
 ```
-index.php           # Точка входа, файловый роутер
-├── pages/          # Страницы (файловый роутинг /slug/ → /pages/slug/index.php)
-│   ├── index/      # Главная
-│   ├── catalog/    # Каталог свай
-│   ├── prices/     # Цены
-│   ├── calc/       # Калькулятор
-│   ├── montage/    # Монтаж
-│   ├── articles/   # Статьи (28 страниц)
-│   ├── contacts/   # Контакты
-│   ├── map/        # Карта объектов (~500, в разработке)
-│   ├── document/   # Документация
-│   └── 404/        # Страница ошибки
-├── layouts/        # Шаблоны страниц (main, home, wide)
-├── partials/       # Переиспользуемые блоки (header, footer, sidebar, splash, components)
-├── assets/         # CSS, JS, изображения
-│   └── img/        # WebP-наборы с srcset (несколько размеров на изображение)
-├── data/           # JSON-данные (закрыты от прямого доступа)
-├── video/          # Видеоматериалы
-├── sitemap.xml     # 37 URL (9 основных + 28 статей)
-├── robots.txt      # Yandex/Googlebot/*, Sitemap-директива
-└── .htaccess       # Rewrite rules, gzip, кэширование статики
+Zavodsvay-Static/
+├── pages/              ← страницы ({slug}/index.php + content.html)
+│   └── articles/       ← 28 статей
+├── layouts/            ← шаблоны (main, home, wide)
+├── partials/           ← переиспользуемые компоненты (image.php, ...)
+├── assets/
+│   ├── css/template.css
+│   ├── img/            ← нарезанные WebP-наборы
+│   └── fonts/
+├── source/             ← оригиналы изображений (jpg, png, gif, webp)
+├── data/
+│   └── media.json      ← SSOT-реестр изображений
+├── video/
+├── tools/              ← медиапайплайн (Node.js)
+│   ├── process-media.js
+│   ├── server.js
+│   └── ui/index.html
+├── index.php           ← файловый роутер
+├── sitemap.xml
+├── robots.txt
+├── .htaccess
+└── CONTEXT.md          ← живой документ разработки для AI + команды
 ```
 
-## Принцип работы
+---
 
-Каждый запрос попадает в `index.php`, который резолвит `REQUEST_URI` в путь `pages/{slug}/index.php`. Каждая страница определяет `$title`, `$meta_description`, `$canonical`, рендерит контент через `ob_start()` и подключает нужный layout. Layouts подключают partials — header, footer и опциональные блоки.
+## Медиапайплайн
+
+Локальный инструмент для работы с изображениями. На хостинг не деплоится.
+
+### Запуск
+
+```bash
+cd tools
+npm install      # один раз
+npm run ui       # Media UI → http://localhost:3010
+# или CLI:
+node process-media.js
+```
+
+### Как работает
+
+1. Бросаешь оригинал в `source/` (jpg/png/gif/webp, включая анимированные GIF)
+2. Нажимаешь **«Сканировать»** в UI — файл регистрируется в `data/media.json`
+3. Нажимаешь **«Нарезать всё»** — генерируются WebP-варианты в `assets/img/`
+4. Заполняешь `alt` и `caption` прямо в интерфейсе
+5. При замене файла — чекбокс **«Перегенерировать»** при сохранении
+
+### Ключи в media.json
+
+Ключ = путь относительно `source/` без расширения, слэши → дефисы:
+- `source/logo2.png` → `"logo2"`
+- `source/objects/obj-001/main.jpg` → `"objects-obj-001-main"`
+
+### Использование в PHP
 
 ```php
-// pages/catalog/index.php
-$title = "Каталог винтовых свай";
-ob_start();
-readfile(__DIR__ . '/content.html');
-$content = ob_get_clean();
-include __DIR__ . '/../../layouts/main.php';
+require_once __DIR__ . '/partials/image.php';
+render_image('logo2');
+// генерирует <picture> с srcset, width, height из реестра
 ```
+
+---
+
+## Страницы
+
+| URL | Файл |
+|---|---|
+| `/` | `pages/index/` |
+| `/catalog/` | `pages/catalog/` |
+| `/prices/` | `pages/prices/` |
+| `/calc/` | `pages/calc/` |
+| `/montage/` | `pages/montage/` |
+| `/articles/` | `pages/articles/` |
+| `/contacts/` | `pages/contacts/` |
+| `/map/` | `pages/map/` |
+| `/document/` | `pages/document/` |
+| `/articles/{slug}/` | `pages/articles/{slug}/` |
+
+---
+
+## SEO
+
+- `sitemap.xml` — 37 URL (9 основных + 28 статей)
+- `robots.txt` — Yandex/Googlebot, Crawl-delay для Yandex
+- WebP + `srcset` — Core Web Vitals
+- `orig_width`/`orig_height` в реестре → нулевой Layout Shift (CLS)
+- **Запланировано:** Open Graph, JSON-LD Schema.org, geo-теги, favicon
+
+---
+
+## Роадмап
+
+- [ ] SEO-разметка (OG, Schema.org, geo)
+- [ ] Favicon + `site.webmanifest`
+- [ ] Карта ~500 объектов (MapLibre GL + PMTiles)
+- [ ] GitHub Actions → автодеплой по FTP
+- [ ] `build.php` → pure static `/dist/`
+
+---
 
 ## Стек
 
 | Слой | Технология |
 |---|---|
-| Сервер | Nginx + PHP-FPM 8.3 |
-| Роутинг | Самописный PHP file-router |
-| Шаблонизация | PHP include / ob_start |
-| Стили | Нативный CSS (один файл до build-фазы) |
-| Скрипты | Vanilla JS |
-| Данные | JSON-файлы в `/data/` |
-| Хостинг | ISPmanager, webhost1 |
-
-## SEO-слой
-
-- `sitemap.xml` — 37 URL, генерируется вручную до реализации `build.php`
-- `robots.txt` — настроен для Yandex и Googlebot
-- Semantic HTML: `<header>`, `<main>`, `<footer>`, `<article>`, `<figure>`
-- WebP srcset на все изображения
-- Планируется: Open Graph, Twitter Cards, JSON-LD Schema.org, favicon/manifest
-
-## Локальная разработка
-
-Требования: [Laragon](https://laragon.org/) (PHP 8.x, Nginx/Apache).
-
-```bash
-# Клонировать репо в папку www
-git clone https://github.com/AlexanderKuzikov/Zavodsvay-Static D:\laragon\www\Zavodsvay-Static
-```
-
-```powershell
-# Или создать символическую ссылку если репо уже клонирован
-New-Item -ItemType SymbolicLink -Path "D:\laragon\www\Zavodsvay-Static" -Target "D:\GitHub\Zavodsvay-Static"
-```
-
-Сайт доступен по адресу `http://zavodsvay-static.test`
-
-## Деплой
-
-Workflow: локальная правка → проверка на Laragon → коммит в `main` → деплой на сервер.
-
-```
-local (Laragon) → GitHub (main) → FTP → zavodsvay.ru
-```
-
-## Roadmap
-
-- [ ] Open Graph / Twitter Cards / VK мета-теги + JSON-LD Schema.org
-- [ ] Favicon, `site.webmanifest`, `theme-color`
-- [ ] Медиасистема: реестр изображений, нарезка Sharp, VLM auto-alt
-- [ ] Карта объектов (~500) + страницы каждого объекта (programmatic SEO)
-- [ ] GitHub Actions → автодеплой по FTP при пуше в `main`
-- [ ] `build.php` — генерация чистого статического HTML в `/dist/` + динамический sitemap.xml
-- [ ] Переход на pure static: Nginx без PHP
-
-## Связь с WebForge
-
-Этот проект — **production-кейс** [WebForge](https://github.com/AlexanderKuzikov/WebForge), универсального генератора статических сайтов. По мере зрелости WebForge:
-- `webforge.json` станет SSOT для всей структуры, данных и медиа сайта
-- `build.php` заменит текущий PHP file-router на pure static HTML
-- Медиапайплайн (Node.js + Sharp + VLM) будет общим инструментом
-- Schema.org / OG разметка будет генерироваться из данных `webforge.json`
-
-## Автор
-
-**Alexander Kuzikov** — [github.com/AlexanderKuzikov](https://github.com/AlexanderKuzikov)
-
-## Лицензия
-
-Распространяется под лицензией [Apache License 2.0](LICENSE).
-
----
-
-© 2012 — 2026 Завод винтовых свай «Гефест»
+| Сайт | PHP 8.x, нативный CSS, vanilla JS |
+| Медиапайплайн | Node.js, Sharp, Express |
+| Деплой | FTP (shared hosting) |
+| Карта (план) | MapLibre GL + PMTiles |
