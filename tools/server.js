@@ -24,7 +24,7 @@ import {
 } from './process-media.js';
 
 const DEFAULT_WIDTHS = [320, 640, 1024, 1600];
-const PORT = 3000;
+const PORT = 3010;
 const app = express();
 
 app.use(express.json());
