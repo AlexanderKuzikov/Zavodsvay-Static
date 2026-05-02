@@ -7,6 +7,8 @@
  * Ключ = относительный путь от source/ без расширения, слэши → дефисы
  * Пример: source/objects/obj-001/main.jpg → ключ "objects-obj-001-main"
  *          source/logo2.png → ключ "logo2"
+ *
+ * После нарезки widths в JSON перезаписывается реальными сгенерированными размерами.
  */
 
 import fs from 'fs/promises';
@@ -114,6 +116,8 @@ async function processMedia() {
         console.log(`   └─ ✓ ${key}-${w}.webp`);
       }
 
+      // Перезаписываем widths реальными сгенерированными размерами
+      media[key].widths = finalWidths;
       media[key].generated = true;
       ok++;
     } catch (err) {
