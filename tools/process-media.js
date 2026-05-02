@@ -1,127 +1,129 @@
 /**
- * process-media.js — нарезка изображений из реестра data/media.json
+ * process-media.js — сканирует source/, регистрирует новые файлы в media.json, нарезает WebP
  *
  * Запуск из папки tools/:
  *   node process-media.js
- * Или через npm:
- *   npm run media
  *
- * Логика:
- *   - Читает data/media.json
- *   - Обрабатывает только записи с generated: false
- *   - Smart Source Limit: не генерирует размеры больше оригинала
- *   - Сохраняет WebP в assets/img/{dir}/{key}-{width}.webp
- *   - Обновляет флаг generated: true в реестре после успешной нарезки
+ * Ключ = относительный путь от source/ без расширения, слэши → дефисы
+ * Пример: source/objects/obj-001/main.jpg → ключ "objects-obj-001-main"
+ *          source/logo2.png → ключ "logo2"
  */
 
 import fs from 'fs/promises';
 import path from 'path';
 import sharp from 'sharp';
 
-// Скрипт запускается из tools/, корень проекта — на уровень выше
 const ROOT_DIR = path.resolve(process.cwd(), '..');
+const SOURCE_DIR = path.join(ROOT_DIR, 'source');
 const MEDIA_JSON_PATH = path.join(ROOT_DIR, 'data', 'media.json');
 const ASSETS_IMG_DIR = path.join(ROOT_DIR, 'assets', 'img');
 
-async function processMedia() {
-  let media;
+const SUPPORTED_EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
+const DEFAULT_WIDTHS = [320, 640, 1024, 1600];
 
+async function scanSource(dir, baseDir, results = []) {
+  let entries;
   try {
-    const rawData = await fs.readFile(MEDIA_JSON_PATH, 'utf-8');
-    media = JSON.parse(rawData);
-  } catch (err) {
-    console.error('❌ Не удалось прочитать data/media.json:', err.message);
-    process.exit(1);
+    entries = await fs.readdir(dir, { withFileTypes: true });
+  } catch {
+    console.log(`⚠️  source/ не найден: ${dir}`);
+    return results;
+  }
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      await scanSource(fullPath, baseDir, results);
+    } else if (SUPPORTED_EXTS.includes(path.extname(entry.name).toLowerCase())) {
+      const rel = path.relative(baseDir, fullPath).replace(/\\/g, '/');
+      const key = rel.replace(/\.[^.]+$/, '').replace(/\//g, '-');
+      const relDir = path.dirname(rel).replace(/\\/g, '/');
+      results.push({
+        key,
+        file: 'source/' + rel,
+        dir: relDir === '.' ? '' : relDir
+      });
+    }
+  }
+  return results;
+}
+
+async function processMedia() {
+  let media = {};
+  try {
+    const raw = await fs.readFile(MEDIA_JSON_PATH, 'utf-8');
+    media = JSON.parse(raw);
+  } catch {
+    console.log('ℹ️  data/media.json не найден — будет создан.');
   }
 
-  const entries = Object.entries(media);
-  const pending = entries.filter(([, data]) => !data.generated);
+  // Сканируем source/ и регистрируем новые
+  const found = await scanSource(SOURCE_DIR, SOURCE_DIR);
+  let newCount = 0;
+  for (const { key, file, dir } of found) {
+    if (!media[key]) {
+      media[key] = { file, dir, widths: DEFAULT_WIDTHS, alt: '', caption: '', generated: false };
+      console.log(`➕ Зарегистрирован: ${key}  (${file})`);
+      newCount++;
+    }
+  }
+  if (newCount > 0) {
+    await fs.writeFile(MEDIA_JSON_PATH, JSON.stringify(media, null, 2) + '\n');
+    console.log(`✅ Добавлено записей: ${newCount}\n`);
+  }
 
+  // Нарезаем всё с generated: false
+  const pending = Object.entries(media).filter(([, d]) => !d.generated);
   if (pending.length === 0) {
-    console.log('✅ Нет новых изображений для обработки (все generated: true).');
+    console.log('✅ Нет новых изображений для нарезки.');
     return;
   }
 
-  console.log(`🔄 Старт обработки медиабиблиотеки. Новых записей: ${pending.length}`);
-
-  let successCount = 0;
-  let errorCount = 0;
-  let updated = false;
+  console.log(`🔄 Нарезка: ${pending.length} файлов\n`);
+  let ok = 0, fail = 0;
 
   for (const [key, data] of pending) {
-    const sourcePath = path.join(ROOT_DIR, data.file);
-
-    // Проверяем существование исходного файла
+    const srcPath = path.join(ROOT_DIR, data.file);
     try {
-      await fs.access(sourcePath);
+      await fs.access(srcPath);
     } catch {
-      console.error(`\n[Пропуск] Файл не найден: ${data.file}`);
-      errorCount++;
+      console.error(`[Пропуск] Не найден: ${data.file}`);
+      fail++;
       continue;
     }
 
-    console.log(`\n📸 Обработка: ${key}`);
-    console.log(`   Источник: ${data.file}`);
-
+    console.log(`📸 ${key}`);
     try {
-      const image = sharp(sourcePath);
-      const metadata = await image.metadata();
-      const origWidth = metadata.width;
+      const meta = await sharp(srcPath).metadata();
+      const validWidths = data.widths.filter(w => w <= meta.width);
+      const finalWidths = validWidths.length ? validWidths : [meta.width];
 
-      console.log(`   Оригинал: ${origWidth}×${metadata.height}px`);
-
-      // Smart Source Limit: убираем ширины больше оригинала
-      let validWidths = (data.widths || []).filter(w => w <= origWidth);
-
-      // Если оригинал меньше минимальной ширины — берём его размер as-is
-      if (validWidths.length === 0) {
-        validWidths = [origWidth];
-        console.log(`   ⚠️  Оригинал меньше всех запрошенных размеров. Генерируем только: ${origWidth}px`);
+      const skipped = data.widths.filter(w => w > meta.width);
+      if (skipped.length) {
+        console.log(`   ℹ️  Пропущены (> ${meta.width}px): ${skipped.join(', ')}px`);
       }
 
-      const skipped = (data.widths || []).filter(w => w > origWidth);
-      if (skipped.length > 0) {
-        console.log(`   ℹ️  Пропущены размеры (больше оригинала): ${skipped.join(', ')}px`);
-      }
-
-      // Создаём выходную папку если не существует
-      const outDir = path.join(ASSETS_IMG_DIR, data.dir);
+      const outDir = data.dir ? path.join(ASSETS_IMG_DIR, data.dir) : ASSETS_IMG_DIR;
       await fs.mkdir(outDir, { recursive: true });
 
-      // Нарезка
-      for (const width of validWidths) {
-        const outFile = path.join(outDir, `${key}-${width}.webp`);
-
-        await sharp(sourcePath)
-          .resize({ width, withoutEnlargement: true })
+      for (const w of finalWidths) {
+        const outFile = path.join(outDir, `${key}-${w}.webp`);
+        await sharp(srcPath)
+          .resize({ width: w, withoutEnlargement: true })
           .webp({ effort: 4, quality: 80 })
           .toFile(outFile);
-
-        console.log(`   └─ ✓ ${key}-${width}.webp`);
+        console.log(`   └─ ✓ ${key}-${w}.webp`);
       }
 
-      // Ставим флаг
       media[key].generated = true;
-      updated = true;
-      successCount++;
-
+      ok++;
     } catch (err) {
-      console.error(`   ❌ Ошибка при обработке ${key}:`, err.message);
-      errorCount++;
+      console.error(`   ❌ Ошибка: ${err.message}`);
+      fail++;
     }
   }
 
-  // Сохраняем обновлённый реестр
-  if (updated) {
-    try {
-      await fs.writeFile(MEDIA_JSON_PATH, JSON.stringify(media, null, 2) + '\n');
-      console.log('\n✅ data/media.json обновлён.');
-    } catch (err) {
-      console.error('❌ Не удалось записать data/media.json:', err.message);
-    }
-  }
-
-  console.log(`\n📊 Итого: обработано ${successCount}, ошибок ${errorCount}.`);
+  await fs.writeFile(MEDIA_JSON_PATH, JSON.stringify(media, null, 2) + '\n');
+  console.log(`\n📊 Итого: обработано ${ok}, ошибок ${fail}.`);
 }
 
 processMedia();
