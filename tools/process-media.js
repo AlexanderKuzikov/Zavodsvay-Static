@@ -1,10 +1,12 @@
 /**
  * process-media.js — сканирует source/, регистрирует новые файлы в media.json, нарезает WebP.
- * Может использоваться как CLI (напрямую) или через server.js.
+ * Поддерживаемые форматы: jpg, jpeg, png, webp, gif (включая анимированные).
+ * GIF конвертируется в анимированный WebP.
  *
  * Ключ = относительный путь от source/ без расширения, слэши → дефисы.
- * source/logo2.png         → "logo2"
+ * source/logo2.png              → "logo2"
  * source/objects/obj-001/main.jpg → "objects-obj-001-main"
+ * source/banner.gif             → "banner"
  */
 
 import fs from 'fs/promises';
@@ -16,7 +18,7 @@ export const SOURCE_DIR = path.join(ROOT_DIR, 'source');
 export const MEDIA_JSON_PATH = path.join(ROOT_DIR, 'data', 'media.json');
 export const ASSETS_IMG_DIR = path.join(ROOT_DIR, 'assets', 'img');
 
-const SUPPORTED_EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
+const SUPPORTED_EXTS = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
 const DEFAULT_WIDTHS = [320, 640, 1024, 1600];
 
 export async function scanSource(dir, baseDir, results = []) {
@@ -55,13 +57,12 @@ export async function writeMedia(media) {
 
 /**
  * Нарезает одну запись из реестра.
- * @param {string} key
- * @param {object} data  Запись из media.json
- * @param {function} onLog  Коллбэк для вывода (строка)
- * @returns {object}  Обновлённая запись
+ * GIF обрабатывается с флагом animated:true — сохраняется анимация.
  */
 export async function processEntry(key, data, onLog = console.log) {
   const srcPath = path.join(ROOT_DIR, data.file);
+  const ext = path.extname(data.file).toLowerCase();
+  const isGif = ext === '.gif';
 
   try {
     await fs.access(srcPath);
@@ -70,26 +71,28 @@ export async function processEntry(key, data, onLog = console.log) {
     return data;
   }
 
-  const meta = await sharp(srcPath).metadata();
+  // Для GIF читаем метаданные с учётом анимации
+  const image = sharp(srcPath, isGif ? { animated: true } : {});
+  const meta = await image.metadata();
   const origWidth = meta.width;
-  const origHeight = meta.height;
+  const origHeight = meta.pageHeight ?? meta.height; // pageHeight для анимированных
 
   const validWidths = data.widths.filter(w => w <= origWidth);
   const finalWidths = validWidths.length ? validWidths : [origWidth];
 
   const skipped = data.widths.filter(w => w > origWidth);
-  if (skipped.length) onLog(`   ℹ️  Пропущены (> ${origWidth}px): ${skipped.join(', ')}px`);
+  if (skipped.length) onLog(`   ℹ  Пропущены (> ${origWidth}px): ${skipped.join(', ')}px`);
 
   const outDir = data.dir ? path.join(ASSETS_IMG_DIR, data.dir) : ASSETS_IMG_DIR;
   await fs.mkdir(outDir, { recursive: true });
 
   for (const w of finalWidths) {
     const outFile = path.join(outDir, `${key}-${w}.webp`);
-    await sharp(srcPath)
+    await sharp(srcPath, isGif ? { animated: true } : {})
       .resize({ width: w, withoutEnlargement: true })
       .webp({ effort: 4, quality: 80 })
       .toFile(outFile);
-    onLog(`   └─ ✓ ${key}-${w}.webp`);
+    onLog(`   └─ ✓ ${key}-${w}.webp${isGif ? ' (animated)' : ''}`);
   }
 
   return {
@@ -110,7 +113,7 @@ async function runCLI() {
   for (const { key, file, dir } of found) {
     if (!media[key]) {
       media[key] = { file, dir, widths: DEFAULT_WIDTHS, alt: '', caption: '', generated: false };
-      console.log(`➕ ${key}  (${file})`);
+      console.log(`✚ ${key}  (${file})`);
       newCount++;
     }
   }
