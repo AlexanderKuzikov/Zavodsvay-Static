@@ -1,0 +1,10 @@
+{
+  "obj-001-main": {
+    "file": "source/objects/obj-001/main.jpg",
+    "dir": "objects/obj-001",
+    "widths": [320, 640, 1024, 1600],
+    "alt": "Монтаж винтовых свай в Перми",
+    "caption": "Завершение работ на объекте",
+    "generated": false
+  }
+}

@@ -85,8 +85,6 @@ dist
 
 # Gatsby files
 .cache/
-# Comment in the public line in if your project uses Gatsby and not Next.js
-# https://nextjs.org/blog/next-9-1#public-directory-support
 # public
 
 # vuepress build output
@@ -141,3 +139,13 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# ============================================
+# Zavodsvay-Static: медиапайплайн
+# ============================================
+
+# Оригиналы изображений — только локально, не в git и не на хостинг
+source/
+
+# Node.js зависимости инструментов
+tools/node_modules/
