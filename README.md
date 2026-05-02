@@ -10,6 +10,8 @@
 
 Корпоративный сайт производителя винтовых свай. Реализован как zero-dependency PHP micro-framework с файловым роутингом — без фреймворков, без сборщиков, без npm. Целевое состояние — полностью статический HTML после build-фазы.
 
+Проект является **первым production-кейсом** генератора статических сайтов [WebForge](https://github.com/AlexanderKuzikov/WebForge). Текущая pre-static PHP-версия — рабочая среда разработки и прямой источник контента до реализации полного WebForge-пайплайна.
+
 ---
 
 ## Архитектура
@@ -24,12 +26,13 @@ index.php           # Точка входа, файловый роутер
 │   ├── montage/    # Монтаж
 │   ├── articles/   # Статьи (28 страниц)
 │   ├── contacts/   # Контакты
-│   ├── map/        # Карта дилеров
+│   ├── map/        # Карта объектов (~500, в разработке)
 │   ├── document/   # Документация
 │   └── 404/        # Страница ошибки
 ├── layouts/        # Шаблоны страниц (main, home, wide)
 ├── partials/       # Переиспользуемые блоки (header, footer, sidebar, splash, components)
 ├── assets/         # CSS, JS, изображения
+│   └── img/        # WebP-наборы с srcset (несколько размеров на изображение)
 ├── data/           # JSON-данные (закрыты от прямого доступа)
 ├── video/          # Видеоматериалы
 ├── sitemap.xml     # 37 URL (9 основных + 28 статей)
@@ -57,10 +60,18 @@ include __DIR__ . '/../../layouts/main.php';
 | Сервер | Nginx + PHP-FPM 8.3 |
 | Роутинг | Самописный PHP file-router |
 | Шаблонизация | PHP include / ob_start |
-| Стили | Нативный CSS |
+| Стили | Нативный CSS (один файл до build-фазы) |
 | Скрипты | Vanilla JS |
 | Данные | JSON-файлы в `/data/` |
 | Хостинг | ISPmanager, webhost1 |
+
+## SEO-слой
+
+- `sitemap.xml` — 37 URL, генерируется вручную до реализации `build.php`
+- `robots.txt` — настроен для Yandex и Googlebot
+- Semantic HTML: `<header>`, `<main>`, `<footer>`, `<article>`, `<figure>`
+- WebP srcset на все изображения
+- Планируется: Open Graph, Twitter Cards, JSON-LD Schema.org, favicon/manifest
 
 ## Локальная разработка
 
@@ -88,10 +99,21 @@ local (Laragon) → GitHub (main) → FTP → zavodsvay.ru
 
 ## Roadmap
 
+- [ ] Open Graph / Twitter Cards / VK мета-теги + JSON-LD Schema.org
+- [ ] Favicon, `site.webmanifest`, `theme-color`
+- [ ] Медиасистема: реестр изображений, нарезка Sharp, VLM auto-alt
+- [ ] Карта объектов (~500) + страницы каждого объекта (programmatic SEO)
 - [ ] GitHub Actions → автодеплой по FTP при пуше в `main`
-- [ ] Вынос динамики (форма, калькулятор) в отдельный API endpoint
 - [ ] `build.php` — генерация чистого статического HTML в `/dist/` + динамический sitemap.xml
 - [ ] Переход на pure static: Nginx без PHP
+
+## Связь с WebForge
+
+Этот проект — **production-кейс** [WebForge](https://github.com/AlexanderKuzikov/WebForge), универсального генератора статических сайтов. По мере зрелости WebForge:
+- `webforge.json` станет SSOT для всей структуры, данных и медиа сайта
+- `build.php` заменит текущий PHP file-router на pure static HTML
+- Медиапайплайн (Node.js + Sharp + VLM) будет общим инструментом
+- Schema.org / OG разметка будет генерироваться из данных `webforge.json`
 
 ## Автор
 
