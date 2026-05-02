@@ -1,16 +1,15 @@
 {
-  "obj-001-main": {
-    "file": "source/objects/obj-001/main.jpg",
-    "dir": "objects/obj-001",
+  "13": {
+    "file": "source/13.gif",
+    "dir": "",
     "widths": [
-      320,
-      640,
-      1024,
-      1600
+      320
     ],
-    "alt": "Монтаж винтовых свай в Перми",
-    "caption": "Завершение работ на объекте",
-    "generated": false
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 556,
+    "orig_height": 313
   },
   "logo2": {
     "file": "source/logo2.png",
@@ -46,5 +45,19 @@
     "generated": true,
     "orig_width": 336,
     "orig_height": 370
+  },
+  "bgbg": {
+    "file": "source/bgbg.gif",
+    "dir": "",
+    "widths": [
+      320,
+      640,
+      1024
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1048,
+    "orig_height": 1150
   }
 }
