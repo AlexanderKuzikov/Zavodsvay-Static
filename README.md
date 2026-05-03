@@ -3,6 +3,8 @@
 Производственный сайт завода свайных фундаментов **«Гефест»** (Пермь).  
 Первый production-кейс [WebForge](https://github.com/AlexanderKuzikov/WebForge).
 
+> **Статус:** pre-static PHP-версия. Целевое состояние — pure static HTML через `build.php` после готовности WebForge-генератора.
+
 ---
 
 ## Архитектура
@@ -16,29 +18,30 @@ Zavodsvay-Static/
 ├── layouts/            ← шаблоны (main, home, wide)
 ├── partials/           ← переиспользуемые компоненты (image.php, ...)
 ├── assets/
-│   ├── css/template.css
-│   ├── img/            ← нарезанные WebP-наборы
+│   ├── css/template.css   ← монолитный CSS (до build.php)
+│   ├── img/               ← нарезанные WebP-наборы
 │   └── fonts/
-├── source/             ← оригиналы изображений (jpg, png, gif, webp)
+├── source/             ← оригиналы изображений (jpg, png, gif, webp) — в git
 ├── data/
 │   └── media.json      ← SSOT-реестр изображений
 ├── video/
-├── tools/              ← медиапайплайн (Node.js)
+├── tools/              ← медиапайплайн (Node.js, только локально)
 │   ├── process-media.js
 │   ├── server.js
 │   └── ui/index.html
 ├── index.php           ← файловый роутер
-├── sitemap.xml
+├── sitemap.xml         ← обновляется вручную до build.php
 ├── robots.txt
 ├── .htaccess
-└── CONTEXT.md          ← живой документ разработки для AI + команды
+├── CONTEXT.md          ← живой документ разработки для AI + разработчика
+└── README.md
 ```
 
 ---
 
 ## Медиапайплайн
 
-Локальный инструмент для работы с изображениями. На хостинг не деплоится.
+Локальный инструмент для работы с изображениями. На хостинг **не деплоится**.
 
 ### Запуск
 
@@ -57,12 +60,35 @@ node process-media.js
 3. Нажимаешь **«Нарезать всё»** — генерируются WebP-варианты в `assets/img/`
 4. Заполняешь `alt` и `caption` прямо в интерфейсе
 5. При замене файла — чекбокс **«Перегенерировать»** при сохранении
+6. Кнопка **«Найти мусор»** — удаляет WebP-файлы без записи в реестре (orphans)
 
 ### Ключи в media.json
 
 Ключ = путь относительно `source/` без расширения, слэши → дефисы:
 - `source/logo2.png` → `"logo2"`
 - `source/objects/obj-001/main.jpg` → `"objects-obj-001-main"`
+
+### Структура записи
+
+```json
+{
+  "logo2": {
+    "file": "source/logo2.png",
+    "dir": "",
+    "orig_width": 1200,
+    "orig_height": 400,
+    "widths": [320, 640],
+    "alt": "Логотип Завод Гефест",
+    "caption": "",
+    "generated": true
+  }
+}
+```
+
+**Ключевые поля:**
+- `widths` — реально сгенерированные размеры (≤ ширины оригинала)
+- `orig_width`/`orig_height` — для `width`/`height` атрибутов и нулевого CLS
+- `generated: false` → пересоздать файлы при следующем запуске
 
 ### Использование в PHP
 
@@ -93,21 +119,34 @@ render_image('logo2');
 
 ## SEO
 
-- `sitemap.xml` — 37 URL (9 основных + 28 статей)
+- `sitemap.xml` — 37 URL (9 основных + 28 статей), ручное обновление до `build.php`
 - `robots.txt` — Yandex/Googlebot, Crawl-delay для Yandex
 - WebP + `srcset` — Core Web Vitals
 - `orig_width`/`orig_height` в реестре → нулевой Layout Shift (CLS)
-- **Запланировано:** Open Graph, JSON-LD Schema.org, geo-теги, favicon
+- **Запланировано:** Open Graph, JSON-LD Schema.org, geo-теги, favicon + webmanifest
+
+---
+
+## Известный технический долг
+
+| Проблема | Причина | Решение |
+|---|---|---|
+| `template.css` — монолит | Осознанно до `build.php` | Декомпозиция на компоненты при миграции на WebForge |
+| `sitemap.xml` вручную | До генератора | Автогенерация в `build.php` |
+| `source/` в git | Пока объём мал | Git LFS при росте объёма (решать до, не после) |
+| Нет CI/CD | Не приоритет | GitHub Actions → FTP (30 мин работы, в очереди) |
+| Нет hash-инвалидации CSS/JS | До `build.php` | `style.{hash8}.css` при сборке |
 
 ---
 
 ## Роадмап
 
-- [ ] SEO-разметка (OG, Schema.org, geo)
+- [ ] SEO-разметка (OG, Schema.org, geo-теги)
 - [ ] Favicon + `site.webmanifest`
-- [ ] Карта ~500 объектов (MapLibre GL + PMTiles)
+- [ ] Карта ~500 объектов (MapLibre GL + PMTiles) + страницы объектов
 - [ ] GitHub Actions → автодеплой по FTP
 - [ ] `build.php` → pure static `/dist/`
+- [ ] Портирование медиапайплайна в WebForge
 
 ---
 
