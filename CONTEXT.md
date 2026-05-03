@@ -15,6 +15,67 @@
 
 ---
 
+## Данные клиента (Завод «Гефест»)
+
+> Используются для Schema.org, OG-разметки, geo-тегов, favicon, site.webmanifest.
+
+```
+Название:        Завод винтовых свай «Гефест»
+Юр. название:   (уточнить при необходимости)
+Сайт:            https://zavodsvay.ru/
+Телефон:         +7 (342) 20-99-800  →  +73422099800
+Email:           info@zavodsvay.ru
+Адрес:           г. Пермь, ул. Монастырская, 14, офис 502
+Город:           Пермь
+Регион:          RU-PER (Пермский край)
+Индекс:          (уточнить)
+
+Координаты:
+  Decimal:       58.014746, 56.228500
+  DMS:           58°0′53″N, 56°13′43″E
+  Яндекс.Карты:  https://yandex.ru/maps/-/CPWQYF-0
+
+Режим работы:
+  Пн–Пт:         09:00–18:00
+  Сб–Вс:         Выходной
+
+Соцсети:
+  VK:            https://vk.com/club236711949
+  Telegram:      https://t.me/zavodsvay
+
+На рынке с:      2012 года
+Гарантия:        до 50 лет
+Сфера:           Производство и монтаж винтовых свай, фундаменты
+```
+
+### Для Schema.org `openingHoursSpecification`
+```json
+[
+  {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+    "opens": "09:00",
+    "closes": "18:00"
+  }
+]
+```
+
+### Для geo-тегов
+```html
+<meta name="geo.region" content="RU-PER">
+<meta name="geo.placename" content="Пермь">
+<meta name="geo.position" content="58.014746;56.228500">
+<meta name="ICBM" content="58.014746, 56.228500">
+```
+
+### Блокеры (нужно от клиента)
+- [ ] Логотип SVG или PNG 512px+ — для favicon и og:image
+- [ ] Юридическое название (ООО/ИП?) — для Schema.org `legalName`
+- [ ] Почтовый индекс — для `postalCode` в Schema.org
+- [ ] OG-изображение 1200×630px — если нет, генерировать из логотипа
+
+---
+
 ## Связь с WebForge
 
 Этот проект — **первый production-кейс** [WebForge](https://github.com/AlexanderKuzikov/WebForge).
@@ -231,8 +292,8 @@ Sitemap: https://zavodsvay.ru/sitemap.xml
 ```html
 <meta name="geo.region" content="RU-PER">
 <meta name="geo.placename" content="Пермь">
-<meta name="geo.position" content="58.0105;56.2502">
-<meta name="ICBM" content="58.0105, 56.2502">
+<meta name="geo.position" content="58.014746;56.228500">
+<meta name="ICBM" content="58.014746, 56.228500">
 ```
 
 ---
@@ -308,3 +369,4 @@ include __DIR__ . '/../../layouts/main.php';
 | 2026-05-03 | Удаление: «только запись» или «запись + WebP файлы» — выбор в UI |
 | 2026-05-03 | Orphan-файлы (WebP без записи в реестре) удаляются через кнопку «Найти мусор» в UI |
 | 2026-05-03 | UI-сервер: порт 3010 (3000 занят) |
+| 2026-05-03 | Данные клиента (контакты, geo, часы работы) зафиксированы в CONTEXT.md |
