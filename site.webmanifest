@@ -1,0 +1,21 @@
+{
+  "name": "Завод винтовых свай Гефест",
+  "short_name": "Гефест",
+  "description": "Производство и монтаж винтовых свай в Перми. Гарантия до 50 лет.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#1a3a6b",
+  "icons": [
+    {
+      "src": "/assets/img/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/img/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
