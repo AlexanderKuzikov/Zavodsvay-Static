@@ -3,7 +3,7 @@
 Производственный сайт завода свайных фундаментов **«Гефест»** (Пермь).  
 Первый production-кейс [WebForge](https://github.com/AlexanderKuzikov/WebForge).
 
-> **Статус:** pre-static PHP-версия. Целевое состояние — pure static HTML через `build.php` после готовности WebForge-генератора.
+> **Статус:** pre-static PHP-версия. Favicon + `site.webmanifest` уже подключены. Целевое состояние — pure static HTML через `build.php` после готовности WebForge-генератора.
 
 ---
 
@@ -16,10 +16,10 @@ Zavodsvay-Static/
 ├── pages/              ← страницы ({slug}/index.php + content.html)
 │   └── articles/       ← 28 статей
 ├── layouts/            ← шаблоны (main, home, wide)
-├── partials/           ← переиспользуемые компоненты (image.php, ...)
+├── partials/           ← переиспользуемые компоненты (image.php, head-favicon.php, ...)
 ├── assets/
 │   ├── css/template.css   ← монолитный CSS (до build.php)
-│   ├── img/               ← нарезанные WebP-наборы
+│   ├── img/               ← нарезанные WebP-наборы + icons/
 │   └── fonts/
 ├── source/             ← оригиналы изображений (jpg, png, gif, webp) — в git
 ├── data/
@@ -30,6 +30,9 @@ Zavodsvay-Static/
 │   ├── server.js
 │   └── ui/index.html
 ├── index.php           ← файловый роутер
+├── favicon.png
+├── apple-touch-icon.png
+├── site.webmanifest
 ├── sitemap.xml         ← обновляется вручную до build.php
 ├── robots.txt
 ├── .htaccess
@@ -123,7 +126,8 @@ render_image('logo2');
 - `robots.txt` — Yandex/Googlebot, Crawl-delay для Yandex
 - WebP + `srcset` — Core Web Vitals
 - `orig_width`/`orig_height` в реестре → нулевой Layout Shift (CLS)
-- **Запланировано:** Open Graph, JSON-LD Schema.org, geo-теги, favicon + webmanifest
+- Уже реализовано: `favicon.png`, `apple-touch-icon.png`, `site.webmanifest`, `assets/img/icons/icon-192.png`, `assets/img/icons/icon-512.png`, `partials/head-favicon.php`
+- В планах: Open Graph, JSON-LD Schema.org, geo-теги
 
 ---
 
@@ -134,7 +138,7 @@ render_image('logo2');
 | `template.css` — монолит | Осознанно до `build.php` | Декомпозиция на компоненты при миграции на WebForge |
 | `sitemap.xml` вручную | До генератора | Автогенерация в `build.php` |
 | `source/` в git | Пока объём мал | Git LFS при росте объёма (решать до, не после) |
-| Нет CI/CD | Не приоритет | GitHub Actions → FTP (30 мин работы, в очереди) |
+| Нет CI/CD | Не приоритет | GitHub Actions → FTP |
 | Нет hash-инвалидации CSS/JS | До `build.php` | `style.{hash8}.css` при сборке |
 
 ---
@@ -142,7 +146,7 @@ render_image('logo2');
 ## Роадмап
 
 - [ ] SEO-разметка (OG, Schema.org, geo-теги)
-- [ ] Favicon + `site.webmanifest`
+- [x] Favicon + `site.webmanifest`
 - [ ] Карта ~500 объектов (MapLibre GL + PMTiles) + страницы объектов
 - [ ] GitHub Actions → автодеплой по FTP
 - [ ] `build.php` → pure static `/dist/`
@@ -156,5 +160,5 @@ render_image('logo2');
 |---|---|
 | Сайт | PHP 8.x, нативный CSS, vanilla JS |
 | Медиапайплайн | Node.js, Sharp, Express |
-| Деплой | FTP (shared hosting) |
+| Деплой | FTP (shared hosting, пока вручную) |
 | Карта (план) | MapLibre GL + PMTiles |
