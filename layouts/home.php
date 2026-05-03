@@ -21,6 +21,7 @@ if (!isset($content)) $content = '';
     <?php if (!empty($meta_description)): ?>
     <meta name="description" content="<?= htmlspecialchars($meta_description) ?>">
     <?php endif; ?>
+    <?php include __DIR__ . '/../partials/head-favicon.php'; ?>
 </head>
 <body>
 
