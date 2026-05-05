@@ -28,8 +28,13 @@ jobs:
           lftp -c "
             set ftp:passive-mode off;
             set ssl:verify-certificate no;
+            set net:timeout 30;
+            set net:max-retries 3;
+            set net:reconnect-interval-base 5;
+            set ftp:use-feat no;
+            set ftp:use-mlsd no;
             open ftp://$FTP_USERNAME:$FTP_PASSWORD@$FTP_SERVER;
-            mirror -R --delete --verbose \
+            mirror -R --delete --verbose --use-cache \
               --exclude-glob .git* \
               --exclude-glob source/ \
               --exclude-glob tools/ \
