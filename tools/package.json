@@ -5,10 +5,15 @@
   "type": "module",
   "scripts": {
     "media": "node process-media.js",
-    "ui": "node server.js"
+    "ui": "node server.js",
+    "deploy": "node deploy.js",
+    "deploy:dry": "node deploy.js --dry-run",
+    "deploy:full": "node deploy.js --full"
   },
   "dependencies": {
     "sharp": "^0.33.3",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "basic-ftp": "^5.0.5",
+    "dotenv": "^16.4.5"
   }
 }
