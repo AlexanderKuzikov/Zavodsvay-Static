@@ -16,22 +16,27 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /www/zavodsvay/
-          local-dir: ./
-          security: loose
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/source/**
-            **/tools/**
-            **/node_modules/**
-            README.md
-            CONTEXT.md
-            nginx.conf
-            var_domain.record.csv
+      - name: Install lftp
+        run: sudo apt-get install -y lftp
+
+      - name: Deploy via lftp
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          lftp -c "
+            set ftp:passive-mode off;
+            set ssl:verify-certificate no;
+            open ftp://$FTP_USERNAME:$FTP_PASSWORD@$FTP_SERVER;
+            mirror -R --delete --verbose \
+              --exclude-glob .git* \
+              --exclude-glob source/ \
+              --exclude-glob tools/ \
+              --exclude-glob node_modules/ \
+              --exclude README.md \
+              --exclude CONTEXT.md \
+              --exclude nginx.conf \
+              --exclude var_domain.record.csv \
+              ./ /www/zavodsvay/
+          "
