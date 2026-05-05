@@ -1,0 +1,10 @@
+{
+  "name": "zavodsvay-static",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "deploy": "node tools/deploy.js",
+    "deploy:dry": "node tools/deploy.js --dry-run",
+    "deploy:full": "node tools/deploy.js --full"
+  }
+}
