@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * FTP Deploy Utility
- * Usage:
+ * Usage (from tools/ directory):
  *   npm run deploy       — upload changed files since last deploy
  *   npm run deploy:dry   — dry-run, show what would be uploaded/deleted
  *   npm run deploy:full  — upload ALL deployable files (first run or full restore)
@@ -11,7 +11,7 @@
 
 import * as ftp from 'basic-ftp';
 import { execSync } from 'child_process';
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
 import { resolve, dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
 import { createInterface } from 'readline';
@@ -29,7 +29,6 @@ const FTP_USER = process.env.FTP_USER;
 const FTP_PASS = process.env.FTP_PASS;
 const FTP_REMOTE_DIR = process.env.FTP_REMOTE_DIR || '/';
 
-// Файлы и папки которые НЕ деплоятся
 const EXCLUDE = [
   '.git',
   '.github',
@@ -47,67 +46,41 @@ const isDryRun = process.argv.includes('--dry-run');
 const isFull = process.argv.includes('--full');
 
 function isExcluded(filePath) {
-  const parts = filePath.split('/');
-  return EXCLUDE.some(ex => parts[0] === ex || filePath === ex);
+  const top = filePath.split('/')[0];
+  return EXCLUDE.includes(top) || EXCLUDE.includes(filePath);
+}
+
+function getAllFilesSync(dir = ROOT, base = ROOT) {
+  const results = [];
+  for (const entry of readdirSync(dir)) {
+    const fullPath = resolve(dir, entry);
+    const relPath = relative(base, fullPath).replace(/\\/g, '/');
+    if (isExcluded(relPath.split('/')[0])) continue;
+    if (statSync(fullPath).isDirectory()) {
+      results.push(...getAllFilesSync(fullPath, base));
+    } else {
+      results.push(relPath);
+    }
+  }
+  return results;
 }
 
 function getChangedFiles(sinceSha) {
   try {
-    const added = execSync(
+    const upload = execSync(
       `git diff ${sinceSha} HEAD --name-only --diff-filter=ACMR`,
       { cwd: ROOT, encoding: 'utf8' }
-    ).trim().split('\n').filter(Boolean);
+    ).trim().split('\n').filter(Boolean).filter(f => !isExcluded(f));
 
-    const deleted = execSync(
+    const del = execSync(
       `git diff ${sinceSha} HEAD --name-only --diff-filter=D`,
       { cwd: ROOT, encoding: 'utf8' }
-    ).trim().split('\n').filter(Boolean);
+    ).trim().split('\n').filter(Boolean).filter(f => !isExcluded(f));
 
-    return {
-      upload: added.filter(f => !isExcluded(f)),
-      delete: deleted.filter(f => !isExcluded(f)),
-    };
+    return { upload, delete: del };
   } catch {
     return { upload: [], delete: [] };
   }
-}
-
-function getAllFiles(dir = ROOT, base = ROOT) {
-  const { readdirSync, statSync } = await import('fs');
-  // sync version
-  const results = [];
-  const entries = readdirSync(dir);
-  for (const entry of entries) {
-    const fullPath = resolve(dir, entry);
-    const relPath = relative(base, fullPath).replace(/\\/g, '/');
-    if (isExcluded(relPath.split('/')[0])) continue;
-    const stat = statSync(fullPath);
-    if (stat.isDirectory()) {
-      results.push(...getAllFilesSync(fullPath, base));
-    } else {
-      results.push(relPath);
-    }
-  }
-  return results;
-}
-
-function getAllFilesSync(dir = ROOT, base = ROOT) {
-  import { readdirSync, statSync } from 'fs';
-  const results = [];
-  const entries = readdirSync(dir);
-  for (const entry of entries) {
-    const fullPath = resolve(dir, entry);
-    const relPath = relative(base, fullPath).replace(/\\/g, '/');
-    const topLevel = relPath.split('/')[0];
-    if (isExcluded(topLevel)) continue;
-    const stat = statSync(fullPath);
-    if (stat.isDirectory()) {
-      results.push(...getAllFilesSync(fullPath, base));
-    } else {
-      results.push(relPath);
-    }
-  }
-  return results;
 }
 
 function getCurrentSha() {
@@ -125,10 +98,10 @@ function saveDeployedSha(sha) {
 
 async function confirm(message) {
   const rl = createInterface({ input: process.stdin, output: process.stdout });
-  return new Promise(resolve => {
+  return new Promise(res => {
     rl.question(`${message} [y/n] `, answer => {
       rl.close();
-      resolve(answer.toLowerCase() === 'y');
+      res(answer.toLowerCase() === 'y');
     });
   });
 }
@@ -147,13 +120,11 @@ async function main() {
   let filesToDelete = [];
 
   if (isFull || !lastSha) {
-    if (!lastSha) {
-      console.log('\nℹ️  Файл .last-deploy не найден — выполняется полный деплой');
-    } else {
-      console.log('\nℹ️  Режим полного деплоя (--full)');
-    }
+    console.log(!lastSha
+      ? '\nℹ️  .last-deploy не найден — выполняется полный деплой'
+      : '\nℹ️  Режим полного деплоя (--full)'
+    );
     filesToUpload = getAllFilesSync();
-    filesToDelete = [];
   } else {
     const diff = getChangedFiles(lastSha);
     filesToUpload = diff.upload;
@@ -201,12 +172,8 @@ async function main() {
       secure: false,
     });
 
-    // Принудительно PASV без EPSV
-    client.ftp.socket.setKeepAlive(true);
-
     console.log('\n🔗 Подключено к FTP\n');
 
-    // Upload
     for (const file of filesToUpload) {
       const localPath = resolve(ROOT, file);
       const remotePath = FTP_REMOTE_DIR + file;
@@ -220,7 +187,6 @@ async function main() {
       }
     }
 
-    // Delete
     for (const file of filesToDelete) {
       const remotePath = FTP_REMOTE_DIR + file;
       try {
