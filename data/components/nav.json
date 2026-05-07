@@ -5,6 +5,7 @@
     { "label": "Техническая документация", "url": "/document/" },
     { "label": "Услуги монтажа", "url": "/montage/" },
     { "label": "Для новичков", "url": "/articles/" },
+    { "label": "Карта работ", "url": "/map/" },
     { "label": "Контакты", "url": "/contacts/" }
   ]
 }
