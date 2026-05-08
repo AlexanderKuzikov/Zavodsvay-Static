@@ -45,7 +45,7 @@
     }
 </style>
 
-<script src="https://api-maps.yandex.ru/v3/?apikey=c0204985-1515-44c3-8e4e-1a57f540fd94&lang=ru_RU&packages=%40yandex%2Fymaps3-clusterer"></script>
+<script src="https://api-maps.yandex.ru/v3/?apikey=c0204985-1515-44c3-8e4e-1a57f540fd94&lang=ru_RU"></script>
 
 <div id="map-works">
     <div class="map-loader">Загрузка карты...</div>
@@ -64,6 +64,12 @@
             );
             map.addChild(new YMapDefaultSchemeLayer());
             map.addChild(new YMapDefaultFeaturesLayer());
+
+            // Регистрируем CDN для пакета кластеризации
+            ymaps3.import.registerCdn(
+                'https://cdn.jsdelivr.net/npm/{package}',
+                ['@yandex/ymaps3-clusterer@']
+            );
 
             const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer');
 
