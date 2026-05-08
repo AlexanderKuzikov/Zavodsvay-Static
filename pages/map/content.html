@@ -62,15 +62,15 @@
 
             const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker } = ymaps3;
 
-            // Сначала создаём карту и добавляем слои
             const map = new YMap(document.getElementById('map-works'), {
                 location: { center: [55.9, 58.1], zoom: 9 }
-            });
-            map.addChild(new YMapDefaultSchemeLayer());
-            map.addChild(new YMapDefaultFeaturesLayer());
+            }, [
+                new YMapDefaultSchemeLayer(),
+                new YMapDefaultFeaturesLayer()
+            ]);
 
-            // Затем импортируем модуль кластеризации
-            const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer@0.0.1');
+            // Без версии в названии пакета — так в актуальной документации
+            const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer');
 
             let objects = [];
             try {
@@ -81,38 +81,41 @@
                 console.error('Ошибка загрузки data/map.json:', e);
             }
 
+            // Формат Feature для кластеризатора: geometry.coordinates
             const points = objects.map(obj => ({
+                type: 'Feature',
                 id: String(obj.id),
-                coordinates: obj.coords,
+                geometry: { type: 'Point', coordinates: obj.coords },
                 properties: { obj }
             }));
 
-            const markerContent = (obj) => {
+            const marker = (feature) => {
                 const el = document.createElement('div');
                 el.className = 'custom-marker';
-                el.title = obj.title || '';
-                el.onclick = () => { if (obj.url) window.open(obj.url, '_blank'); };
-                return el;
+                el.title = feature.properties.obj.title || '';
+                el.onclick = () => {
+                    const url = feature.properties.obj.url;
+                    if (url) window.open(url, '_blank');
+                };
+                return new YMapMarker(
+                    { coordinates: feature.geometry.coordinates },
+                    el
+                );
             };
 
-            const clusterContent = (features) => {
+            // cluster(coordinates, features) — так в API v3
+            const cluster = (coordinates, features) => {
                 const el = document.createElement('div');
                 el.className = 'cluster-icon';
                 el.innerText = features.length;
-                return el;
+                return new YMapMarker({ coordinates }, el);
             };
 
             const clusterer = new YMapClusterer({
                 method: clusterByGrid({ gridSize: 64 }),
                 features: points,
-                marker: (feature) => new YMapMarker(
-                    { coordinates: feature.coordinates },
-                    markerContent(feature.properties.obj)
-                ),
-                cluster: (features) => new YMapMarker(
-                    { coordinates: features[0].coordinates },
-                    clusterContent(features)
-                )
+                marker,
+                cluster
             });
 
             map.addChild(clusterer);
