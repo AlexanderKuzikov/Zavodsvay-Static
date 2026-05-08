@@ -23,7 +23,8 @@ Zavodsvay-Static/
 │   └── fonts/
 ├── source/             ← оригиналы изображений (jpg, png, gif, webp) — в git
 ├── data/
-│   └── media.json      ← SSOT-реестр изображений
+│   ├── media.json      ← SSOT-реестр изображений
+│   └── map.json        ← данные точек карты выполненных работ
 ├── video/
 ├── tools/              ← медиапайплайн (Node.js, только локально)
 │   ├── process-media.js
@@ -147,7 +148,8 @@ render_image('logo2');
 
 - [ ] SEO-разметка (OG, Schema.org, geo-теги)
 - [x] Favicon + `site.webmanifest`
-- [ ] Карта ~500 объектов (MapLibre GL + PMTiles) + страницы объектов
+- [x] Карта выполненных работ (Яндекс.Карты v3 + кластеризация)
+- [ ] Карта ~500 объектов (данные + страницы объектов)
 - [ ] GitHub Actions → автодеплой по FTP
 - [ ] `build.php` → pure static `/dist/`
 - [ ] Портирование медиапайплайна в WebForge
@@ -161,4 +163,4 @@ render_image('logo2');
 | Сайт | PHP 8.x, нативный CSS, vanilla JS |
 | Медиапайплайн | Node.js, Sharp, Express |
 | Деплой | FTP (shared hosting, пока вручную) |
-| Карта (план) | MapLibre GL + PMTiles |
+| Карта | Яндекс.Карты JS API v3 + `@yandex/ymaps3-clusterer` (via jsdelivr CDN) |
