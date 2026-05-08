@@ -45,7 +45,8 @@
     }
 </style>
 
-<script src="https://api-maps.yandex.ru/v3/?apikey=c0204985-1515-44c3-8e4e-1a57f540fd94&lang=ru_RU"></script>
+<!-- packages=@yandex/ymaps3-clusterer обязателен для ymaps3.import -->
+<script src="https://api-maps.yandex.ru/v3/?apikey=c0204985-1515-44c3-8e4e-1a57f540fd94&lang=ru_RU&packages=@yandex/ymaps3-clusterer"></script>
 
 <div id="map-works">
     <div class="map-loader">Загрузка карты...</div>
@@ -55,7 +56,6 @@
     async function initMap() {
         try {
             await ymaps3.ready;
-            console.log('[map] ymaps3.ready OK');
 
             const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker } = ymaps3;
 
@@ -65,18 +65,14 @@
             );
             map.addChild(new YMapDefaultSchemeLayer());
             map.addChild(new YMapDefaultFeaturesLayer());
-            console.log('[map] YMap init OK');
 
-            console.log('[map] importing clusterer...');
             const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer');
-            console.log('[map] clusterer imported OK');
 
             let objects = [];
             try {
                 const res = await fetch('/data/map.json');
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 objects = await res.json();
-                console.log('[map] data loaded, objects:', objects.length);
             } catch (e) {
                 console.error('[map] fetch error:', e);
             }
@@ -112,7 +108,6 @@
                 marker,
                 cluster
             }));
-            console.log('[map] clusterer added OK');
 
         } catch (e) {
             console.error('[map] CRASH:', e);
