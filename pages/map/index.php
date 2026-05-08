@@ -7,4 +7,4 @@ ob_start();
 readfile(__DIR__ . '/content.html');
 $content = ob_get_clean();
 
-include __DIR__ . '/../../layouts/wide.php';
+include __DIR__ . '/../../layouts/main.php';
