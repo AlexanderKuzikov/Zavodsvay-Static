@@ -28,20 +28,6 @@
         transform: scale(1.2);
         background-color: #e64a19;
     }
-    .cluster-icon {
-        background: #3f51b5;
-        color: white;
-        border-radius: 50%;
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        font-weight: bold;
-        border: 2px solid #fff;
-        cursor: pointer;
-    }
 </style>
 
 <script src="https://api-maps.yandex.ru/v3/?apikey=c0204985-1515-44c3-8e4e-1a57f540fd94&lang=ru_RU"></script>
@@ -52,66 +38,42 @@
 
 <script>
     async function initMap() {
-        await ymaps3.ready;
-
-        const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker } = ymaps3;
-        const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer@0.0.1');
-
-        const map = new YMap(document.getElementById('map-works'), {
-            location: {
-                center: [55.9, 58.1],
-                zoom: 9
-            }
-        });
-
-        map.addChild(new YMapDefaultSchemeLayer());
-        map.addChild(new YMapDefaultFeaturesLayer());
-
-        let objects = [];
         try {
-            const res = await fetch('/pages/map/data.json');
-            if (!res.ok) throw new Error(res.status);
-            objects = await res.json();
-        } catch (e) {
-            console.error('Ошибка загрузки data.json:', e);
+            await ymaps3.ready;
+
+            const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker } = ymaps3;
+
+            const map = new YMap(document.getElementById('map-works'), {
+                location: { center: [55.9, 58.1], zoom: 9 }
+            });
+
+            map.addChild(new YMapDefaultSchemeLayer());
+            map.addChild(new YMapDefaultFeaturesLayer());
+
+            let objects = [];
+            try {
+                const res = await fetch('data.json');
+                if (!res.ok) throw new Error(res.status);
+                objects = await res.json();
+            } catch (e) {
+                console.error('Ошибка загрузки data.json:', e);
+            }
+
+            objects.forEach(obj => {
+                const el = document.createElement('div');
+                el.className = 'custom-marker';
+                el.title = obj.title || '';
+                el.onclick = () => { if (obj.url) window.open(obj.url, '_blank'); };
+
+                map.addChild(new YMapMarker(
+                    { coordinates: obj.coords, draggable: false },
+                    el
+                ));
+            });
+        } finally {
+            const loader = document.querySelector('.map-loader');
+            if (loader) loader.style.display = 'none';
         }
-
-        const points = objects.map(obj => ({
-            id: String(obj.id),
-            coordinates: obj.coords,
-            properties: { obj }
-        }));
-
-        const markerContent = (obj) => {
-            const el = document.createElement('div');
-            el.className = 'custom-marker';
-            el.title = obj.title || '';
-            el.onclick = () => { if (obj.url) window.open(obj.url, '_blank'); };
-            return el;
-        };
-
-        const clusterContent = (features) => {
-            const el = document.createElement('div');
-            el.className = 'cluster-icon';
-            el.innerText = features.length;
-            return el;
-        };
-
-        const clusterer = new YMapClusterer({
-            method: clusterByGrid({ gridSize: 64 }),
-            features: points,
-            marker: (feature) => new YMapMarker(
-                { coordinates: feature.coordinates },
-                markerContent(feature.properties.obj)
-            ),
-            cluster: (features) => new YMapMarker(
-                { coordinates: features[0].coordinates },
-                clusterContent(features)
-            )
-        });
-
-        map.addChild(clusterer);
-        document.querySelector('.map-loader').style.display = 'none';
     }
 
     initMap().catch(console.error);
