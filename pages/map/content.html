@@ -65,10 +65,9 @@
             map.addChild(new YMapDefaultSchemeLayer());
             map.addChild(new YMapDefaultFeaturesLayer());
 
-            // Регистрируем CDN для пакета кластеризации
             ymaps3.import.registerCdn(
                 'https://cdn.jsdelivr.net/npm/{package}',
-                ['@yandex/ymaps3-clusterer@']
+                '@yandex/ymaps3-clusterer@0.0.1'
             );
 
             const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer');
@@ -78,6 +77,7 @@
                 const res = await fetch('/data/map.json');
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 objects = await res.json();
+                console.log('[map] objects:', objects.length);
             } catch (e) {
                 console.error('[map] fetch error:', e);
             }
