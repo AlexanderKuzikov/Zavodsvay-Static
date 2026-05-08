@@ -14,6 +14,34 @@
         transform: translate(-50%, -50%);
         z-index: 10;
     }
+    .custom-marker {
+        background-color: #ff5722;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        transition: transform 0.2s;
+    }
+    .custom-marker:hover {
+        transform: scale(1.2);
+        background-color: #e64a19;
+    }
+    .cluster-icon {
+        background: #3f51b5;
+        color: white;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: bold;
+        border: 2px solid #fff;
+        cursor: pointer;
+    }
 </style>
 
 <script src="https://api-maps.yandex.ru/v3/?apikey=c0204985-1515-44c3-8e4e-1a57f540fd94&lang=ru_RU"></script>
@@ -23,37 +51,11 @@
 </div>
 
 <script>
-    const OBJECTS_DATA = [
-        {
-            id: 1,
-            coords: [56.43269, 58.460985],
-            title: "г. Добрянка, фундамент на склоне",
-            url: "javascript:void(0)"
-        },
-        {
-            id: 2,
-            coords: [55.662813, 58.004323],
-            title: "Усть-Качка, фундаменты трёх домов",
-            url: "javascript:void(0)"
-        },
-        {
-            id: 3,
-            coords: [55.930675, 58.058760],
-            title: "пос. Мысы, фундамент 8×8",
-            url: "javascript:void(0)"
-        },
-        {
-            id: 4,
-            coords: [55.540843, 58.030011],
-            title: 'СНТ "Содружество", фундамент 5.4×8.4',
-            url: "javascript:void(0)"
-        }
-    ];
-
     async function initMap() {
         await ymaps3.ready;
 
         const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker } = ymaps3;
+        const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer@0.0.1');
 
         const map = new YMap(document.getElementById('map-works'), {
             location: {
@@ -65,15 +67,50 @@
         map.addChild(new YMapDefaultSchemeLayer());
         map.addChild(new YMapDefaultFeaturesLayer());
 
-        OBJECTS_DATA.forEach(obj => {
-            const el = document.createElement('div');
-            el.style.cssText = 'width:20px;height:20px;background:#ff5722;border-radius:50%;border:2px solid white;cursor:pointer;';
-            el.title = obj.title;
-            el.onclick = () => console.log('Объект:', obj.title);
+        let objects = [];
+        try {
+            const res = await fetch('/pages/map/data.json');
+            if (!res.ok) throw new Error(res.status);
+            objects = await res.json();
+        } catch (e) {
+            console.error('Ошибка загрузки data.json:', e);
+        }
 
-            map.addChild(new YMapMarker({ coordinates: obj.coords, draggable: false }, el));
+        const points = objects.map(obj => ({
+            id: String(obj.id),
+            coordinates: obj.coords,
+            properties: { obj }
+        }));
+
+        const markerContent = (obj) => {
+            const el = document.createElement('div');
+            el.className = 'custom-marker';
+            el.title = obj.title || '';
+            el.onclick = () => { if (obj.url) window.open(obj.url, '_blank'); };
+            return el;
+        };
+
+        const clusterContent = (features) => {
+            const el = document.createElement('div');
+            el.className = 'cluster-icon';
+            el.innerText = features.length;
+            return el;
+        };
+
+        const clusterer = new YMapClusterer({
+            method: clusterByGrid({ gridSize: 64 }),
+            features: points,
+            marker: (feature) => new YMapMarker(
+                { coordinates: feature.coordinates },
+                markerContent(feature.properties.obj)
+            ),
+            cluster: (features) => new YMapMarker(
+                { coordinates: features[0].coordinates },
+                clusterContent(features)
+            )
         });
 
+        map.addChild(clusterer);
         document.querySelector('.map-loader').style.display = 'none';
     }
 
