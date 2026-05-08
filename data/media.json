@@ -173,5 +173,17 @@
     "generated": true,
     "orig_width": 336,
     "orig_height": 370
+  },
+  "prosvirnov": {
+    "file": "source/prosvirnov.jpg",
+    "dir": "",
+    "widths": [
+      320
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 336,
+    "orig_height": 370
   }
 }
