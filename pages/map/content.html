@@ -62,15 +62,15 @@
 
             const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker } = ymaps3;
 
-            const map = new YMap(document.getElementById('map-works'), {
-                location: { center: [55.9, 58.1], zoom: 9 }
-            }, [
-                new YMapDefaultSchemeLayer(),
-                new YMapDefaultFeaturesLayer()
-            ]);
-
-            // Без версии в названии пакета — так в актуальной документации
+            // 1. Сначала import модуля, потом new YMap — именно так по документации
             const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer');
+
+            // 2. Слои передаются третьим аргументом конструктора
+            const map = new YMap(
+                document.getElementById('map-works'),
+                { location: { center: [55.9, 58.1], zoom: 9 } },
+                [new YMapDefaultSchemeLayer({}), new YMapDefaultFeaturesLayer({})]
+            );
 
             let objects = [];
             try {
@@ -81,7 +81,6 @@
                 console.error('Ошибка загрузки data/map.json:', e);
             }
 
-            // Формат Feature для кластеризатора: geometry.coordinates
             const points = objects.map(obj => ({
                 type: 'Feature',
                 id: String(obj.id),
@@ -97,13 +96,9 @@
                     const url = feature.properties.obj.url;
                     if (url) window.open(url, '_blank');
                 };
-                return new YMapMarker(
-                    { coordinates: feature.geometry.coordinates },
-                    el
-                );
+                return new YMapMarker({ coordinates: feature.geometry.coordinates }, el);
             };
 
-            // cluster(coordinates, features) — так в API v3
             const cluster = (coordinates, features) => {
                 const el = document.createElement('div');
                 el.className = 'cluster-icon';
@@ -111,14 +106,12 @@
                 return new YMapMarker({ coordinates }, el);
             };
 
-            const clusterer = new YMapClusterer({
+            map.addChild(new YMapClusterer({
                 method: clusterByGrid({ gridSize: 64 }),
                 features: points,
                 marker,
                 cluster
-            });
-
-            map.addChild(clusterer);
+            }));
 
         } finally {
             const loader = document.querySelector('.map-loader');
