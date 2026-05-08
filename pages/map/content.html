@@ -52,11 +52,11 @@
 
             let objects = [];
             try {
-                const res = await fetch('data.json');
+                const res = await fetch('/data/map.json');
                 if (!res.ok) throw new Error(res.status);
                 objects = await res.json();
             } catch (e) {
-                console.error('Ошибка загрузки data.json:', e);
+                console.error('Ошибка загрузки data/map.json:', e);
             }
 
             objects.forEach(obj => {
