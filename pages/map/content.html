@@ -1,3 +1,81 @@
 <h1>Карта выполненных работ</h1>
 
-<p>Раздел в разработке. Скоро здесь появится интерактивная карта наших объектов.</p>
+<style>
+    #map-works {
+        width: 100%;
+        height: 500px;
+        background-color: #f0f0f0;
+        position: relative;
+    }
+    .map-loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+    }
+</style>
+
+<script src="https://api-maps.yandex.ru/v3/?apikey=c0204985-1515-44c3-8e4e-1a57f540fd94&lang=ru_RU"></script>
+
+<div id="map-works">
+    <div class="map-loader">Загрузка карты...</div>
+</div>
+
+<script>
+    const OBJECTS_DATA = [
+        {
+            id: 1,
+            coords: [56.43269, 58.460985],
+            title: "г. Добрянка, фундамент на склоне",
+            url: "javascript:void(0)"
+        },
+        {
+            id: 2,
+            coords: [55.662813, 58.004323],
+            title: "Усть-Качка, фундаменты трёх домов",
+            url: "javascript:void(0)"
+        },
+        {
+            id: 3,
+            coords: [55.930675, 58.058760],
+            title: "пос. Мысы, фундамент 8×8",
+            url: "javascript:void(0)"
+        },
+        {
+            id: 4,
+            coords: [55.540843, 58.030011],
+            title: 'СНТ "Содружество", фундамент 5.4×8.4',
+            url: "javascript:void(0)"
+        }
+    ];
+
+    async function initMap() {
+        await ymaps3.ready;
+
+        const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker } = ymaps3;
+
+        const map = new YMap(document.getElementById('map-works'), {
+            location: {
+                center: [55.9, 58.1],
+                zoom: 9
+            }
+        });
+
+        map.addChild(new YMapDefaultSchemeLayer());
+        map.addChild(new YMapDefaultFeaturesLayer());
+
+        OBJECTS_DATA.forEach(obj => {
+            const el = document.createElement('div');
+            el.style.cssText = 'width:20px;height:20px;background:#ff5722;border-radius:50%;border:2px solid white;cursor:pointer;';
+            el.title = obj.title;
+            el.onclick = () => console.log('Объект:', obj.title);
+
+            map.addChild(new YMapMarker({ coordinates: obj.coords, draggable: false }, el));
+        });
+
+        document.querySelector('.map-loader').style.display = 'none';
+    }
+
+    initMap().catch(console.error);
+</script>
