@@ -42,10 +42,6 @@
         border: 2px solid #fff;
         box-shadow: 0 2px 6px rgba(0,0,0,0.35);
         cursor: pointer;
-        transition: transform 0.15s;
-    }
-    .cluster-icon:hover {
-        transform: scale(1.1);
     }
 </style>
 
@@ -59,26 +55,30 @@
     async function initMap() {
         try {
             await ymaps3.ready;
+            console.log('[map] ymaps3.ready OK');
 
             const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker } = ymaps3;
 
-            // 1. Сначала import модуля, потом new YMap — именно так по документации
-            const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer');
-
-            // 2. Слои передаются третьим аргументом конструктора
             const map = new YMap(
                 document.getElementById('map-works'),
-                { location: { center: [55.9, 58.1], zoom: 9 } },
-                [new YMapDefaultSchemeLayer({}), new YMapDefaultFeaturesLayer({})]
+                { location: { center: [55.9, 58.1], zoom: 9 } }
             );
+            map.addChild(new YMapDefaultSchemeLayer());
+            map.addChild(new YMapDefaultFeaturesLayer());
+            console.log('[map] YMap init OK');
+
+            console.log('[map] importing clusterer...');
+            const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer');
+            console.log('[map] clusterer imported OK');
 
             let objects = [];
             try {
                 const res = await fetch('/data/map.json');
-                if (!res.ok) throw new Error(res.status);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
                 objects = await res.json();
+                console.log('[map] data loaded, objects:', objects.length);
             } catch (e) {
-                console.error('Ошибка загрузки data/map.json:', e);
+                console.error('[map] fetch error:', e);
             }
 
             const points = objects.map(obj => ({
@@ -112,12 +112,15 @@
                 marker,
                 cluster
             }));
+            console.log('[map] clusterer added OK');
 
+        } catch (e) {
+            console.error('[map] CRASH:', e);
         } finally {
             const loader = document.querySelector('.map-loader');
             if (loader) loader.style.display = 'none';
         }
     }
 
-    initMap().catch(console.error);
+    initMap();
 </script>
