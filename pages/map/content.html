@@ -77,7 +77,6 @@
                 const res = await fetch('/data/map.json');
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 objects = await res.json();
-                console.log('[map] objects:', objects.length);
             } catch (e) {
                 console.error('[map] fetch error:', e);
             }
@@ -115,7 +114,7 @@
             }));
 
         } catch (e) {
-            console.error('[map] CRASH:', e);
+            console.error('[map] error:', e);
         } finally {
             const loader = document.querySelector('.map-loader');
             if (loader) loader.style.display = 'none';
