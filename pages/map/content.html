@@ -127,9 +127,8 @@
                 const el = document.createElement('div');
                 el.className = 'custom-marker';
                 el.title = obj.title || '';
-                el.style.backgroundColor = CAT_COLORS[obj.cat] ?? CAT_COLORS.other;
+                el.style.backgroundColor = CAT_COLORS[obj.category] ?? CAT_COLORS.other;
                 el.onclick = () => {
-                    // Заготовка под scrollIntoView когда появятся SEO-карточки
                     const card = document.querySelector('[data-id="' + obj.id + '"]');
                     if (card) {
                         card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
