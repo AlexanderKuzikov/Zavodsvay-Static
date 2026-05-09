@@ -52,7 +52,7 @@ Zavodsvay-Static/
 ```bash
 cd tools
 npm install      # один раз
-npm run ui       # Media UI → http://localhost:3010
+ npm run ui       # Media UI → http://localhost:3010
 # или CLI:
 node process-media.js
 ```
@@ -148,7 +148,7 @@ render_image('logo2');
 
 - [ ] SEO-разметка (OG, Schema.org, geo-теги)
 - [x] Favicon + `site.webmanifest`
-- [x] Карта выполненных работ (Яндекс.Карты v3 + кластеризация)
+- [x] Карта выполненных работ (Яндекс.Карты v3 + кластеризация + легенда категорий)
 - [ ] Карта ~500 объектов (данные + страницы объектов)
 - [ ] GitHub Actions → автодеплой по FTP
 - [ ] `build.php` → pure static `/dist/`
@@ -162,5 +162,5 @@ render_image('logo2');
 |---|---|
 | Сайт | PHP 8.x, нативный CSS, vanilla JS |
 | Медиапайплайн | Node.js, Sharp, Express |
-| Деплой | FTP (shared hosting, пока вручную) |
+| Деплой | FTP (shared hosting, пока вручной) |
 | Карта | Яндекс.Карты JS API v3 + `@yandex/ymaps3-clusterer` (via jsdelivr CDN) |
