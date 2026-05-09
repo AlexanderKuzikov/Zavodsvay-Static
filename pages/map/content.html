@@ -41,12 +41,79 @@
         box-shadow: 0 2px 6px rgba(0,0,0,0.35);
         cursor: pointer;
     }
+
+    /* === Легенда === */
+    .map-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 20px;
+        margin-top: 18px;
+        padding: 16px 20px;
+        background: #f8f8f8;
+        border: 1px solid #e4e4e4;
+        border-radius: 10px;
+    }
+    .map-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: #333;
+        line-height: 1;
+    }
+    .map-legend-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+        flex-shrink: 0;
+    }
 </style>
 
 <script src="https://api-maps.yandex.ru/v3/?apikey=c0204985-1515-44c3-8e4e-1a57f540fd94&lang=ru_RU"></script>
 
 <div id="map-works">
     <div class="map-loader">Загрузка карты...</div>
+</div>
+
+<div class="map-legend" aria-label="Обозначения маркеров">
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#2563eb"></span>
+        <span>Жилой дом</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#16a34a"></span>
+        <span>Баня</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#9333ea"></span>
+        <span>Забор</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#ea580c"></span>
+        <span>Коммерция</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#dc2626"></span>
+        <span>Промышленные</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#0891b2"></span>
+        <span>Водные объекты</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#ca8a04"></span>
+        <span>Социальные</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#65a30d"></span>
+        <span>Сельхоз</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#6b7280"></span>
+        <span>Прочее</span>
+    </div>
 </div>
 
 <script>
