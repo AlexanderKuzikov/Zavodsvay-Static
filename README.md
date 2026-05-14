@@ -25,9 +25,10 @@
 ```
 Zavodsvay-Static/
 ├── pages/              ← страницы ({slug}/index.php + content.html)
-│   └── articles/       ← 28 статей
+│   ├── articles/       ← 28 статей
+│   └── objects/        ← страницы объектов (в разработке)
 ├── layouts/            ← шаблоны (main, home, wide)
-├── partials/           ← переиспользуемые компоненты (image.php, head-favicon.php, ...)
+├── partials/           ← переиспользуемые компоненты (image.php, head-favicon.php, head-seo.php, ...)
 ├── assets/
 │   ├── css/template.css   ← монолитный CSS (до build.php)
 │   ├── img/               ← нарезанные WebP-наборы + icons/ + og/
@@ -35,7 +36,8 @@ Zavodsvay-Static/
 ├── source/             ← оригиналы изображений (jpg, png, gif, webp) — в git
 ├── data/
 │   ├── media.json      ← SSOT-реестр изображений
-│   └── map.json        ← данные точек карты выполненных работ
+│   ├── map.json        ← данные 500+ точек карты выполненных работ
+│   └── objects.json    ← реестр объектов (в разработке)
 ├── video/
 ├── tools/              ← медиапайплайн + деплой (Node.js, только локально)
 │   ├── process-media.js
@@ -141,6 +143,7 @@ node deploy.js
 | `/map/` | `pages/map/` |
 | `/document/` | `pages/document/` |
 | `/articles/{slug}/` | `pages/articles/{slug}/` |
+| `/objects/{slug}/` | `pages/objects/{slug}/` (в разработке) |
 
 ---
 
@@ -151,8 +154,9 @@ node deploy.js
 - WebP + `srcset` — Core Web Vitals
 - `orig_width`/`orig_height` в реестре → нулевой Layout Shift (CLS)
 - **OG-изображения готовы:** `assets/img/og/og-home.jpg` (primary, для краулеров), `assets/img/og/og-home.webp` (дополнительный)
+- **`partials/head-seo.php`** — реализован: OG, Twitter Cards, JSON-LD Schema.org `@graph`, geo-теги Яндекса
 - Уже реализовано: `favicon.png`, `apple-touch-icon.png`, `site.webmanifest`, `assets/img/icons/icon-192.png`, `assets/img/icons/icon-512.png`, `partials/head-favicon.php`
-- В планах: Open Graph, JSON-LD Schema.org, geo-теги
+- В планах: OG + Schema.org для статей (`og_type=article`), страницы объектов (programmatic SEO)
 
 ---
 
@@ -164,18 +168,32 @@ node deploy.js
 | `sitemap.xml` вручную | До генератора | Автогенерация в `build.php` |
 | `source/` в git | Пока объём мал | Git LFS при росте объёма (решать до, не после) |
 | Нет hash-инвалидации CSS/JS | До `build.php` | `style.{hash8}.css` при сборке |
+| Изображения объектов вне репо | Требуют подготовки и нарезки | Image pipeline для объектов (отдельный этап) |
 
 ---
 
 ## Роадмап
 
-- [ ] SEO-разметка (OG, Schema.org, geo-теги)
 - [x] Favicon + `site.webmanifest`
 - [x] Карта выполненных работ (Яндекс.Карты v3 + кластеризация + легенда категорий)
 - [x] OG-изображения (`assets/img/og/og-home.jpg` + `.webp`)
-- [ ] Карта ~500 объектов (данные + страницы объектов)
+- [x] SEO-partial (`partials/head-seo.php` — OG, Schema.org, geo-теги)
+- [x] Карта 500+ объектов — данные подготовлены через Qwen3.5 Flash, карта реализована
+- [ ] **Object pages** — первые страницы объектов `/objects/{slug}/`, открываются по клику с карты
+- [ ] **Image pipeline для объектов** — подготовка, нарезка, частичная автоматизация + generative-модели
+- [ ] SEO-разметка статей (og_type=article, Schema.org Article)
 - [ ] `build.php` → pure static `/dist/`
 - [ ] Портирование медиапайплайна в WebForge
+
+---
+
+## AI в проекте
+
+| Инструмент | Применение |
+|---|---|
+| Perplexity (Space: Zavodsvay) | Основной AI-ассистент разработки, работа с репо через GitHub MCP |
+| Qwen3.5 Flash (облачный) | Подготовка данных карты: восстановление полей, нормализация, категоризация 500+ объектов |
+| Generative-модели (планируется) | Подготовка и дополнение изображений объектов в image pipeline |
 
 ---
 
