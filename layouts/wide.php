@@ -2,10 +2,12 @@
 /**
  * Layout без sidebar (для карты работ и других широких страниц)
  */
-if (!isset($title)) $title = '';
+if (!isset($title))            $title            = '';
 if (!isset($meta_description)) $meta_description = '';
-if (!isset($canonical)) $canonical = '';
-if (!isset($content)) $content = '';
+if (!isset($canonical))        $canonical        = '';
+if (!isset($content))          $content          = '';
+// SEO page-level опционалы — дефолты внутри head-seo.php
+// $og_image, $og_type, $schema_type, $article_published, $article_modified
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -21,6 +23,7 @@ if (!isset($content)) $content = '';
     <meta name="description" content="<?= htmlspecialchars($meta_description) ?>">
     <?php endif; ?>
     <?php include __DIR__ . '/../partials/head-favicon.php'; ?>
+    <?php include __DIR__ . '/../partials/head-seo.php'; ?>
 </head>
 <body>
 
