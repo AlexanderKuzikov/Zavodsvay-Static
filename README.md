@@ -3,6 +3,17 @@
 Производственный сайт завода свайных фундаментов **«Гефест»** (Пермь).  
 Первый production-кейс [WebForge](https://github.com/AlexanderKuzikov/WebForge).
 
+![PHP](https://img.shields.io/badge/PHP-8.x-777BB4?style=flat-square&logo=php&logoColor=white)
+![CSS](https://img.shields.io/badge/CSS-нативный-1572B6?style=flat-square&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JS-Vanilla-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-медиапайплайн-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white)
+![Sharp](https://img.shields.io/badge/Sharp-WebP-99CC00?style=flat-square&logo=sharp&logoColor=white)
+![FTP Deploy](https://img.shields.io/badge/Deploy-FTP_deploy.js-0066CC?style=flat-square&logo=filezilla&logoColor=white)
+![Yandex Maps](https://img.shields.io/badge/Яндекс.Карты-JS_API_v3-FF0000?style=flat-square&logo=yandex&logoColor=white)
+![WebP](https://img.shields.io/badge/Images-WebP_srcset-2196F3?style=flat-square&logo=webp&logoColor=white)
+![SEO](https://img.shields.io/badge/SEO-first-4CAF50?style=flat-square&logo=googlesearchconsole&logoColor=white)
+![License](https://img.shields.io/badge/License-Apache_2.0-D22128?style=flat-square&logo=apache&logoColor=white)
+
 > **Статус:** pre-static PHP-версия. Favicon + `site.webmanifest` уже подключены. Целевое состояние — pure static HTML через `build.php` после готовности WebForge-генератора.
 
 ---
