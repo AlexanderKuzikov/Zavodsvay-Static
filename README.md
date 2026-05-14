@@ -19,15 +19,16 @@ Zavodsvay-Static/
 ├── partials/           ← переиспользуемые компоненты (image.php, head-favicon.php, ...)
 ├── assets/
 │   ├── css/template.css   ← монолитный CSS (до build.php)
-│   ├── img/               ← нарезанные WebP-наборы + icons/
+│   ├── img/               ← нарезанные WebP-наборы + icons/ + og/
 │   └── fonts/
 ├── source/             ← оригиналы изображений (jpg, png, gif, webp) — в git
 ├── data/
 │   ├── media.json      ← SSOT-реестр изображений
 │   └── map.json        ← данные точек карты выполненных работ
 ├── video/
-├── tools/              ← медиапайплайн (Node.js, только локально)
+├── tools/              ← медиапайплайн + деплой (Node.js, только локально)
 │   ├── process-media.js
+│   ├── deploy.js       ← FTP-деплой на shared hosting
 │   ├── server.js
 │   └── ui/index.html
 ├── index.php           ← файловый роутер
@@ -52,7 +53,7 @@ Zavodsvay-Static/
 ```bash
 cd tools
 npm install      # один раз
- npm run ui       # Media UI → http://localhost:3010
+npm run ui       # Media UI → http://localhost:3010
 # или CLI:
 node process-media.js
 ```
@@ -104,6 +105,17 @@ render_image('logo2');
 
 ---
 
+## Деплой
+
+Локальный FTP-деплой через `tools/deploy.js`. Быстрый, управляемый, без внешних CI.
+
+```bash
+cd tools
+node deploy.js
+```
+
+---
+
 ## Страницы
 
 | URL | Файл |
@@ -127,6 +139,7 @@ render_image('logo2');
 - `robots.txt` — Yandex/Googlebot, Crawl-delay для Yandex
 - WebP + `srcset` — Core Web Vitals
 - `orig_width`/`orig_height` в реестре → нулевой Layout Shift (CLS)
+- **OG-изображения готовы:** `assets/img/og/og-home.jpg` (primary, для краулеров), `assets/img/og/og-home.webp` (дополнительный)
 - Уже реализовано: `favicon.png`, `apple-touch-icon.png`, `site.webmanifest`, `assets/img/icons/icon-192.png`, `assets/img/icons/icon-512.png`, `partials/head-favicon.php`
 - В планах: Open Graph, JSON-LD Schema.org, geo-теги
 
@@ -139,7 +152,6 @@ render_image('logo2');
 | `template.css` — монолит | Осознанно до `build.php` | Декомпозиция на компоненты при миграции на WebForge |
 | `sitemap.xml` вручную | До генератора | Автогенерация в `build.php` |
 | `source/` в git | Пока объём мал | Git LFS при росте объёма (решать до, не после) |
-| Нет CI/CD | Не приоритет | GitHub Actions → FTP |
 | Нет hash-инвалидации CSS/JS | До `build.php` | `style.{hash8}.css` при сборке |
 
 ---
@@ -149,8 +161,8 @@ render_image('logo2');
 - [ ] SEO-разметка (OG, Schema.org, geo-теги)
 - [x] Favicon + `site.webmanifest`
 - [x] Карта выполненных работ (Яндекс.Карты v3 + кластеризация + легенда категорий)
+- [x] OG-изображения (`assets/img/og/og-home.jpg` + `.webp`)
 - [ ] Карта ~500 объектов (данные + страницы объектов)
-- [ ] GitHub Actions → автодеплой по FTP
 - [ ] `build.php` → pure static `/dist/`
 - [ ] Портирование медиапайплайна в WebForge
 
@@ -162,5 +174,5 @@ render_image('logo2');
 |---|---|
 | Сайт | PHP 8.x, нативный CSS, vanilla JS |
 | Медиапайплайн | Node.js, Sharp, Express |
-| Деплой | FTP (shared hosting, пока вручной) |
+| Деплой | FTP через `tools/deploy.js` (shared hosting, локальный deploy tool) |
 | Карта | Яндекс.Карты JS API v3 + `@yandex/ymaps3-clusterer` (via jsdelivr CDN) |
