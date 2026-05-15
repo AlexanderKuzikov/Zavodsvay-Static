@@ -185,5 +185,377 @@
     "generated": true,
     "orig_width": 336,
     "orig_height": 370
+  },
+  "old-13": {
+    "file": "source/old/13.gif",
+    "dir": "old",
+    "widths": [
+      320
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 556,
+    "orig_height": 313
+  },
+  "old-bgbg": {
+    "file": "source/old/bgbg.gif",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1048,
+    "orig_height": 1150
+  },
+  "old-gilin": {
+    "file": "source/old/gilin.jpg",
+    "dir": "old",
+    "widths": [
+      320
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 455,
+    "orig_height": 481
+  },
+  "old-logo": {
+    "file": "source/old/logo.png",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 2471,
+    "orig_height": 2471
+  },
+  "old-logo2": {
+    "file": "source/old/logo2.png",
+    "dir": "old",
+    "widths": [
+      320,
+      640
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 960,
+    "orig_height": 960
+  },
+  "old-pic1": {
+    "file": "source/old/pic1.webp",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1920,
+    "orig_height": 1080
+  },
+  "old-pic2": {
+    "file": "source/old/pic2.webp",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1920,
+    "orig_height": 1080
+  },
+  "old-pic3": {
+    "file": "source/old/pic3.webp",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1920,
+    "orig_height": 1080
+  },
+  "old-pic4": {
+    "file": "source/old/pic4.webp",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1920,
+    "orig_height": 1080
+  },
+  "old-pic5": {
+    "file": "source/old/pic5.webp",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1920,
+    "orig_height": 1080
+  },
+  "old-prosvirnov": {
+    "file": "source/old/prosvirnov.jpg",
+    "dir": "old",
+    "widths": [
+      320
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 336,
+    "orig_height": 370
+  },
+  "old-vintovaya-svaya-VSG-1": {
+    "file": "source/old/vintovaya-svaya-VSG-1.jpg",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 2048,
+    "orig_height": 2048
+  },
+  "old-vintovaya-svaya-VSG-2": {
+    "file": "source/old/vintovaya-svaya-VSG-2.jpg",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 2048,
+    "orig_height": 2048
+  },
+  "old-vintovaya-svaya-VSG-3-2-lopastnaya": {
+    "file": "source/old/vintovaya-svaya-VSG-3-2-lopastnaya.jpg",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1792,
+    "orig_height": 2400
+  },
+  "old-vintovaya-svaya-VSG-3": {
+    "file": "source/old/vintovaya-svaya-VSG-3.jpg",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 2048,
+    "orig_height": 2048
+  },
+  "old-vintovaya-svaya-VSG-4": {
+    "file": "source/old/vintovaya-svaya-VSG-4.jpg",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1070,
+    "orig_height": 1470
+  },
+  "old-VSG-1_": {
+    "file": "source/old/VSG-1_.jpeg",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 2048,
+    "orig_height": 2048
+  },
+  "old-VSG-2_": {
+    "file": "source/old/VSG-2_.jpeg",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 2048,
+    "orig_height": 2048
+  },
+  "old-VSG-3-2": {
+    "file": "source/old/VSG-3-2.jpeg",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1792,
+    "orig_height": 2400
+  },
+  "old-VSG-3": {
+    "file": "source/old/VSG-3.jpeg",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 2048,
+    "orig_height": 2048
+  },
+  "old-VSG-4_": {
+    "file": "source/old/VSG-4_.jpeg",
+    "dir": "old",
+    "widths": [
+      320,
+      640,
+      1024,
+      1600
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 2048,
+    "orig_height": 2048
+  },
+  "vintovaya-svaya-VSG-1": {
+    "file": "source/vintovaya-svaya-VSG-1.webp",
+    "dir": "",
+    "widths": [
+      320,
+      640,
+      1024
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1070,
+    "orig_height": 1470
+  },
+  "vintovaya-svaya-VSG-2": {
+    "file": "source/vintovaya-svaya-VSG-2.webp",
+    "dir": "",
+    "widths": [
+      320,
+      640,
+      1024
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1070,
+    "orig_height": 1470
+  },
+  "vintovaya-svaya-VSG-3-2-lopastnaya": {
+    "file": "source/vintovaya-svaya-VSG-3-2-lopastnaya.webp",
+    "dir": "",
+    "widths": [
+      320,
+      640,
+      1024
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1070,
+    "orig_height": 2140
+  },
+  "vintovaya-svaya-VSG-3": {
+    "file": "source/vintovaya-svaya-VSG-3.webp",
+    "dir": "",
+    "widths": [
+      320,
+      640,
+      1024
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1070,
+    "orig_height": 1470
+  },
+  "vintovaya-svaya-VSG-4": {
+    "file": "source/vintovaya-svaya-VSG-4.webp",
+    "dir": "",
+    "widths": [
+      320,
+      640,
+      1024
+    ],
+    "alt": "",
+    "caption": "",
+    "generated": true,
+    "orig_width": 1070,
+    "orig_height": 1470
   }
 }
