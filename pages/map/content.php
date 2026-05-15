@@ -408,15 +408,19 @@ $CAT_COLORS = [
                 el.className = 'custom-marker' + (obj.url ? ' custom-marker--published' : '');
                 el.title = obj.title || '';
                 el.style.backgroundColor = CAT_COLORS[obj.category] ?? CAT_COLORS.other;
-                el.onclick = () => {
+                el.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     if (obj.url) {
                         window.location.href = obj.url;
                         return;
                     }
                     const card = document.querySelector('[data-id="' + obj.id + '"]');
-                    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                };
-                return new YMapMarker({ coordinates: feature.geometry.coordinates }, el);
+                    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+                return new YMapMarker(
+                    { coordinates: feature.geometry.coordinates, zIndex: 10 },
+                    el
+                );
             };
 
             const cluster = (coordinates, features) => {
