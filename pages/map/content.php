@@ -51,6 +51,8 @@ $CAT_COLORS = [
         cursor: pointer;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
         transition: transform 0.15s;
+        display: block;
+        text-decoration: none;
     }
 
     .custom-marker:hover {
@@ -404,23 +406,15 @@ $CAT_COLORS = [
 
             const marker = (feature) => {
                 const obj = feature.properties.obj;
-                const el = document.createElement('div');
+                // Для объектов с url используем <a> тег - браузер обрабатывает навигацию до любых обработчиков карты
+                const el = obj.url
+                    ? document.createElement('a')
+                    : document.createElement('div');
                 el.className = 'custom-marker' + (obj.url ? ' custom-marker--published' : '');
                 el.title = obj.title || '';
                 el.style.backgroundColor = CAT_COLORS[obj.category] ?? CAT_COLORS.other;
                 if (obj.url) {
-                    // Вешаем на pointerup чтобы опередить обработчики карты
-                    el.addEventListener('pointerup', (e) => {
-                        e.stopImmediatePropagation();
-                        e.preventDefault();
-                        window.location.href = obj.url;
-                    });
-                    // click как fallback для обычных браузеров
-                    el.addEventListener('click', (e) => {
-                        e.stopImmediatePropagation();
-                        e.preventDefault();
-                        window.location.href = obj.url;
-                    });
+                    el.href = obj.url;
                 }
                 return new YMapMarker(
                     { coordinates: feature.geometry.coordinates, zIndex: 10 },
