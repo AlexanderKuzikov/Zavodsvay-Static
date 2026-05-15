@@ -408,15 +408,20 @@ $CAT_COLORS = [
                 el.className = 'custom-marker' + (obj.url ? ' custom-marker--published' : '');
                 el.title = obj.title || '';
                 el.style.backgroundColor = CAT_COLORS[obj.category] ?? CAT_COLORS.other;
-                el.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (obj.url) {
+                if (obj.url) {
+                    // Вешаем на pointerup чтобы опередить обработчики карты
+                    el.addEventListener('pointerup', (e) => {
+                        e.stopImmediatePropagation();
+                        e.preventDefault();
                         window.location.href = obj.url;
-                        return;
-                    }
-                    const card = document.querySelector('[data-id="' + obj.id + '"]');
-                    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                });
+                    });
+                    // click как fallback для обычных браузеров
+                    el.addEventListener('click', (e) => {
+                        e.stopImmediatePropagation();
+                        e.preventDefault();
+                        window.location.href = obj.url;
+                    });
+                }
                 return new YMapMarker(
                     { coordinates: feature.geometry.coordinates, zIndex: 10 },
                     el
