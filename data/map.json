@@ -53,7 +53,7 @@
       "3_3.webp",
       "3_4.webp"
     ],
-    "url": null
+    "url": "/objects/{id}/"
   },
   {
     "id": 4,
@@ -171,7 +171,7 @@
       "10_1.webp",
       "10_2.webp"
     ],
-    "url": null
+    "url": "/objects/{id}/"
   },
   {
     "id": 11,
@@ -436,7 +436,7 @@
       "25_3.webp",
       "25_4.webp"
     ],
-    "url": null
+    "url": "/objects/{id}/"
   },
   {
     "id": 26,
@@ -1519,7 +1519,7 @@
       "92_1.webp",
       "92_2.webp"
     ],
-    "url": null
+    "url": "/objects/{id}/"
   },
   {
     "id": 93,
@@ -5855,7 +5855,7 @@
     "images": [
       "371_1.webp"
     ],
-    "url": null
+    "url": "/objects/{id}/"
   },
   {
     "id": 372,
@@ -5870,7 +5870,7 @@
     "images": [
       "372_1.webp"
     ],
-    "url": null
+    "url": "/objects/{id}/"
   },
   {
     "id": 373,
