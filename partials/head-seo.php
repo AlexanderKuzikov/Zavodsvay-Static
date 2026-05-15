@@ -3,7 +3,7 @@
  * head-seo.php — SEO-мета, Open Graph, Twitter Cards, JSON-LD Schema.org, geo-теги
  *
  * Подключается во все layouts ПОСЛЕ head-favicon.php.
- * Page-level переменные (опциональные, задаются в pages/*/index.php):
+ * Page-level переменные (опциональные, задаются в pages/{page}/index.php):
  *   $og_image    — абс. URL картинки (дефолт: og-home.jpg)
  *   $og_type     — 'website' | 'article' (дефолт: 'website')
  *   $schema_type — 'LocalBusiness' | 'Article' | 'FAQPage' (дефолт: 'LocalBusiness')
