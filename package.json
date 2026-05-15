@@ -1,10 +1,13 @@
 {
   "name": "zavodsvay-static",
   "version": "1.0.0",
-  "type": "module",
+  "description": "Root scripts — прокси к tools/. На хостинг не деплоится.",
+  "private": true,
   "scripts": {
-    "deploy": "node tools/deploy.js",
-    "deploy:dry": "node tools/deploy.js --dry-run",
-    "deploy:full": "node tools/deploy.js --full"
+    "media": "cd tools && node process-media.js",
+    "ui": "cd tools && node server.js",
+    "deploy": "cd tools && node deploy.js",
+    "deploy:dry": "cd tools && node deploy.js --dry-run",
+    "deploy:full": "cd tools && node deploy.js --full"
   }
 }

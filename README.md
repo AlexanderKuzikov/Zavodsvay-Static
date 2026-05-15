@@ -43,7 +43,9 @@ Zavodsvay-Static/
 │   ├── process-media.js
 │   ├── deploy.js       ← FTP-деплой на shared hosting
 │   ├── server.js
-│   └── ui/index.html
+│   ├── ui/index.html
+│   └── package.json
+├── package.json        ← корневые npm-скрипты (прокси к tools/)
 ├── index.php           ← файловый роутер
 ├── favicon.png
 ├── apple-touch-icon.png
@@ -61,15 +63,23 @@ Zavodsvay-Static/
 
 Локальный инструмент для работы с изображениями. На хостинг **не деплоится**.
 
-### Запуск
+### Первый запуск
 
 ```bash
-cd tools
-npm install      # один раз
-npm run ui       # Media UI → http://localhost:3010
-# или CLI:
-node process-media.js
+cd tools && npm install   # установить зависимости — один раз
 ```
+
+### Команды (из корня репозитория)
+
+```bash
+npm run ui       # Media UI → http://localhost:3010
+npm run media    # CLI-нарезка без UI
+npm run deploy   # FTP-деплой на хостинг
+npm run deploy:dry   # деплой — dry run (ничего не отправляет)
+npm run deploy:full  # принудительный полный деплой
+```
+
+> `npm install` нужен только один раз в `tools/`. Корневой `package.json` не имеет своих зависимостей — только прокси-скрипты.
 
 ### Как работает
 
@@ -116,6 +126,8 @@ render_image('logo2');
 // генерирует <picture> с srcset, width, height из реестра
 ```
 
+> **Примечание:** статичные product-фото (каталог, одиночные страницы) можно подключать напрямую через `<picture>` без регистрации в реестре. `render_image()` нужен там, где изображения переиспользуются или управляются через UI.
+
 ---
 
 ## Деплой
@@ -123,8 +135,7 @@ render_image('logo2');
 Локальный FTP-деплой через `tools/deploy.js`. Быстрый, управляемый, без внешних CI.
 
 ```bash
-cd tools
-node deploy.js
+npm run deploy
 ```
 
 ---
@@ -179,6 +190,7 @@ node deploy.js
 - [x] OG-изображения (`assets/img/og/og-home.jpg` + `.webp`)
 - [x] SEO-partial (`partials/head-seo.php` — OG, Schema.org, geo-теги)
 - [x] Карта 500+ объектов — данные подготовлены через Qwen3.5 Flash, карта реализована
+- [x] Корневые npm-скрипты (`npm run ui`, `npm run media`, `npm run deploy`)
 - [ ] **Object pages** — первые страницы объектов `/objects/{slug}/`, открываются по клику с карты
 - [ ] **Image pipeline для объектов** — подготовка, нарезка, частичная автоматизация + generative-модели
 - [ ] SEO-разметка статей (og_type=article, Schema.org Article)
