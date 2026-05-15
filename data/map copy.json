@@ -1,0 +1,100 @@
+[
+  {
+    "id": 3,
+    "coords": [
+      56.5178955,
+      57.9237226
+    ],
+    "category": "house",
+    "pileCount": null,
+    "title": "СК «Мечта», г. Пермь, Свердловский район",
+    "techDescription": "Винтовой фундамент для дома 6х10",
+    "images": [
+      "3_1.webp",
+      "3_2.webp",
+      "3_3.webp",
+      "3_4.webp"
+    ],
+    "url": null
+  },
+  {
+    "id": 10,
+    "coords": [
+      56.514321,
+      57.914244
+    ],
+    "category": "house",
+    "pileCount": null,
+    "title": "СК «Мечта», г. Пермь, Свердловский район",
+    "techDescription": "Винтовой фундамент для дачного дома 5,38х5,38 м",
+    "images": [
+      "10_1.webp",
+      "10_2.webp"
+    ],
+    "url": null
+  },
+  {
+    "id": 25,
+    "coords": [
+      56.508543,
+      57.916774
+    ],
+    "category": "house",
+    "pileCount": null,
+    "title": "СК «Мечта», г. Пермь, Свердловский район",
+    "techDescription": "Винтовой фундамент для каркасного дома 10,9х12,3 м",
+    "images": [
+      "25_1.webp",
+      "25_2.webp",
+      "25_3.webp",
+      "25_4.webp"
+    ],
+    "url": null
+  },
+  {
+    "id": 92,
+    "coords": [
+      56.510153,
+      57.91931
+    ],
+    "category": "house",
+    "pileCount": null,
+    "title": "СНТ «Мечта», Свердловский район, г. Пермь",
+    "techDescription": "Винтовой фундамент для дома из бруса 7,5х8,0 м",
+    "images": [
+      "92_1.webp",
+      "92_2.webp"
+    ],
+    "url": null
+  },
+  {
+    "id": 371,
+    "coords": [
+      56.510443,
+      57.915618
+    ],
+    "category": "house",
+    "pileCount": null,
+    "title": "СНТ «Мечта», фундамент для каркасного дома",
+    "techDescription": "Фундамент для каркасного дома. Размеры: 11800х5800.",
+    "images": [
+      "371_1.webp"
+    ],
+    "url": null
+  },
+  {
+    "id": 372,
+    "coords": [
+      56.517272,
+      57.921908
+    ],
+    "category": "house",
+    "pileCount": null,
+    "title": "СНТ «Мечта», фундамент для дома из бруса",
+    "techDescription": "Фундамент для дома из бруса. Размеры: 5740х5740.",
+    "images": [
+      "372_1.webp"
+    ],
+    "url": null
+  }
+]
