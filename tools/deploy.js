@@ -40,6 +40,7 @@ const EXCLUDE = [
   'CONTEXT.md',
   'nginx.conf',
   'var_domain.record.csv',
+  'old',
 ];
 
 const isDryRun = process.argv.includes('--dry-run');
