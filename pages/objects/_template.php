@@ -1,10 +1,10 @@
 <?php
 /**
  * Шаблон страницы объекта.
- * Требует: $object_id (int), __DIR__ указывает на папку объекта.
+ * Требует: $object_id (int), $object_dir (string) — __DIR__ из index.php
  */
 
-$map_data = json_decode(file_get_contents(__DIR__ . '/../../../data/map.json'), true);
+$map_data = json_decode(file_get_contents($object_dir . '/../../../data/map.json'), true);
 $obj = null;
 foreach ($map_data as $item) {
     if ($item['id'] === $object_id) { $obj = $item; break; }
@@ -12,7 +12,7 @@ foreach ($map_data as $item) {
 
 if (!$obj) {
     http_response_code(404);
-    require __DIR__ . '/../../404/index.php';
+    require $object_dir . '/../../404/index.php';
     exit;
 }
 
@@ -82,7 +82,6 @@ ob_start();
         overflow: hidden;
         position: relative;
     }
-    /* Текущий объект — увеличенный оранжевый маркер с пульсацией */
     .current-marker {
         width: 28px;
         height: 28px;
@@ -99,7 +98,6 @@ ob_start();
         0%, 100% { box-shadow: 0 0 0 3px rgba(249,115,22,0.4); }
         50%       { box-shadow: 0 0 0 8px rgba(249,115,22,0.15); }
     }
-    /* Обычные маркеры — те же стили что на странице карты */
     .custom-marker {
         border: 2px solid #fff;
         border-radius: 50%;
@@ -137,7 +135,7 @@ ob_start();
 <script>
 (async function() {
     const CURRENT_ID     = <?= $obj_id_js ?>;
-    const CURRENT_COORDS = <?= $obj_coords_js ?>; // [lat, lon] → ymaps3 ждёт [lon, lat]
+    const CURRENT_COORDS = <?= $obj_coords_js ?>;
     const CENTER         = [CURRENT_COORDS[1], CURRENT_COORDS[0]];
 
     const CAT_COLORS = {
@@ -185,7 +183,6 @@ ob_start();
             console.error('[object-map] fetch error:', e);
         }
 
-        // Текущий объект — отдельный маркер поверх кластеров
         const currentEl = document.createElement('div');
         currentEl.className = 'current-marker';
         currentEl.title = <?= json_encode($obj['title'], JSON_UNESCAPED_UNICODE) ?>;
@@ -194,7 +191,6 @@ ob_start();
             currentEl
         ));
 
-        // Все остальные объекты — в кластер
         const points = objects
             .filter(o => o.id !== CURRENT_ID)
             .map(o => ({
@@ -266,4 +262,4 @@ ob_start();
 </script>
 <?php
 $content = ob_get_clean();
-include __DIR__ . '/../../../layouts/main.php';
+include $object_dir . '/../../../layouts/main.php';
