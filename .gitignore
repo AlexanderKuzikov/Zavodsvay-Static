@@ -68,7 +68,7 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 source/old/
-
+old/
 # ============================================
 # Zavodsvay-Static: медиапайплайн
 # ============================================
