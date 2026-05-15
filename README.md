@@ -14,7 +14,7 @@
 ![SEO](https://img.shields.io/badge/SEO-first-4CAF50?style=flat-square&logo=googlesearchconsole&logoColor=white)
 ![License](https://img.shields.io/badge/License-Apache_2.0-D22128?style=flat-square&logo=apache&logoColor=white)
 
-> **Статус:** pre-static PHP-версия. Favicon + `site.webmanifest` уже подключены. Целевое состояние — pure static HTML через `build.php` после готовности WebForge-генератора.
+> **Статус:** pre-static PHP-версия. Object pages реализованы (пилот 6 страниц). Целевое состояние — pure static HTML через `build.php` после готовности WebForge-генератора.
 
 ---
 
@@ -26,31 +26,28 @@
 Zavodsvay-Static/
 ├── pages/              ← страницы ({slug}/index.php + content.html)
 │   ├── articles/       ← 28 статей
-│   └── objects/        ← страницы объектов (в разработке)
+│   ├── map/            ← карта выполненных работ (content.php)
+│   └── objects/        ← страницы объектов
+│       ├── _template.php   ← единый шаблон для всех объектов
+│       ├── 3/index.php     ← двустрочник: $object_id + require _template
+│       ├── 10/, 25/, 92/, 371/, 372/
+│       └── ...
 ├── layouts/            ← шаблоны (main, home, wide)
-├── partials/           ← переиспользуемые компоненты (image.php, head-favicon.php, head-seo.php, ...)
+├── partials/           ← переиспользуемые компоненты
 ├── assets/
-│   ├── css/template.css   ← монолитный CSS (до build.php)
+│   ├── css/template.css
 │   ├── img/               ← нарезанные WebP-наборы + icons/ + og/
 │   └── fonts/
-├── source/             ← оригиналы изображений (jpg, png, gif, webp) — в git
+├── source/             ← оригиналы изображений — в git
 ├── data/
 │   ├── media.json      ← SSOT-реестр изображений
 │   ├── map.json        ← данные 500+ точек карты выполненных работ
 │   └── objects.json    ← реестр объектов (в разработке)
 ├── video/
 ├── tools/              ← медиапайплайн + деплой (Node.js, только локально)
-│   ├── process-media.js
-│   ├── deploy.js       ← FTP-деплой на shared hosting
-│   ├── server.js
-│   ├── ui/index.html
-│   └── package.json
 ├── package.json        ← корневые npm-скрипты (прокси к tools/)
 ├── index.php           ← файловый роутер
-├── favicon.png
-├── apple-touch-icon.png
-├── site.webmanifest
-├── sitemap.xml         ← обновляется вручную до build.php
+├── sitemap.xml
 ├── robots.txt
 ├── .htaccess
 ├── CONTEXT.md          ← живой документ разработки для AI + разработчика
@@ -83,40 +80,12 @@ npm run deploy:full  # принудительный полный деплой
 
 ### Как работает
 
-1. Бросаешь оригинал в `source/` (jpg/png/gif/webp, включая анимированные GIF)
-2. Нажимаешь **«Сканировать»** в UI — файл регистрируется в `data/media.json`
-3. Нажимаешь **«Нарезать всё»** — генерируются WebP-варианты в `assets/img/`
-4. Заполняешь `alt` и `caption` прямо в интерфейсе
-5. При замене файла — чекбокс **«Перегенерировать»** при сохранении
-6. Кнопка **«Найти мусор»** — удаляет WebP-файлы без записи в реестре (orphans)
-
-### Ключи в media.json
-
-Ключ = путь относительно `source/` без расширения, слэши → дефисы:
-- `source/logo2.png` → `"logo2"`
-- `source/objects/obj-001/main.jpg` → `"objects-obj-001-main"`
-
-### Структура записи
-
-```json
-{
-  "logo2": {
-    "file": "source/logo2.png",
-    "dir": "",
-    "orig_width": 1200,
-    "orig_height": 400,
-    "widths": [320, 640],
-    "alt": "Логотип Завод Гефест",
-    "caption": "",
-    "generated": true
-  }
-}
-```
-
-**Ключевые поля:**
-- `widths` — реально сгенерированные размеры (≤ ширины оригинала)
-- `orig_width`/`orig_height` — для `width`/`height` атрибутов и нулевого CLS
-- `generated: false` → пересоздать файлы при следующем запуске
+1. Бросаешь оригинал в `source/`
+2. **«Сканировать»** в UI — регистрируется в `data/media.json`
+3. **«Нарезать всё»** — генерируются WebP-варианты
+4. Заполняешь `alt` и `caption` в интерфейсе
+5. При замене файла — чекбокс **«Перегенерировать»**
+6. **«Найти мусор»** — удаляет orphan WebP-файлы без записи в реестре
 
 ### Использование в PHP
 
@@ -126,13 +95,13 @@ render_image('logo2');
 // генерирует <picture> с srcset, width, height из реестра
 ```
 
-> **Примечание:** статичные product-фото (каталог, одиночные страницы) можно подключать напрямую через `<picture>` без регистрации в реестре. `render_image()` нужен там, где изображения переиспользуются или управляются через UI.
+> Статичные product-фото можно подключать напрямую через `<picture>` без регистрации в реестре.
 
 ---
 
 ## Деплой
 
-Локальный FTP-деплой через `tools/deploy.js`. Быстрый, управляемый, без внешних CI.
+Локальный FTP-деплой через `tools/deploy.js`.
 
 ```bash
 npm run deploy
@@ -154,20 +123,57 @@ npm run deploy
 | `/map/` | `pages/map/` |
 | `/document/` | `pages/document/` |
 | `/articles/{slug}/` | `pages/articles/{slug}/` |
-| `/objects/{slug}/` | `pages/objects/{slug}/` (в разработке) |
+| `/objects/{id}/` | `pages/objects/{id}/index.php` → `pages/objects/_template.php` |
+
+---
+
+## Карта выполненных работ
+
+- Яндекс.Карты JS API v3 + `@yandex/ymaps3-clusterer` (jsdelivr CDN)
+- 500+ объектов из `data/map.json`
+- Маркеры кластеризуются (`clusterByGrid({ gridSize: 64 })`)
+- Клик на маркер с `url` → страница объекта (через ymaps3 `onClick` prop + `mapEvent.stopPropagation()`)
+- Легенда категорий под картой (9 категорий, CSS Grid)
+- **Object page map:** на странице каждого объекта — карта с центрированием на объекте (zoom 13), текущий объект выделен оранжевым маркером с пульсацией, остальные объекты — те же маркеры с навигацией
+
+### Критический нюанс координат
+> `data/map.json` хранит `coords` в формате `[latitude, longitude]` (как в Яндекс.Картах v2 / бытовой нотации).  
+> ymaps3 ожидает `[longitude, latitude]` (GeoJSON).  
+> Везде где передаются координаты в ymaps3: `coordinates: [coords[1], coords[0]]`.
+
+---
+
+## Object Pages
+
+Страницы объектов `/objects/{id}/` — SEO-страницы с галереей и мини-картой.
+
+### Архитектура
+- Каждый `index.php` — двустрочник: задаёт `$object_id` + `$object_dir = __DIR__` и подключает `pages/objects/_template.php`
+- `_template.php` читает данные из `data/map.json` по `$object_id`, рендерит контент + карту
+- `$object_dir` передаётся явно — `__DIR__` внутри `require`-файла указывает на директорию шаблона, а не вызывающего файла
+- Карта объекта: текущий объект — отдельный маркер с `zIndex: 100` и CSS-анимацией пульсации (`#f97316`), все остальные — через кластеризатор
+
+### Добавление нового объекта
+1. Создать `pages/objects/{id}/index.php`:
+```php
+<?php
+$object_id  = {id};
+$object_dir = __DIR__;
+require __DIR__ . '/../_template.php';
+```
+2. Убедиться что объект есть в `data/map.json` с полем `"url": "/objects/{id}/"`
+3. Добавить изображения в `pages/map/img/{id}_1.webp`, `{id}_2.webp`, ...
 
 ---
 
 ## SEO
 
-- `sitemap.xml` — 37 URL (9 основных + 28 статей), ручное обновление до `build.php`
-- `robots.txt` — Yandex/Googlebot, Crawl-delay для Yandex
-- WebP + `srcset` — Core Web Vitals
-- `orig_width`/`orig_height` в реестре → нулевой Layout Shift (CLS)
-- **OG-изображения готовы:** `assets/img/og/og-home.jpg` (primary, для краулеров), `assets/img/og/og-home.webp` (дополнительный)
-- **`partials/head-seo.php`** — реализован: OG, Twitter Cards, JSON-LD Schema.org `@graph`, geo-теги Яндекса
-- Уже реализовано: `favicon.png`, `apple-touch-icon.png`, `site.webmanifest`, `assets/img/icons/icon-192.png`, `assets/img/icons/icon-512.png`, `partials/head-favicon.php`
-- В планах: OG + Schema.org для статей (`og_type=article`), страницы объектов (programmatic SEO)
+- `sitemap.xml` — ручное обновление до `build.php`
+- `robots.txt` — Yandex/Googlebot, Crawl-delay
+- WebP + `srcset` — Core Web Vitals / CLS = 0
+- **`partials/head-seo.php`** — OG, Twitter Cards, JSON-LD Schema.org `@graph`, geo-теги Яндекса
+- Object pages: Schema.org `CreativeWork` + `GeoCoordinates` уже в шаблоне
+- В планах: `og_type=article` + Schema.org Article для статей
 
 ---
 
@@ -175,24 +181,26 @@ npm run deploy
 
 | Проблема | Причина | Решение |
 |---|---|---|
-| `template.css` — монолит | Осознанно до `build.php` | Декомпозиция на компоненты при миграции на WebForge |
+| `template.css` — монолит | Осознанно до `build.php` | Декомпозиция при миграции на WebForge |
 | `sitemap.xml` вручную | До генератора | Автогенерация в `build.php` |
-| `source/` в git | Пока объём мал | Git LFS при росте объёма (решать до, не после) |
+| `source/` в git | Пока объём мал | Git LFS при росте |
 | Нет hash-инвалидации CSS/JS | До `build.php` | `style.{hash8}.css` при сборке |
-| Изображения объектов вне репо | Требуют подготовки и нарезки | Image pipeline для объектов (отдельный этап) |
+| Изображения объектов в `pages/map/img/` | Исторически | При масштабировании — вынести в `assets/img/objects/` |
+| 6 object pages из 500+ | Пилот | Programmatic генерация остальных после image pipeline |
 
 ---
 
 ## Роадмап
 
 - [x] Favicon + `site.webmanifest`
-- [x] Карта выполненных работ (Яндекс.Карты v3 + кластеризация + легенда категорий)
-- [x] OG-изображения (`assets/img/og/og-home.jpg` + `.webp`)
-- [x] SEO-partial (`partials/head-seo.php` — OG, Schema.org, geo-теги)
-- [x] Карта 500+ объектов — данные подготовлены через Qwen3.5 Flash, карта реализована
-- [x] Корневые npm-скрипты (`npm run ui`, `npm run media`, `npm run deploy`)
-- [ ] **Object pages** — первые страницы объектов `/objects/{slug}/`, открываются по клику с карты
-- [ ] **Image pipeline для объектов** — подготовка, нарезка, частичная автоматизация + generative-модели
+- [x] Карта выполненных работ (Яндекс.Карты v3 + кластеризация + легенда)
+- [x] OG-изображения
+- [x] SEO-partial (`partials/head-seo.php`)
+- [x] Данные 500+ объектов карты (Qwen3.5 Flash)
+- [x] Корневые npm-скрипты
+- [x] **Object pages** — шаблон + 6 пилотных страниц, карта на странице объекта
+- [ ] **Image pipeline для объектов** — нарезка, автоматизация, generative-модели
+- [ ] Programmatic генерация остальных object pages
 - [ ] SEO-разметка статей (og_type=article, Schema.org Article)
 - [ ] `build.php` → pure static `/dist/`
 - [ ] Портирование медиапайплайна в WebForge
@@ -205,7 +213,7 @@ npm run deploy
 |---|---|
 | Perplexity (Space: Zavodsvay) | Основной AI-ассистент разработки, работа с репо через GitHub MCP |
 | Qwen3.5 Flash (облачный) | Подготовка данных карты: восстановление полей, нормализация, категоризация 500+ объектов |
-| Generative-модели (планируется) | Подготовка и дополнение изображений объектов в image pipeline |
+| Generative-модели (планируется) | Подготовка и дополнение изображений объектов |
 
 ---
 
@@ -215,5 +223,5 @@ npm run deploy
 |---|---|
 | Сайт | PHP 8.x, нативный CSS, vanilla JS |
 | Медиапайплайн | Node.js, Sharp, Express |
-| Деплой | FTP через `tools/deploy.js` (shared hosting, локальный deploy tool) |
-| Карта | Яндекс.Карты JS API v3 + `@yandex/ymaps3-clusterer` (via jsdelivr CDN) |
+| Деплой | FTP через `tools/deploy.js` (shared hosting) |
+| Карта | Яндекс.Карты JS API v3 + `@yandex/ymaps3-clusterer` (jsdelivr CDN) |
