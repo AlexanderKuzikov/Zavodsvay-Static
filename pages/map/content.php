@@ -343,13 +343,12 @@ $CAT_COLORS = [
     </div>
 </div>
 
-<?php if (!empty($published)): ?>
 <section class="objects-section">
     <div class="objects-section__header">
-        <h2 class="objects-section__title">Подробные описания объектов</h2>
-        <span class="objects-section__count"><?= count($published) ?> объект<?= count($published) === 1 ? '' : (count($published) < 5 ? 'а' : 'ов') ?></span>
+        <h2 class="objects-section__title" id="objects-section-title">Подробные описания объектов</h2>
+        <span class="objects-section__count" id="objects-section-count"></span>
     </div>
-    <div class="objects-grid">
+    <div class="objects-grid" id="objects-grid">
         <?php foreach ($published as $obj):
             $color     = $CAT_COLORS[$obj['category']] ?? $CAT_COLORS['other'];
             $cat_label = $CAT_LABELS[$obj['category']] ?? 'Прочее';
@@ -383,13 +382,17 @@ $CAT_COLORS = [
         <?php endforeach; ?>
     </div>
 </section>
-<?php endif; ?>
 
 <script>
     const CAT_COLORS = {
         house: '#2563eb', banya: '#16a34a', fence: '#9333ea',
         commercial: '#ea580c', industrial: '#dc2626', water: '#0891b2',
         social: '#ca8a04', agro: '#65a30d', other: '#6b7280'
+    };
+    const CAT_LABELS = {
+        house: 'Жилой дом', banya: 'Баня', fence: 'Забор',
+        commercial: 'Коммерция', industrial: 'Промышленные', water: 'Водные объекты',
+        social: 'Социальные', agro: 'Сельхоз', other: 'Прочее'
     };
 
     const MAP_CUSTOMIZATION = [
@@ -406,6 +409,51 @@ $CAT_COLORS = [
     ];
 
     const ALL_CATS = Object.keys(CAT_COLORS);
+    const CARDS_LIMIT = 9;
+
+    // Рендер карточек из JS-массива
+    function renderCards(objects) {
+        const grid = document.getElementById('objects-grid');
+        const title = document.getElementById('objects-section-title');
+        const count = document.getElementById('objects-section-count');
+        const shown = objects.slice(0, CARDS_LIMIT);
+
+        grid.innerHTML = shown.map(obj => {
+            const color = CAT_COLORS[obj.category] || CAT_COLORS.other;
+            const label = CAT_LABELS[obj.category] || 'Прочее';
+            const thumb = obj.images && obj.images.length
+                ? `/pages/map/img/${obj.images[0]}`
+                : null;
+            const thumbHtml = thumb
+                ? `<img class="object-card__thumb" src="${thumb}" alt="${escHtml(obj.title)}" loading="lazy" width="440" height="330">`
+                : `<div class="object-card__thumb--placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#0a2342" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9l4-4 4 4 4-4 4 4"/><path d="M3 15h18"/></svg></div>`;
+            return `<a class="object-card" href="${escHtml(obj.url)}" data-id="${obj.id}">
+                ${thumbHtml}
+                <div class="object-card__body">
+                    <span class="object-card__category" style="background:${color}">${label}</span>
+                    <p class="object-card__title">${escHtml(obj.title)}</p>
+                    ${obj.techDescription ? `<p class="object-card__desc">${escHtml(obj.techDescription)}</p>` : ''}
+                    <span class="object-card__link">Подробнее &rarr;</span>
+                </div>
+            </a>`;
+        }).join('');
+
+        count.textContent = `${shown.length} объект${pluralize(shown.length)}`;
+    }
+
+    function pluralize(n) {
+        if (n % 10 === 1 && n % 100 !== 11) return '';
+        if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) return 'а';
+        return 'ов';
+    }
+
+    function escHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
 
     async function initMap() {
         try {
@@ -438,6 +486,13 @@ $CAT_COLORS = [
             } catch (e) {
                 console.error('[map] fetch error:', e);
             }
+
+            // Опубликованные (есть url) — для карточек
+            const allPublished = allObjects.filter(o => o.url);
+
+            // Инициализируем счётчик
+            document.getElementById('objects-section-count').textContent =
+                `${Math.min(allPublished.length, CARDS_LIMIT)} объект${pluralize(Math.min(allPublished.length, CARDS_LIMIT))}`;
 
             const toFeature = obj => ({
                 type: 'Feature',
@@ -495,6 +550,18 @@ $CAT_COLORS = [
                 const filtered = allObjects.filter(o => activeCategories.has(o.category));
                 counter.textContent = isFiltered ? `показано ${filtered.length} из ${allObjects.length}` : '';
                 clusterer.update({ features: filtered.map(toFeature) });
+
+                // Обновляем карточки
+                if (!isFiltered) {
+                    // Сброс — показываем дефолтные 9 опубликованных
+                    renderCards(allPublished);
+                } else if (activeCategories.size === 1) {
+                    // Соло-категория — 9 опубликованных из неё
+                    const cat = [...activeCategories][0];
+                    const catObjects = allPublished.filter(o => o.category === cat);
+                    renderCards(catObjects);
+                }
+                // При мульти-выборе карточки не меняем
             }
 
             items.forEach(item => {
@@ -503,14 +570,11 @@ $CAT_COLORS = [
                     const allActive = activeCategories.size === ALL_CATS.length;
 
                     if (allActive) {
-                        // Первый клик при полном сете — оставляем только эту
                         activeCategories.clear();
                         activeCategories.add(cat);
                     } else if (activeCategories.has(cat) && activeCategories.size === 1) {
-                        // Клик по единственной активной — сброс всех
                         ALL_CATS.forEach(c => activeCategories.add(c));
                     } else {
-                        // Обычный тоггл
                         if (activeCategories.has(cat)) activeCategories.delete(cat);
                         else activeCategories.add(cat);
                     }
