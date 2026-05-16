@@ -80,48 +80,6 @@ $CAT_COLORS = [
         cursor: pointer;
     }
 
-    /* === Переключатель типа карты === */
-    .map-type-control {
-        display: flex;
-        gap: 0;
-        background: #fff;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        border: 1px solid #ddd;
-    }
-
-    .map-type-btn {
-        padding: 7px 14px;
-        font-size: 13px;
-        font-weight: 500;
-        color: #333;
-        background: #fff;
-        border: none;
-        cursor: pointer;
-        transition: background 0.15s, color 0.15s;
-        border-right: 1px solid #ddd;
-        line-height: 1;
-        white-space: nowrap;
-    }
-
-    .map-type-btn:last-child {
-        border-right: none;
-    }
-
-    .map-type-btn:hover {
-        background: #f0f4ff;
-    }
-
-    .map-type-btn--active {
-        background: #0a2342;
-        color: #fff;
-    }
-
-    .map-type-btn--active:hover {
-        background: #0a2342;
-    }
-
     /* === Легенда === */
     .map-legend {
         display: grid;
@@ -152,8 +110,10 @@ $CAT_COLORS = [
         flex-shrink: 0;
     }
 
-    /* === Список объектов === */
-    .objects-section { margin-top: 36px; }
+    /* === Список опубликованных объектов === */
+    .objects-section {
+        margin-top: 36px;
+    }
 
     .objects-section__header {
         display: flex;
@@ -171,7 +131,10 @@ $CAT_COLORS = [
         margin: 0;
     }
 
-    .objects-section__count { font-size: 0.85em; color: #888; }
+    .objects-section__count {
+        font-size: 0.85em;
+        color: #888;
+    }
 
     .objects-grid {
         display: grid;
@@ -215,7 +178,11 @@ $CAT_COLORS = [
         flex-shrink: 0;
     }
 
-    .object-card__thumb--placeholder svg { width: 40px; height: 40px; opacity: 0.3; }
+    .object-card__thumb--placeholder svg {
+        width: 40px;
+        height: 40px;
+        opacity: 0.3;
+    }
 
     .object-card__body {
         padding: 12px 14px;
@@ -245,7 +212,12 @@ $CAT_COLORS = [
         margin: 0;
     }
 
-    .object-card__desc { font-size: 0.8em; color: #666; line-height: 1.4; margin: 0; }
+    .object-card__desc {
+        font-size: 0.8em;
+        color: #666;
+        line-height: 1.4;
+        margin: 0;
+    }
 
     .object-card__link {
         font-size: 0.8em;
@@ -256,11 +228,17 @@ $CAT_COLORS = [
     }
 
     @media (max-width: 768px) {
-        .objects-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+        .objects-grid {
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+        }
     }
 
     @media (max-width: 480px) {
-        .objects-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+        .objects-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
     }
 </style>
 
@@ -271,15 +249,42 @@ $CAT_COLORS = [
 </div>
 
 <div class="map-legend" aria-label="Обозначения маркеров">
-    <div class="map-legend-item"><span class="map-legend-dot" style="background:#2563eb"></span><span>Жилой дом</span></div>
-    <div class="map-legend-item"><span class="map-legend-dot" style="background:#16a34a"></span><span>Баня</span></div>
-    <div class="map-legend-item"><span class="map-legend-dot" style="background:#9333ea"></span><span>Забор</span></div>
-    <div class="map-legend-item"><span class="map-legend-dot" style="background:#ea580c"></span><span>Коммерция</span></div>
-    <div class="map-legend-item"><span class="map-legend-dot" style="background:#dc2626"></span><span>Промышленные</span></div>
-    <div class="map-legend-item"><span class="map-legend-dot" style="background:#0891b2"></span><span>Водные объекты</span></div>
-    <div class="map-legend-item"><span class="map-legend-dot" style="background:#ca8a04"></span><span>Социальные</span></div>
-    <div class="map-legend-item"><span class="map-legend-dot" style="background:#65a30d"></span><span>Сельхоз</span></div>
-    <div class="map-legend-item"><span class="map-legend-dot" style="background:#6b7280"></span><span>Прочее</span></div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#2563eb"></span>
+        <span>Жилой дом</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#16a34a"></span>
+        <span>Баня</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#9333ea"></span>
+        <span>Забор</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#ea580c"></span>
+        <span>Коммерция</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#dc2626"></span>
+        <span>Промышленные</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#0891b2"></span>
+        <span>Водные объекты</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#ca8a04"></span>
+        <span>Социальные</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#65a30d"></span>
+        <span>Сельхоз</span>
+    </div>
+    <div class="map-legend-item">
+        <span class="map-legend-dot" style="background:#6b7280"></span>
+        <span>Прочее</span>
+    </div>
 </div>
 
 <?php if (!empty($published)): ?>
@@ -326,9 +331,15 @@ $CAT_COLORS = [
 
 <script>
     const CAT_COLORS = {
-        house: '#2563eb', banya: '#16a34a', fence: '#9333ea',
-        commercial: '#ea580c', industrial: '#dc2626', water: '#0891b2',
-        social: '#ca8a04', agro: '#65a30d', other: '#6b7280'
+        house: '#2563eb',
+        banya: '#16a34a',
+        fence: '#9333ea',
+        commercial: '#ea580c',
+        industrial: '#dc2626',
+        water: '#0891b2',
+        social: '#ca8a04',
+        agro: '#65a30d',
+        other: '#6b7280'
     };
 
     const MAP_CUSTOMIZATION = [
@@ -344,98 +355,35 @@ $CAT_COLORS = [
         }
     ];
 
-    let map, schemeLayer, satelliteSource, satelliteLayer, hybridSchemeLayer;
-    let currentType = 'scheme';
-
-    function removeSatelliteLayers() {
-        if (hybridSchemeLayer) { map.removeChild(hybridSchemeLayer); hybridSchemeLayer = null; }
-        if (satelliteLayer)    { map.removeChild(satelliteLayer);    satelliteLayer    = null; }
-        if (satelliteSource)   { map.removeChild(satelliteSource);   satelliteSource   = null; }
-    }
-
-    function setMapType(type) {
-        if (type === currentType) return;
-
-        if (currentType === 'scheme') {
-            map.removeChild(schemeLayer);
-            schemeLayer = null;
-        } else {
-            removeSatelliteLayers();
-        }
-
-        const { YMapDefaultSchemeLayer, YMapTileDataSource, YMapLayer } = ymaps3;
-
-        if (type === 'scheme') {
-            schemeLayer = new YMapDefaultSchemeLayer({ customization: MAP_CUSTOMIZATION });
-            map.addChild(schemeLayer);
-        } else if (type === 'satellite') {
-            satelliteSource = new YMapTileDataSource('satellite', {
-                url: 'https://core-sat.maps.yandex.net/tiles?l=sat&x={x}&y={y}&z={z}&scale=1&lang=ru_RU'
-            });
-            satelliteLayer = new YMapLayer({ source: 'satellite', type: 'ground' });
-            map.addChild(satelliteSource);
-            map.addChild(satelliteLayer);
-        } else if (type === 'hybrid') {
-            satelliteSource   = new YMapTileDataSource('satellite', {
-                url: 'https://core-sat.maps.yandex.net/tiles?l=sat&x={x}&y={y}&z={z}&scale=1&lang=ru_RU'
-            });
-            satelliteLayer    = new YMapLayer({ source: 'satellite', type: 'ground' });
-            hybridSchemeLayer = new YMapDefaultSchemeLayer({ theme: 'dark' });
-            map.addChild(satelliteSource);
-            map.addChild(satelliteLayer);
-            map.addChild(hybridSchemeLayer);
-        }
-
-        currentType = type;
-        document.querySelectorAll('.map-type-btn').forEach(btn => {
-            btn.classList.toggle('map-type-btn--active', btn.dataset.type === type);
-        });
-    }
-
     async function initMap() {
         try {
             await ymaps3.ready;
 
             const {
-                YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer,
-                YMapMarker, YMapControls, YMapControl
+                YMap,
+                YMapDefaultSchemeLayer,
+                YMapDefaultFeaturesLayer,
+                YMapMarker
             } = ymaps3;
 
-            map = new YMap(
+            const map = new YMap(
                 document.getElementById('map-works'),
                 {
-                    // center: [lng, lat] — формат ymaps3 (GeoJSON)
-                    location: { center: [58.0, 56.2], zoom: 9 },
+                    location: { center: [56.2, 58.0], zoom: 9 },
                     behaviors: ['drag', 'pinchZoom', 'scrollZoom', 'dblClick']
                 }
             );
 
-            schemeLayer = new YMapDefaultSchemeLayer({ customization: MAP_CUSTOMIZATION });
-            map.addChild(schemeLayer);
+            map.addChild(new YMapDefaultSchemeLayer({
+                customization: MAP_CUSTOMIZATION
+            }));
             map.addChild(new YMapDefaultFeaturesLayer());
 
-            // Переключатель типа карты
-            const controlEl = document.createElement('div');
-            controlEl.className = 'map-type-control';
-            [
-                { type: 'scheme',    label: 'Схема'   },
-                { type: 'satellite', label: 'Спутник' },
-                { type: 'hybrid',    label: 'Гибрид'  },
-            ].forEach(({ type, label }) => {
-                const btn = document.createElement('button');
-                btn.className = 'map-type-btn' + (type === 'scheme' ? ' map-type-btn--active' : '');
-                btn.dataset.type = type;
-                btn.textContent = label;
-                btn.addEventListener('click', () => setMapType(type));
-                controlEl.appendChild(btn);
-            });
-            map.addChild(new YMapControls({ position: 'top right' }).addChild(new YMapControl().addChild(controlEl)));
-
-            // Кластеризация
             ymaps3.import.registerCdn(
                 'https://cdn.jsdelivr.net/npm/{package}',
                 '@yandex/ymaps3-clusterer@0.0.1'
             );
+
             const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer');
 
             let objects = [];
@@ -447,7 +395,6 @@ $CAT_COLORS = [
                 console.error('[map] fetch error:', e);
             }
 
-            // coords в map.json хранятся как [lat, lng] — перевод в [lng, lat] для ymaps3
             const points = objects.map(obj => ({
                 type: 'Feature',
                 id: String(obj.id),
@@ -461,13 +408,16 @@ $CAT_COLORS = [
                 el.className = 'custom-marker' + (obj.url ? ' custom-marker--published' : '');
                 el.title = obj.title || '';
                 el.style.backgroundColor = CAT_COLORS[obj.category] ?? CAT_COLORS.other;
+
                 return new YMapMarker(
                     {
                         coordinates: feature.geometry.coordinates,
                         zIndex: 10,
                         onClick(event, mapEvent) {
                             mapEvent.stopPropagation();
-                            if (obj.url) window.location.href = obj.url;
+                            if (obj.url) {
+                                window.location.href = obj.url;
+                            }
                         }
                     },
                     el
