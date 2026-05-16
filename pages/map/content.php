@@ -394,6 +394,7 @@ $CAT_COLORS = [
         commercial: 'Коммерция', industrial: 'Промышленные', water: 'Водные объекты',
         social: 'Социальные', agro: 'Сельхоз', other: 'Прочее'
     };
+    const CAT_ORDER = ['house', 'banya', 'fence', 'commercial', 'industrial', 'water', 'social', 'agro', 'other'];
 
     const MAP_CUSTOMIZATION = [
         {
@@ -409,16 +410,25 @@ $CAT_COLORS = [
     ];
 
     const ALL_CATS = Object.keys(CAT_COLORS);
-    const CARDS_LIMIT = 9;
 
-    // Рендер карточек из JS-массива
+    // Зеркало PHP-логики: по одному лучшему (с фото) из каждой категории
+    function getDefaultCards(published) {
+        const result = [];
+        for (const cat of CAT_ORDER) {
+            const candidates = published.filter(o => o.category === cat);
+            if (!candidates.length) continue;
+            // С фото — первым
+            const withPhoto = candidates.find(o => o.images && o.images.length);
+            result.push(withPhoto || candidates[0]);
+        }
+        return result;
+    }
+
     function renderCards(objects) {
-        const grid = document.getElementById('objects-grid');
-        const title = document.getElementById('objects-section-title');
+        const grid  = document.getElementById('objects-grid');
         const count = document.getElementById('objects-section-count');
-        const shown = objects.slice(0, CARDS_LIMIT);
 
-        grid.innerHTML = shown.map(obj => {
+        grid.innerHTML = objects.map(obj => {
             const color = CAT_COLORS[obj.category] || CAT_COLORS.other;
             const label = CAT_LABELS[obj.category] || 'Прочее';
             const thumb = obj.images && obj.images.length
@@ -438,7 +448,7 @@ $CAT_COLORS = [
             </a>`;
         }).join('');
 
-        count.textContent = `${shown.length} объект${pluralize(shown.length)}`;
+        count.textContent = `${objects.length} объект${pluralize(objects.length)}`;
     }
 
     function pluralize(n) {
@@ -487,12 +497,10 @@ $CAT_COLORS = [
                 console.error('[map] fetch error:', e);
             }
 
-            // Опубликованные (есть url) — для карточек
             const allPublished = allObjects.filter(o => o.url);
 
-            // Инициализируем счётчик
-            document.getElementById('objects-section-count').textContent =
-                `${Math.min(allPublished.length, CARDS_LIMIT)} объект${pluralize(Math.min(allPublished.length, CARDS_LIMIT))}`;
+            // Начальный рендер — зеркало PHP
+            renderCards(getDefaultCards(allPublished));
 
             const toFeature = obj => ({
                 type: 'Feature',
@@ -551,17 +559,14 @@ $CAT_COLORS = [
                 counter.textContent = isFiltered ? `показано ${filtered.length} из ${allObjects.length}` : '';
                 clusterer.update({ features: filtered.map(toFeature) });
 
-                // Обновляем карточки
                 if (!isFiltered) {
-                    // Сброс — показываем дефолтные 9 опубликованных
-                    renderCards(allPublished);
+                    // Сброс — дефолтные 9 по одному из категории
+                    renderCards(getDefaultCards(allPublished));
                 } else if (activeCategories.size === 1) {
-                    // Соло-категория — 9 опубликованных из неё
                     const cat = [...activeCategories][0];
-                    const catObjects = allPublished.filter(o => o.category === cat);
-                    renderCards(catObjects);
+                    renderCards(allPublished.filter(o => o.category === cat));
                 }
-                // При мульти-выборе карточки не меняем
+                // Мульти-выбор — карточки не трогаем
             }
 
             items.forEach(item => {
