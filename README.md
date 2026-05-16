@@ -244,3 +244,10 @@ require __DIR__ . '/../_template.php';
 | Медиапайплайн | Node.js, Sharp, Express |
 | Деплой | FTP через `tools/deploy.js` (shared hosting) |
 | Карта | Яндекс.Карты JS API v3 + `@yandex/ymaps3-clusterer` (jsdelivr CDN) |
+
+---
+
+## Лицензия
+
+Copyright 2024 Alexander Kuzikov  
+Licensed under the [Apache License, Version 2.0](./LICENSE).
