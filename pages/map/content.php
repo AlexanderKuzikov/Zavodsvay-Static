@@ -80,6 +80,48 @@ $CAT_COLORS = [
         cursor: pointer;
     }
 
+    /* === Переключатель типа карты === */
+    .map-type-control {
+        display: flex;
+        gap: 0;
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        border: 1px solid #ddd;
+    }
+
+    .map-type-btn {
+        padding: 7px 14px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #333;
+        background: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+        border-right: 1px solid #ddd;
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    .map-type-btn:last-child {
+        border-right: none;
+    }
+
+    .map-type-btn:hover {
+        background: #f0f4ff;
+    }
+
+    .map-type-btn--active {
+        background: #0a2342;
+        color: #fff;
+    }
+
+    .map-type-btn--active:hover {
+        background: #0a2342;
+    }
+
     /* === Легенда === */
     .map-legend {
         display: grid;
@@ -363,7 +405,11 @@ $CAT_COLORS = [
                 YMap,
                 YMapDefaultSchemeLayer,
                 YMapDefaultFeaturesLayer,
-                YMapMarker
+                YMapMarker,
+                YMapControls,
+                YMapControl,
+                YMapTileDataSource,
+                YMapLayer
             } = ymaps3;
 
             const map = new YMap(
@@ -374,11 +420,79 @@ $CAT_COLORS = [
                 }
             );
 
-            map.addChild(new YMapDefaultSchemeLayer({
-                customization: MAP_CUSTOMIZATION
-            }));
+            // Слои карты — держим в переменных для управления
+            let schemeLayer = new YMapDefaultSchemeLayer({ customization: MAP_CUSTOMIZATION });
+            let satelliteSource = null;
+            let satelliteLayer = null;
+            let hybridSchemeLayer = null;
+
+            // Начальный режим — схема
+            map.addChild(schemeLayer);
             map.addChild(new YMapDefaultFeaturesLayer());
 
+            // === Переключатель типа карты ===
+            let currentType = 'scheme';
+
+            function setMapType(type) {
+                if (type === currentType) return;
+
+                // Убираем текущие слои подложки
+                if (currentType === 'scheme') {
+                    map.removeChild(schemeLayer);
+                } else if (currentType === 'satellite') {
+                    map.removeChild(satelliteLayer);
+                    map.removeChild(satelliteSource);
+                } else if (currentType === 'hybrid') {
+                    map.removeChild(satelliteLayer);
+                    map.removeChild(satelliteSource);
+                    map.removeChild(hybridSchemeLayer);
+                }
+
+                // Добавляем новые слои подложки
+                if (type === 'scheme') {
+                    schemeLayer = new YMapDefaultSchemeLayer({ customization: MAP_CUSTOMIZATION });
+                    map.addChild(schemeLayer, 0); // вставляем первым
+                } else if (type === 'satellite') {
+                    satelliteSource = new YMapTileDataSource('satellite', { url: 'https://core-sat.maps.yandex.net/tiles?l=sat&x={x}&y={y}&z={z}&scale=1&lang=ru_RU' });
+                    satelliteLayer  = new YMapLayer({ source: 'satellite', type: 'ground' });
+                    map.addChild(satelliteSource, 0);
+                    map.addChild(satelliteLayer, 1);
+                } else if (type === 'hybrid') {
+                    satelliteSource   = new YMapTileDataSource('satellite', { url: 'https://core-sat.maps.yandex.net/tiles?l=sat&x={x}&y={y}&z={z}&scale=1&lang=ru_RU' });
+                    satelliteLayer    = new YMapLayer({ source: 'satellite', type: 'ground' });
+                    hybridSchemeLayer = new YMapDefaultSchemeLayer({ theme: 'dark' });
+                    map.addChild(satelliteSource, 0);
+                    map.addChild(satelliteLayer, 1);
+                    map.addChild(hybridSchemeLayer, 2);
+                }
+
+                currentType = type;
+
+                // Обновляем активную кнопку
+                document.querySelectorAll('.map-type-btn').forEach(btn => {
+                    btn.classList.toggle('map-type-btn--active', btn.dataset.type === type);
+                });
+            }
+
+            // Рендерим кнопки переключателя через YMapControls
+            const controlEl = document.createElement('div');
+            controlEl.className = 'map-type-control';
+            [
+                { type: 'scheme',    label: 'Схема'    },
+                { type: 'satellite', label: 'Спутник'  },
+                { type: 'hybrid',    label: 'Гибрид'   },
+            ].forEach(({ type, label }) => {
+                const btn = document.createElement('button');
+                btn.className = 'map-type-btn' + (type === 'scheme' ? ' map-type-btn--active' : '');
+                btn.dataset.type = type;
+                btn.textContent = label;
+                btn.addEventListener('click', () => setMapType(type));
+                controlEl.appendChild(btn);
+            });
+
+            map.addChild(new YMapControls({ position: 'top right' }).addChild(new YMapControl().addChild(controlEl)));
+
+            // === Кластеризация и маркеры ===
             ymaps3.import.registerCdn(
                 'https://cdn.jsdelivr.net/npm/{package}',
                 '@yandex/ymaps3-clusterer@0.0.1'
@@ -398,7 +512,7 @@ $CAT_COLORS = [
             const points = objects.map(obj => ({
                 type: 'Feature',
                 id: String(obj.id),
-                geometry: { type: 'Point', coordinates: obj.coords },
+                geometry: { type: 'Point', coordinates: [obj.coords[1], obj.coords[0]] },
                 properties: { obj }
             }));
 
