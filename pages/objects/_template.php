@@ -16,6 +16,15 @@ if (!$obj) {
     exit;
 }
 
+// Навигация prev/next: только объекты с url (опубликованные страницы)
+$published = array_values(array_filter($map_data, fn($o) => !empty($o['url'])));
+$current_idx = null;
+foreach ($published as $idx => $o) {
+    if ($o['id'] === $object_id) { $current_idx = $idx; break; }
+}
+$prev_obj = ($current_idx !== null && $current_idx > 0) ? $published[$current_idx - 1] : null;
+$next_obj = ($current_idx !== null && $current_idx < count($published) - 1) ? $published[$current_idx + 1] : null;
+
 $title            = htmlspecialchars($obj['title']) . ' — Завод винтовых свай Гефест';
 $meta_description = 'Выполненный объект: ' . htmlspecialchars($obj['techDescription']) . '. Винтовые фундаменты от завода Гефест, г. Пермь.';
 $canonical        = 'https://zavodsvay.ru/objects/' . $object_id . '/';
@@ -54,9 +63,29 @@ ob_start();
     </div>
     <?php endif; ?>
 
-    <div class="object-page__back">
-        <a href="/map/" class="btn btn--outline">&larr; Вернуться к карте объектов</a>
-    </div>
+    <nav class="object-page__nav" aria-label="Навигация по объектам">
+        <div class="object-page__nav-prev">
+            <?php if ($prev_obj): ?>
+            <a href="<?= htmlspecialchars($prev_obj['url']) ?>" class="object-page__nav-link object-page__nav-link--prev">
+                <span class="object-page__nav-arrow">&larr;</span>
+                <span class="object-page__nav-label">Предыдущий</span>
+                <span class="object-page__nav-title"><?= htmlspecialchars($prev_obj['title']) ?></span>
+            </a>
+            <?php endif; ?>
+        </div>
+        <div class="object-page__nav-back">
+            <a href="/map/" class="btn btn--outline">&uarr; Все объекты</a>
+        </div>
+        <div class="object-page__nav-next">
+            <?php if ($next_obj): ?>
+            <a href="<?= htmlspecialchars($next_obj['url']) ?>" class="object-page__nav-link object-page__nav-link--next">
+                <span class="object-page__nav-arrow">&rarr;</span>
+                <span class="object-page__nav-label">Следующий</span>
+                <span class="object-page__nav-title"><?= htmlspecialchars($next_obj['title']) ?></span>
+            </a>
+            <?php endif; ?>
+        </div>
+    </nav>
 </article>
 
 <!-- Карта объекта -->
@@ -83,6 +112,64 @@ ob_start();
         overflow: hidden;
         position: relative;
     }
+    /* --- Object nav --- */
+    .object-page__nav {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 12px;
+        margin-top: 40px;
+        padding-top: 24px;
+        border-top: 1px solid #e0e4ea;
+    }
+    .object-page__nav-prev { justify-self: start; }
+    .object-page__nav-back { justify-self: center; }
+    .object-page__nav-next { justify-self: end; }
+    .object-page__nav-link {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        text-decoration: none;
+        color: #0a2342;
+        padding: 10px 14px;
+        border: 1px solid #d0d7e2;
+        border-radius: 8px;
+        max-width: 240px;
+        transition: background 0.15s, border-color 0.15s;
+    }
+    .object-page__nav-link:hover {
+        background: #f0f4fa;
+        border-color: #2563eb;
+    }
+    .object-page__nav-link--prev { align-items: flex-start; }
+    .object-page__nav-link--next { align-items: flex-end; text-align: right; }
+    .object-page__nav-arrow {
+        font-size: 1.1em;
+        color: #2563eb;
+    }
+    .object-page__nav-label {
+        font-size: 0.75em;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .object-page__nav-title {
+        font-size: 0.875em;
+        font-weight: 600;
+        line-height: 1.3;
+        color: #0a2342;
+    }
+    @media (max-width: 600px) {
+        .object-page__nav {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+        }
+        .object-page__nav-prev { grid-column: 1; grid-row: 1; }
+        .object-page__nav-next { grid-column: 2; grid-row: 1; justify-self: end; }
+        .object-page__nav-back { grid-column: 1 / -1; grid-row: 2; justify-self: center; }
+        .object-page__nav-link { max-width: 100%; }
+    }
+    /* --- Markers --- */
     .current-marker {
         width: 28px;
         height: 28px;
