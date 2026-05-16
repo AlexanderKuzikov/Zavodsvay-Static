@@ -361,9 +361,10 @@ $CAT_COLORS = [
 
             const {
                 YMap,
-                YMapDefaultSchemeLayer,
                 YMapDefaultFeaturesLayer,
-                YMapMarker
+                YMapMarker,
+                YMapTileDataSource,
+                YMapLayer
             } = ymaps3;
 
             const map = new YMap(
@@ -374,9 +375,10 @@ $CAT_COLORS = [
                 }
             );
 
-            map.addChild(new YMapDefaultSchemeLayer({
-                customization: MAP_CUSTOMIZATION
+            map.addChild(new YMapTileDataSource('satellite', {
+                url: 'https://core-sat.maps.yandex.net/tiles?l=sat&x={x}&y={y}&z={z}&scale=1&lang=ru_RU'
             }));
+            map.addChild(new YMapLayer({ source: 'satellite', type: 'ground' }));
             map.addChild(new YMapDefaultFeaturesLayer());
 
             ymaps3.import.registerCdn(
