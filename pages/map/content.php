@@ -152,7 +152,7 @@ $CAT_COLORS = [
         flex-shrink: 0;
     }
 
-    /* === Список опубликованных объектов === */
+    /* === Список объектов === */
     .objects-section {
         margin-top: 36px;
     }
@@ -291,42 +291,15 @@ $CAT_COLORS = [
 </div>
 
 <div class="map-legend" aria-label="Обозначения маркеров">
-    <div class="map-legend-item">
-        <span class="map-legend-dot" style="background:#2563eb"></span>
-        <span>Жилой дом</span>
-    </div>
-    <div class="map-legend-item">
-        <span class="map-legend-dot" style="background:#16a34a"></span>
-        <span>Баня</span>
-    </div>
-    <div class="map-legend-item">
-        <span class="map-legend-dot" style="background:#9333ea"></span>
-        <span>Забор</span>
-    </div>
-    <div class="map-legend-item">
-        <span class="map-legend-dot" style="background:#ea580c"></span>
-        <span>Коммерция</span>
-    </div>
-    <div class="map-legend-item">
-        <span class="map-legend-dot" style="background:#dc2626"></span>
-        <span>Промышленные</span>
-    </div>
-    <div class="map-legend-item">
-        <span class="map-legend-dot" style="background:#0891b2"></span>
-        <span>Водные объекты</span>
-    </div>
-    <div class="map-legend-item">
-        <span class="map-legend-dot" style="background:#ca8a04"></span>
-        <span>Социальные</span>
-    </div>
-    <div class="map-legend-item">
-        <span class="map-legend-dot" style="background:#65a30d"></span>
-        <span>Сельхоз</span>
-    </div>
-    <div class="map-legend-item">
-        <span class="map-legend-dot" style="background:#6b7280"></span>
-        <span>Прочее</span>
-    </div>
+    <div class="map-legend-item"><span class="map-legend-dot" style="background:#2563eb"></span><span>Жилой дом</span></div>
+    <div class="map-legend-item"><span class="map-legend-dot" style="background:#16a34a"></span><span>Баня</span></div>
+    <div class="map-legend-item"><span class="map-legend-dot" style="background:#9333ea"></span><span>Забор</span></div>
+    <div class="map-legend-item"><span class="map-legend-dot" style="background:#ea580c"></span><span>Коммерция</span></div>
+    <div class="map-legend-item"><span class="map-legend-dot" style="background:#dc2626"></span><span>Промышленные</span></div>
+    <div class="map-legend-item"><span class="map-legend-dot" style="background:#0891b2"></span><span>Водные объекты</span></div>
+    <div class="map-legend-item"><span class="map-legend-dot" style="background:#ca8a04"></span><span>Социальные</span></div>
+    <div class="map-legend-item"><span class="map-legend-dot" style="background:#65a30d"></span><span>Сельхоз</span></div>
+    <div class="map-legend-item"><span class="map-legend-dot" style="background:#6b7280"></span><span>Прочее</span></div>
 </div>
 
 <?php if (!empty($published)): ?>
@@ -397,6 +370,60 @@ $CAT_COLORS = [
         }
     ];
 
+    // Глобальный объект карты и слои подложки
+    let map, schemeLayer, satelliteSource, satelliteLayer, hybridSchemeLayer;
+    let currentType = 'scheme';
+
+    function removeSatelliteLayers() {
+        if (satelliteLayer)  { map.removeChild(satelliteLayer);  satelliteLayer  = null; }
+        if (satelliteSource) { map.removeChild(satelliteSource); satelliteSource = null; }
+        if (hybridSchemeLayer) { map.removeChild(hybridSchemeLayer); hybridSchemeLayer = null; }
+    }
+
+    function setMapType(type) {
+        if (type === currentType) return;
+
+        if (currentType === 'scheme') {
+            map.removeChild(schemeLayer);
+            schemeLayer = null;
+        } else {
+            removeSatelliteLayers();
+        }
+
+        const {
+            YMapDefaultSchemeLayer,
+            YMapTileDataSource,
+            YMapLayer
+        } = ymaps3;
+
+        if (type === 'scheme') {
+            schemeLayer = new YMapDefaultSchemeLayer({ customization: MAP_CUSTOMIZATION });
+            map.addChild(schemeLayer);
+        } else if (type === 'satellite') {
+            satelliteSource = new YMapTileDataSource('satellite', {
+                url: 'https://core-sat.maps.yandex.net/tiles?l=sat&x={x}&y={y}&z={z}&scale=1&lang=ru_RU'
+            });
+            satelliteLayer = new YMapLayer({ source: 'satellite', type: 'ground' });
+            map.addChild(satelliteSource);
+            map.addChild(satelliteLayer);
+        } else if (type === 'hybrid') {
+            satelliteSource   = new YMapTileDataSource('satellite', {
+                url: 'https://core-sat.maps.yandex.net/tiles?l=sat&x={x}&y={y}&z={z}&scale=1&lang=ru_RU'
+            });
+            satelliteLayer    = new YMapLayer({ source: 'satellite', type: 'ground' });
+            hybridSchemeLayer = new YMapDefaultSchemeLayer({ theme: 'dark' });
+            map.addChild(satelliteSource);
+            map.addChild(satelliteLayer);
+            map.addChild(hybridSchemeLayer);
+        }
+
+        currentType = type;
+
+        document.querySelectorAll('.map-type-btn').forEach(btn => {
+            btn.classList.toggle('map-type-btn--active', btn.dataset.type === type);
+        });
+    }
+
     async function initMap() {
         try {
             await ymaps3.ready;
@@ -407,12 +434,10 @@ $CAT_COLORS = [
                 YMapDefaultFeaturesLayer,
                 YMapMarker,
                 YMapControls,
-                YMapControl,
-                YMapTileDataSource,
-                YMapLayer
+                YMapControl
             } = ymaps3;
 
-            const map = new YMap(
+            map = new YMap(
                 document.getElementById('map-works'),
                 {
                     location: { center: [56.2, 58.0], zoom: 9 },
@@ -420,67 +445,18 @@ $CAT_COLORS = [
                 }
             );
 
-            // Слои карты — держим в переменных для управления
-            let schemeLayer = new YMapDefaultSchemeLayer({ customization: MAP_CUSTOMIZATION });
-            let satelliteSource = null;
-            let satelliteLayer = null;
-            let hybridSchemeLayer = null;
-
-            // Начальный режим — схема
+            // Порядок важен: сначала подложка, потом features
+            schemeLayer = new YMapDefaultSchemeLayer({ customization: MAP_CUSTOMIZATION });
             map.addChild(schemeLayer);
             map.addChild(new YMapDefaultFeaturesLayer());
 
-            // === Переключатель типа карты ===
-            let currentType = 'scheme';
-
-            function setMapType(type) {
-                if (type === currentType) return;
-
-                // Убираем текущие слои подложки
-                if (currentType === 'scheme') {
-                    map.removeChild(schemeLayer);
-                } else if (currentType === 'satellite') {
-                    map.removeChild(satelliteLayer);
-                    map.removeChild(satelliteSource);
-                } else if (currentType === 'hybrid') {
-                    map.removeChild(satelliteLayer);
-                    map.removeChild(satelliteSource);
-                    map.removeChild(hybridSchemeLayer);
-                }
-
-                // Добавляем новые слои подложки
-                if (type === 'scheme') {
-                    schemeLayer = new YMapDefaultSchemeLayer({ customization: MAP_CUSTOMIZATION });
-                    map.addChild(schemeLayer, 0); // вставляем первым
-                } else if (type === 'satellite') {
-                    satelliteSource = new YMapTileDataSource('satellite', { url: 'https://core-sat.maps.yandex.net/tiles?l=sat&x={x}&y={y}&z={z}&scale=1&lang=ru_RU' });
-                    satelliteLayer  = new YMapLayer({ source: 'satellite', type: 'ground' });
-                    map.addChild(satelliteSource, 0);
-                    map.addChild(satelliteLayer, 1);
-                } else if (type === 'hybrid') {
-                    satelliteSource   = new YMapTileDataSource('satellite', { url: 'https://core-sat.maps.yandex.net/tiles?l=sat&x={x}&y={y}&z={z}&scale=1&lang=ru_RU' });
-                    satelliteLayer    = new YMapLayer({ source: 'satellite', type: 'ground' });
-                    hybridSchemeLayer = new YMapDefaultSchemeLayer({ theme: 'dark' });
-                    map.addChild(satelliteSource, 0);
-                    map.addChild(satelliteLayer, 1);
-                    map.addChild(hybridSchemeLayer, 2);
-                }
-
-                currentType = type;
-
-                // Обновляем активную кнопку
-                document.querySelectorAll('.map-type-btn').forEach(btn => {
-                    btn.classList.toggle('map-type-btn--active', btn.dataset.type === type);
-                });
-            }
-
-            // Рендерим кнопки переключателя через YMapControls
+            // Переключатель типа карты
             const controlEl = document.createElement('div');
             controlEl.className = 'map-type-control';
             [
-                { type: 'scheme',    label: 'Схема'    },
-                { type: 'satellite', label: 'Спутник'  },
-                { type: 'hybrid',    label: 'Гибрид'   },
+                { type: 'scheme',    label: 'Схема'   },
+                { type: 'satellite', label: 'Спутник' },
+                { type: 'hybrid',    label: 'Гибрид'  },
             ].forEach(({ type, label }) => {
                 const btn = document.createElement('button');
                 btn.className = 'map-type-btn' + (type === 'scheme' ? ' map-type-btn--active' : '');
@@ -489,15 +465,13 @@ $CAT_COLORS = [
                 btn.addEventListener('click', () => setMapType(type));
                 controlEl.appendChild(btn);
             });
-
             map.addChild(new YMapControls({ position: 'top right' }).addChild(new YMapControl().addChild(controlEl)));
 
-            // === Кластеризация и маркеры ===
+            // Кластеризация
             ymaps3.import.registerCdn(
                 'https://cdn.jsdelivr.net/npm/{package}',
                 '@yandex/ymaps3-clusterer@0.0.1'
             );
-
             const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer');
 
             let objects = [];
@@ -522,16 +496,13 @@ $CAT_COLORS = [
                 el.className = 'custom-marker' + (obj.url ? ' custom-marker--published' : '');
                 el.title = obj.title || '';
                 el.style.backgroundColor = CAT_COLORS[obj.category] ?? CAT_COLORS.other;
-
                 return new YMapMarker(
                     {
                         coordinates: feature.geometry.coordinates,
                         zIndex: 10,
                         onClick(event, mapEvent) {
                             mapEvent.stopPropagation();
-                            if (obj.url) {
-                                window.location.href = obj.url;
-                            }
+                            if (obj.url) window.location.href = obj.url;
                         }
                     },
                     el
