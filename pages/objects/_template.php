@@ -92,6 +92,40 @@ ob_start();
 <section class="object-map-section">
     <h2 class="object-map-section__title">Расположение объекта</h2>
     <div id="object-map" class="object-map"></div>
+
+    <div class="map-legend" id="object-map-legend" aria-label="Фильтр по категориям">
+        <div class="map-legend-item" data-cat="house">
+            <span class="map-legend-dot" style="background:#2563eb"></span><span>Жилой дом</span>
+        </div>
+        <div class="map-legend-item" data-cat="banya">
+            <span class="map-legend-dot" style="background:#16a34a"></span><span>Баня</span>
+        </div>
+        <div class="map-legend-item" data-cat="fence">
+            <span class="map-legend-dot" style="background:#9333ea"></span><span>Забор</span>
+        </div>
+        <div class="map-legend-item" data-cat="commercial">
+            <span class="map-legend-dot" style="background:#ea580c"></span><span>Коммерция</span>
+        </div>
+        <div class="map-legend-item" data-cat="industrial">
+            <span class="map-legend-dot" style="background:#dc2626"></span><span>Промышленные</span>
+        </div>
+        <div class="map-legend-item" data-cat="water">
+            <span class="map-legend-dot" style="background:#0891b2"></span><span>Водные объекты</span>
+        </div>
+        <div class="map-legend-item" data-cat="social">
+            <span class="map-legend-dot" style="background:#ca8a04"></span><span>Социальные</span>
+        </div>
+        <div class="map-legend-item" data-cat="agro">
+            <span class="map-legend-dot" style="background:#65a30d"></span><span>Сельхоз</span>
+        </div>
+        <div class="map-legend-item" data-cat="other">
+            <span class="map-legend-dot" style="background:#6b7280"></span><span>Прочее</span>
+        </div>
+        <div class="map-legend-footer">
+            <button class="map-legend-reset" id="object-map-legend-reset" type="button">Показать все</button>
+            <span class="map-legend-counter" id="object-map-legend-counter"></span>
+        </div>
+    </div>
 </section>
 
 <style>
@@ -112,7 +146,69 @@ ob_start();
         overflow: hidden;
         position: relative;
     }
-    /* --- Object nav --- */
+    /* === Легенда-фильтр (1:1 с /map/) === */
+    .map-legend {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px 0;
+        margin-top: 18px;
+        padding: 16px 20px;
+        background: #f8f8f8;
+        border: 1px solid #e4e4e4;
+        border-radius: 10px;
+    }
+    .map-legend-footer {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-top: 10px;
+        border-top: 1px solid #e4e4e4;
+        margin-top: 4px;
+    }
+    .map-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: #333;
+        line-height: 1;
+        cursor: pointer;
+        user-select: none;
+        padding: 3px 6px 3px 0;
+        border-radius: 4px;
+        transition: opacity 0.15s;
+    }
+    .map-legend-item:hover { opacity: 0.8; }
+    .map-legend-item--inactive { opacity: 0.35; }
+    .map-legend-item--inactive .map-legend-dot {
+        background: #ccc !important;
+        box-shadow: none;
+    }
+    .map-legend-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+        flex-shrink: 0;
+        transition: background 0.15s;
+    }
+    .map-legend-reset {
+        display: none;
+        font-size: 12px;
+        color: #2563eb;
+        background: none;
+        border: 1px solid #2563eb;
+        border-radius: 4px;
+        padding: 3px 10px;
+        cursor: pointer;
+        line-height: 1.5;
+        transition: background 0.15s, color 0.15s;
+    }
+    .map-legend-reset:hover { background: #2563eb; color: #fff; }
+    .map-legend-counter { font-size: 12px; color: #888; }
+    /* === Object nav === */
     .object-page__nav {
         display: grid;
         grid-template-columns: 1fr auto 1fr;
@@ -137,16 +233,10 @@ ob_start();
         max-width: 240px;
         transition: background 0.15s, border-color 0.15s;
     }
-    .object-page__nav-link:hover {
-        background: #f0f4fa;
-        border-color: #2563eb;
-    }
+    .object-page__nav-link:hover { background: #f0f4fa; border-color: #2563eb; }
     .object-page__nav-link--prev { align-items: flex-start; }
     .object-page__nav-link--next { align-items: flex-end; text-align: right; }
-    .object-page__nav-arrow {
-        font-size: 1.1em;
-        color: #2563eb;
-    }
+    .object-page__nav-arrow { font-size: 1.1em; color: #2563eb; }
     .object-page__nav-label {
         font-size: 0.75em;
         color: #6b7280;
@@ -169,7 +259,7 @@ ob_start();
         .object-page__nav-back { grid-column: 1 / -1; grid-row: 2; justify-self: center; }
         .object-page__nav-link { max-width: 100%; }
     }
-    /* --- Markers --- */
+    /* === Маркеры === */
     .current-marker {
         width: 28px;
         height: 28px;
@@ -230,6 +320,7 @@ ob_start();
         commercial: '#ea580c', industrial: '#dc2626', water: '#0891b2',
         social: '#ca8a04', agro: '#65a30d', other: '#6b7280'
     };
+    const ALL_CATS = Object.keys(CAT_COLORS);
 
     const MAP_CUSTOMIZATION = [
         {
@@ -261,11 +352,11 @@ ob_start();
         );
         const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer');
 
-        let objects = [];
+        let allObjects = [];
         try {
             const res = await fetch('/data/map.json');
             if (!res.ok) throw new Error('HTTP ' + res.status);
-            objects = await res.json();
+            allObjects = await res.json();
         } catch(e) {
             console.error('[object-map] fetch error:', e);
         }
@@ -279,15 +370,12 @@ ob_start();
             currentEl
         ));
 
-        // Остальные объекты — координаты напрямую без свопа
-        const points = objects
-            .filter(o => o.id !== CURRENT_ID)
-            .map(o => ({
-                type: 'Feature',
-                id: String(o.id),
-                geometry: { type: 'Point', coordinates: o.coords },
-                properties: { obj: o }
-            }));
+        const toFeature = o => ({
+            type: 'Feature',
+            id: String(o.id),
+            geometry: { type: 'Point', coordinates: o.coords },
+            properties: { obj: o }
+        });
 
         const marker = (feature) => {
             const obj = feature.properties.obj;
@@ -315,12 +403,59 @@ ob_start();
             return new YMapMarker({ coordinates }, el);
         };
 
-        map.addChild(new YMapClusterer({
+        // Остальные объекты (без текущего)
+        const otherObjects = allObjects.filter(o => o.id !== CURRENT_ID);
+
+        const clusterer = new YMapClusterer({
             method: clusterByGrid({ gridSize: 64 }),
-            features: points,
+            features: otherObjects.map(toFeature),
             marker,
             cluster
-        }));
+        });
+        map.addChild(clusterer);
+
+        // === Фильтр ===
+        const activeCategories = new Set(ALL_CATS);
+        const resetBtn = document.getElementById('object-map-legend-reset');
+        const counter  = document.getElementById('object-map-legend-counter');
+        const items    = document.querySelectorAll('#object-map-legend .map-legend-item[data-cat]');
+
+        function syncFilter() {
+            items.forEach(item => {
+                item.classList.toggle('map-legend-item--inactive', !activeCategories.has(item.dataset.cat));
+            });
+            const isFiltered = activeCategories.size < ALL_CATS.length;
+            resetBtn.style.display = isFiltered ? 'inline-block' : 'none';
+
+            const filtered = otherObjects.filter(o => activeCategories.has(o.category));
+            counter.textContent = isFiltered
+                ? `показано ${filtered.length + 1} из ${allObjects.length}`
+                : '';
+            clusterer.update({ features: filtered.map(toFeature) });
+        }
+
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                const cat = item.dataset.cat;
+                const allActive = activeCategories.size === ALL_CATS.length;
+
+                if (allActive) {
+                    activeCategories.clear();
+                    activeCategories.add(cat);
+                } else if (activeCategories.has(cat) && activeCategories.size === 1) {
+                    ALL_CATS.forEach(c => activeCategories.add(c));
+                } else {
+                    if (activeCategories.has(cat)) activeCategories.delete(cat);
+                    else activeCategories.add(cat);
+                }
+                syncFilter();
+            });
+        });
+
+        resetBtn.addEventListener('click', () => {
+            ALL_CATS.forEach(c => activeCategories.add(c));
+            syncFilter();
+        });
 
     } catch(e) {
         console.error('[object-map] error:', e);
