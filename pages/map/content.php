@@ -153,9 +153,7 @@ $CAT_COLORS = [
     }
 
     /* === Список объектов === */
-    .objects-section {
-        margin-top: 36px;
-    }
+    .objects-section { margin-top: 36px; }
 
     .objects-section__header {
         display: flex;
@@ -173,10 +171,7 @@ $CAT_COLORS = [
         margin: 0;
     }
 
-    .objects-section__count {
-        font-size: 0.85em;
-        color: #888;
-    }
+    .objects-section__count { font-size: 0.85em; color: #888; }
 
     .objects-grid {
         display: grid;
@@ -220,11 +215,7 @@ $CAT_COLORS = [
         flex-shrink: 0;
     }
 
-    .object-card__thumb--placeholder svg {
-        width: 40px;
-        height: 40px;
-        opacity: 0.3;
-    }
+    .object-card__thumb--placeholder svg { width: 40px; height: 40px; opacity: 0.3; }
 
     .object-card__body {
         padding: 12px 14px;
@@ -254,12 +245,7 @@ $CAT_COLORS = [
         margin: 0;
     }
 
-    .object-card__desc {
-        font-size: 0.8em;
-        color: #666;
-        line-height: 1.4;
-        margin: 0;
-    }
+    .object-card__desc { font-size: 0.8em; color: #666; line-height: 1.4; margin: 0; }
 
     .object-card__link {
         font-size: 0.8em;
@@ -270,17 +256,11 @@ $CAT_COLORS = [
     }
 
     @media (max-width: 768px) {
-        .objects-grid {
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 12px;
-        }
+        .objects-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
     }
 
     @media (max-width: 480px) {
-        .objects-grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
+        .objects-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
     }
 </style>
 
@@ -346,15 +326,9 @@ $CAT_COLORS = [
 
 <script>
     const CAT_COLORS = {
-        house: '#2563eb',
-        banya: '#16a34a',
-        fence: '#9333ea',
-        commercial: '#ea580c',
-        industrial: '#dc2626',
-        water: '#0891b2',
-        social: '#ca8a04',
-        agro: '#65a30d',
-        other: '#6b7280'
+        house: '#2563eb', banya: '#16a34a', fence: '#9333ea',
+        commercial: '#ea580c', industrial: '#dc2626', water: '#0891b2',
+        social: '#ca8a04', agro: '#65a30d', other: '#6b7280'
     };
 
     const MAP_CUSTOMIZATION = [
@@ -370,14 +344,13 @@ $CAT_COLORS = [
         }
     ];
 
-    // Глобальный объект карты и слои подложки
     let map, schemeLayer, satelliteSource, satelliteLayer, hybridSchemeLayer;
     let currentType = 'scheme';
 
     function removeSatelliteLayers() {
-        if (satelliteLayer)  { map.removeChild(satelliteLayer);  satelliteLayer  = null; }
-        if (satelliteSource) { map.removeChild(satelliteSource); satelliteSource = null; }
         if (hybridSchemeLayer) { map.removeChild(hybridSchemeLayer); hybridSchemeLayer = null; }
+        if (satelliteLayer)    { map.removeChild(satelliteLayer);    satelliteLayer    = null; }
+        if (satelliteSource)   { map.removeChild(satelliteSource);   satelliteSource   = null; }
     }
 
     function setMapType(type) {
@@ -390,11 +363,7 @@ $CAT_COLORS = [
             removeSatelliteLayers();
         }
 
-        const {
-            YMapDefaultSchemeLayer,
-            YMapTileDataSource,
-            YMapLayer
-        } = ymaps3;
+        const { YMapDefaultSchemeLayer, YMapTileDataSource, YMapLayer } = ymaps3;
 
         if (type === 'scheme') {
             schemeLayer = new YMapDefaultSchemeLayer({ customization: MAP_CUSTOMIZATION });
@@ -418,7 +387,6 @@ $CAT_COLORS = [
         }
 
         currentType = type;
-
         document.querySelectorAll('.map-type-btn').forEach(btn => {
             btn.classList.toggle('map-type-btn--active', btn.dataset.type === type);
         });
@@ -429,23 +397,19 @@ $CAT_COLORS = [
             await ymaps3.ready;
 
             const {
-                YMap,
-                YMapDefaultSchemeLayer,
-                YMapDefaultFeaturesLayer,
-                YMapMarker,
-                YMapControls,
-                YMapControl
+                YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer,
+                YMapMarker, YMapControls, YMapControl
             } = ymaps3;
 
             map = new YMap(
                 document.getElementById('map-works'),
                 {
-                    location: { center: [56.2, 58.0], zoom: 9 },
+                    // center: [lng, lat] — формат ymaps3 (GeoJSON)
+                    location: { center: [58.0, 56.2], zoom: 9 },
                     behaviors: ['drag', 'pinchZoom', 'scrollZoom', 'dblClick']
                 }
             );
 
-            // Порядок важен: сначала подложка, потом features
             schemeLayer = new YMapDefaultSchemeLayer({ customization: MAP_CUSTOMIZATION });
             map.addChild(schemeLayer);
             map.addChild(new YMapDefaultFeaturesLayer());
@@ -483,10 +447,11 @@ $CAT_COLORS = [
                 console.error('[map] fetch error:', e);
             }
 
+            // coords в map.json хранятся как [lat, lng] — перевод в [lng, lat] для ymaps3
             const points = objects.map(obj => ({
                 type: 'Feature',
                 id: String(obj.id),
-                geometry: { type: 'Point', coordinates: [obj.coords[1], obj.coords[0]] },
+                geometry: { type: 'Point', coordinates: obj.coords },
                 properties: { obj }
             }));
 
