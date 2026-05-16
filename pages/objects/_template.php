@@ -22,6 +22,7 @@ $canonical        = 'https://zavodsvay.ru/objects/' . $object_id . '/';
 $og_image         = '/pages/map/img/' . $object_id . '_1.webp';
 $img_base         = '/pages/map/img/';
 
+// Координаты хранятся как [lat, lng] — ymaps3 принимает их напрямую
 $obj_coords_js    = json_encode($obj['coords']);
 $obj_id_js        = (int)$object_id;
 
@@ -135,8 +136,7 @@ ob_start();
 <script>
 (async function() {
     const CURRENT_ID     = <?= $obj_id_js ?>;
-    const CURRENT_COORDS = <?= $obj_coords_js ?>;
-    const CENTER         = [CURRENT_COORDS[1], CURRENT_COORDS[0]];
+    const CURRENT_COORDS = <?= $obj_coords_js ?>;  // [lat, lng] — подставляем напрямую
 
     const CAT_COLORS = {
         house: '#2563eb', banya: '#16a34a', fence: '#9333ea',
@@ -161,7 +161,7 @@ ob_start();
         const map = new YMap(
             document.getElementById('object-map'),
             {
-                location: { center: CENTER, zoom: 13 },
+                location: { center: CURRENT_COORDS, zoom: 13 },
                 behaviors: ['drag', 'pinchZoom', 'scrollZoom', 'dblClick']
             }
         );
@@ -183,20 +183,22 @@ ob_start();
             console.error('[object-map] fetch error:', e);
         }
 
+        // Текущий объект — отдельный маркер с пульсацией
         const currentEl = document.createElement('div');
         currentEl.className = 'current-marker';
         currentEl.title = <?= json_encode($obj['title'], JSON_UNESCAPED_UNICODE) ?>;
         map.addChild(new YMapMarker(
-            { coordinates: CENTER, zIndex: 100 },
+            { coordinates: CURRENT_COORDS, zIndex: 100 },
             currentEl
         ));
 
+        // Остальные объекты — координаты напрямую без свопа
         const points = objects
             .filter(o => o.id !== CURRENT_ID)
             .map(o => ({
                 type: 'Feature',
                 id: String(o.id),
-                geometry: { type: 'Point', coordinates: [o.coords[1], o.coords[0]] },
+                geometry: { type: 'Point', coordinates: o.coords },
                 properties: { obj: o }
             }));
 

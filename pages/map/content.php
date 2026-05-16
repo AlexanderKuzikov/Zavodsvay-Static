@@ -405,6 +405,8 @@ $CAT_COLORS = [
         }
     ];
 
+    const ALL_CATS = Object.keys(CAT_COLORS);
+
     async function initMap() {
         try {
             await ymaps3.ready;
@@ -479,41 +481,46 @@ $CAT_COLORS = [
             map.addChild(clusterer);
 
             // === Фильтр ===
-            const activeCategories = new Set(Object.keys(CAT_COLORS));
-            const resetBtn  = document.getElementById('map-legend-reset');
-            const counter   = document.getElementById('map-legend-counter');
+            const activeCategories = new Set(ALL_CATS);
+            const resetBtn = document.getElementById('map-legend-reset');
+            const counter  = document.getElementById('map-legend-counter');
+            const items    = document.querySelectorAll('.map-legend-item[data-cat]');
 
-            function applyFilter() {
-                const filtered = allObjects
-                    .filter(o => activeCategories.has(o.category))
-                    .map(toFeature);
-                clusterer.update({ features: filtered });
-
-                const isFiltered = activeCategories.size < Object.keys(CAT_COLORS).length;
+            function syncUI() {
+                items.forEach(item => {
+                    item.classList.toggle('map-legend-item--inactive', !activeCategories.has(item.dataset.cat));
+                });
+                const isFiltered = activeCategories.size < ALL_CATS.length;
                 resetBtn.style.display = isFiltered ? 'inline-block' : 'none';
-                counter.textContent   = isFiltered ? `показано ${filtered.length} из ${allObjects.length}` : '';
+                const filtered = allObjects.filter(o => activeCategories.has(o.category));
+                counter.textContent = isFiltered ? `показано ${filtered.length} из ${allObjects.length}` : '';
+                clusterer.update({ features: filtered.map(toFeature) });
             }
 
-            document.querySelectorAll('.map-legend-item[data-cat]').forEach(item => {
+            items.forEach(item => {
                 item.addEventListener('click', () => {
                     const cat = item.dataset.cat;
-                    if (activeCategories.has(cat)) {
-                        activeCategories.delete(cat);
-                        item.classList.add('map-legend-item--inactive');
-                    } else {
+                    const allActive = activeCategories.size === ALL_CATS.length;
+
+                    if (allActive) {
+                        // Первый клик при полном сете — оставляем только эту
+                        activeCategories.clear();
                         activeCategories.add(cat);
-                        item.classList.remove('map-legend-item--inactive');
+                    } else if (activeCategories.has(cat) && activeCategories.size === 1) {
+                        // Клик по единственной активной — сброс всех
+                        ALL_CATS.forEach(c => activeCategories.add(c));
+                    } else {
+                        // Обычный тоггл
+                        if (activeCategories.has(cat)) activeCategories.delete(cat);
+                        else activeCategories.add(cat);
                     }
-                    applyFilter();
+                    syncUI();
                 });
             });
 
             resetBtn.addEventListener('click', () => {
-                Object.keys(CAT_COLORS).forEach(cat => activeCategories.add(cat));
-                document.querySelectorAll('.map-legend-item[data-cat]').forEach(item => {
-                    item.classList.remove('map-legend-item--inactive');
-                });
-                applyFilter();
+                ALL_CATS.forEach(c => activeCategories.add(c));
+                syncUI();
             });
 
         } catch (e) {
