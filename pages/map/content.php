@@ -80,7 +80,7 @@ $CAT_COLORS = [
         cursor: pointer;
     }
 
-    /* === Легенда === */
+    /* === Легенда-фильтр === */
     .map-legend {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -92,6 +92,16 @@ $CAT_COLORS = [
         border-radius: 10px;
     }
 
+    .map-legend-footer {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-top: 10px;
+        border-top: 1px solid #e4e4e4;
+        margin-top: 4px;
+    }
+
     .map-legend-item {
         display: flex;
         align-items: center;
@@ -99,6 +109,24 @@ $CAT_COLORS = [
         font-size: 13px;
         color: #333;
         line-height: 1;
+        cursor: pointer;
+        user-select: none;
+        padding: 3px 6px 3px 0;
+        border-radius: 4px;
+        transition: opacity 0.15s;
+    }
+
+    .map-legend-item:hover {
+        opacity: 0.8;
+    }
+
+    .map-legend-item--inactive {
+        opacity: 0.35;
+    }
+
+    .map-legend-item--inactive .map-legend-dot {
+        background: #ccc !important;
+        box-shadow: none;
     }
 
     .map-legend-dot {
@@ -108,6 +136,30 @@ $CAT_COLORS = [
         border: 2px solid #fff;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
         flex-shrink: 0;
+        transition: background 0.15s;
+    }
+
+    .map-legend-reset {
+        display: none;
+        font-size: 12px;
+        color: #2563eb;
+        background: none;
+        border: 1px solid #2563eb;
+        border-radius: 4px;
+        padding: 3px 10px;
+        cursor: pointer;
+        line-height: 1.5;
+        transition: background 0.15s, color 0.15s;
+    }
+
+    .map-legend-reset:hover {
+        background: #2563eb;
+        color: #fff;
+    }
+
+    .map-legend-counter {
+        font-size: 12px;
+        color: #888;
     }
 
     /* === Список опубликованных объектов === */
@@ -248,42 +300,46 @@ $CAT_COLORS = [
     <div class="map-loader">Загрузка карты...</div>
 </div>
 
-<div class="map-legend" aria-label="Обозначения маркеров">
-    <div class="map-legend-item">
+<div class="map-legend" id="map-legend" aria-label="Фильтр по категориям">
+    <div class="map-legend-item" data-cat="house">
         <span class="map-legend-dot" style="background:#2563eb"></span>
         <span>Жилой дом</span>
     </div>
-    <div class="map-legend-item">
+    <div class="map-legend-item" data-cat="banya">
         <span class="map-legend-dot" style="background:#16a34a"></span>
         <span>Баня</span>
     </div>
-    <div class="map-legend-item">
+    <div class="map-legend-item" data-cat="fence">
         <span class="map-legend-dot" style="background:#9333ea"></span>
         <span>Забор</span>
     </div>
-    <div class="map-legend-item">
+    <div class="map-legend-item" data-cat="commercial">
         <span class="map-legend-dot" style="background:#ea580c"></span>
         <span>Коммерция</span>
     </div>
-    <div class="map-legend-item">
+    <div class="map-legend-item" data-cat="industrial">
         <span class="map-legend-dot" style="background:#dc2626"></span>
         <span>Промышленные</span>
     </div>
-    <div class="map-legend-item">
+    <div class="map-legend-item" data-cat="water">
         <span class="map-legend-dot" style="background:#0891b2"></span>
         <span>Водные объекты</span>
     </div>
-    <div class="map-legend-item">
+    <div class="map-legend-item" data-cat="social">
         <span class="map-legend-dot" style="background:#ca8a04"></span>
         <span>Социальные</span>
     </div>
-    <div class="map-legend-item">
+    <div class="map-legend-item" data-cat="agro">
         <span class="map-legend-dot" style="background:#65a30d"></span>
         <span>Сельхоз</span>
     </div>
-    <div class="map-legend-item">
+    <div class="map-legend-item" data-cat="other">
         <span class="map-legend-dot" style="background:#6b7280"></span>
         <span>Прочее</span>
+    </div>
+    <div class="map-legend-footer">
+        <button class="map-legend-reset" id="map-legend-reset" type="button">Показать все</button>
+        <span class="map-legend-counter" id="map-legend-counter"></span>
     </div>
 </div>
 
@@ -331,15 +387,9 @@ $CAT_COLORS = [
 
 <script>
     const CAT_COLORS = {
-        house: '#2563eb',
-        banya: '#16a34a',
-        fence: '#9333ea',
-        commercial: '#ea580c',
-        industrial: '#dc2626',
-        water: '#0891b2',
-        social: '#ca8a04',
-        agro: '#65a30d',
-        other: '#6b7280'
+        house: '#2563eb', banya: '#16a34a', fence: '#9333ea',
+        commercial: '#ea580c', industrial: '#dc2626', water: '#0891b2',
+        social: '#ca8a04', agro: '#65a30d', other: '#6b7280'
     };
 
     const MAP_CUSTOMIZATION = [
@@ -359,12 +409,7 @@ $CAT_COLORS = [
         try {
             await ymaps3.ready;
 
-            const {
-                YMap,
-                YMapDefaultSchemeLayer,
-                YMapDefaultFeaturesLayer,
-                YMapMarker
-            } = ymaps3;
+            const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker } = ymaps3;
 
             const map = new YMap(
                 document.getElementById('map-works'),
@@ -374,33 +419,30 @@ $CAT_COLORS = [
                 }
             );
 
-            map.addChild(new YMapDefaultSchemeLayer({
-                customization: MAP_CUSTOMIZATION
-            }));
+            map.addChild(new YMapDefaultSchemeLayer({ customization: MAP_CUSTOMIZATION }));
             map.addChild(new YMapDefaultFeaturesLayer());
 
             ymaps3.import.registerCdn(
                 'https://cdn.jsdelivr.net/npm/{package}',
                 '@yandex/ymaps3-clusterer@0.0.1'
             );
-
             const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer');
 
-            let objects = [];
+            let allObjects = [];
             try {
                 const res = await fetch('/data/map.json');
                 if (!res.ok) throw new Error('HTTP ' + res.status);
-                objects = await res.json();
+                allObjects = await res.json();
             } catch (e) {
                 console.error('[map] fetch error:', e);
             }
 
-            const points = objects.map(obj => ({
+            const toFeature = obj => ({
                 type: 'Feature',
                 id: String(obj.id),
                 geometry: { type: 'Point', coordinates: obj.coords },
                 properties: { obj }
-            }));
+            });
 
             const marker = (feature) => {
                 const obj = feature.properties.obj;
@@ -408,16 +450,13 @@ $CAT_COLORS = [
                 el.className = 'custom-marker' + (obj.url ? ' custom-marker--published' : '');
                 el.title = obj.title || '';
                 el.style.backgroundColor = CAT_COLORS[obj.category] ?? CAT_COLORS.other;
-
                 return new YMapMarker(
                     {
                         coordinates: feature.geometry.coordinates,
                         zIndex: 10,
                         onClick(event, mapEvent) {
                             mapEvent.stopPropagation();
-                            if (obj.url) {
-                                window.location.href = obj.url;
-                            }
+                            if (obj.url) window.location.href = obj.url;
                         }
                     },
                     el
@@ -431,12 +470,51 @@ $CAT_COLORS = [
                 return new YMapMarker({ coordinates }, el);
             };
 
-            map.addChild(new YMapClusterer({
+            const clusterer = new YMapClusterer({
                 method: clusterByGrid({ gridSize: 64 }),
-                features: points,
+                features: allObjects.map(toFeature),
                 marker,
                 cluster
-            }));
+            });
+            map.addChild(clusterer);
+
+            // === Фильтр ===
+            const activeCategories = new Set(Object.keys(CAT_COLORS));
+            const resetBtn  = document.getElementById('map-legend-reset');
+            const counter   = document.getElementById('map-legend-counter');
+
+            function applyFilter() {
+                const filtered = allObjects
+                    .filter(o => activeCategories.has(o.category))
+                    .map(toFeature);
+                clusterer.update({ features: filtered });
+
+                const isFiltered = activeCategories.size < Object.keys(CAT_COLORS).length;
+                resetBtn.style.display = isFiltered ? 'inline-block' : 'none';
+                counter.textContent   = isFiltered ? `показано ${filtered.length} из ${allObjects.length}` : '';
+            }
+
+            document.querySelectorAll('.map-legend-item[data-cat]').forEach(item => {
+                item.addEventListener('click', () => {
+                    const cat = item.dataset.cat;
+                    if (activeCategories.has(cat)) {
+                        activeCategories.delete(cat);
+                        item.classList.add('map-legend-item--inactive');
+                    } else {
+                        activeCategories.add(cat);
+                        item.classList.remove('map-legend-item--inactive');
+                    }
+                    applyFilter();
+                });
+            });
+
+            resetBtn.addEventListener('click', () => {
+                Object.keys(CAT_COLORS).forEach(cat => activeCategories.add(cat));
+                document.querySelectorAll('.map-legend-item[data-cat]').forEach(item => {
+                    item.classList.remove('map-legend-item--inactive');
+                });
+                applyFilter();
+            });
 
         } catch (e) {
             console.error('[map] error:', e);
