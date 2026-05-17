@@ -1,7 +1,11 @@
 <?php
-$title = "История винтовых свай — от маяков Темзы до современного строительства";
-$meta_description = "Кто изобрёл винтовые сваи: история слепого инженера Александра Митчелла, первый маяк Maplin Sands в 1838 году и как технология завоевала весь мир.";
+$title = isset($title) ? $title : 'История винтовых свай — Гефест';
+$meta_description = isset($meta_description) ? $meta_description : '';
 $canonical = "https://zavodsvay.ru/articles/history/";
+$og_type = 'article';
+$schema_type = 'Article';
+$article_published = '2024-01-01'; // TODO: уточнить реальную дату
+$article_modified  = '2024-01-01'; // TODO: уточнить реальную дату
 
 ob_start();
 readfile(__DIR__ . '/content.html');

@@ -1,7 +1,11 @@
 <?php
-$title = "Стоимость винтовых свай — Гефест";
-$meta_description = "Из чего складывается цена на винтовые сваи: диаметр, длина, покрытие и тип лопасти. Советы по оптимизации бюджета на фундамент.";
+$title = isset($title) ? $title : 'Стоимость свай — Гефест';
+$meta_description = isset($meta_description) ? $meta_description : '';
 $canonical = "https://zavodsvay.ru/articles/stoimost-svay/";
+$og_type = 'article';
+$schema_type = 'Article';
+$article_published = '2024-01-01'; // TODO: уточнить реальную дату
+$article_modified  = '2024-01-01'; // TODO: уточнить реальную дату
 
 ob_start();
 readfile(__DIR__ . '/content.html');

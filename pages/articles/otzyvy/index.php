@@ -1,7 +1,11 @@
 <?php
-$title = "Негативные отзывы о винтовых сваях — как выбрать надёжного производителя";
-$meta_description = "Почему появляются плохие отзывы о винтовых сваях: некачественное производство, ошибки монтажа, отсутствие расчётов. Как проверить подрядчика перед заказом.";
+$title = isset($title) ? $title : 'Отзывы о сваях Гефест';
+$meta_description = isset($meta_description) ? $meta_description : '';
 $canonical = "https://zavodsvay.ru/articles/otzyvy/";
+$og_type = 'article';
+$schema_type = 'Article';
+$article_published = '2024-01-01'; // TODO: уточнить реальную дату
+$article_modified  = '2024-01-01'; // TODO: уточнить реальную дату
 
 ob_start();
 readfile(__DIR__ . '/content.html');

@@ -1,7 +1,11 @@
 <?php
-$title = "Фундамент для каркасного дома на винтовых сваях — Гефест";
-$meta_description = "Расчёт свайно-винтового фундамента для каркасного дома 6×6 м: выбор свай, ростверк из бруса, сроки и стоимость монтажа в Пермском крае.";
+$title = isset($title) ? $title : 'Сваи для каркасного дома — Гефест';
+$meta_description = isset($meta_description) ? $meta_description : '';
 $canonical = "https://zavodsvay.ru/articles/karkasny/";
+$og_type = 'article';
+$schema_type = 'Article';
+$article_published = '2024-01-01'; // TODO: уточнить реальную дату
+$article_modified  = '2024-01-01'; // TODO: уточнить реальную дату
 
 ob_start();
 readfile(__DIR__ . '/content.html');

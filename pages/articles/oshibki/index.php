@@ -1,7 +1,11 @@
 <?php
-$title = "Типичные ошибки при заказе фундамента на сваях — Гефест";
-$meta_description = "Разбираем распространённые ошибки заказчиков: занижение числа свай, неверный диаметр, отказ от обвязки. Как не допустить проблем при строительстве.";
-$canonical = "https://zavodsvay.ru/articles/vidy-svay/";
+$title = isset($title) ? $title : 'Ошибки при завинчивании свай — Гефест';
+$meta_description = isset($meta_description) ? $meta_description : '';
+$canonical = "https://zavodsvay.ru/articles/oshibki/";
+$og_type = 'article';
+$schema_type = 'Article';
+$article_published = '2024-01-01'; // TODO: уточнить реальную дату
+$article_modified  = '2024-01-01'; // TODO: уточнить реальную дату
 
 ob_start();
 readfile(__DIR__ . '/content.html');

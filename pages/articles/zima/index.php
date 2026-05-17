@@ -1,7 +1,11 @@
 <?php
-$title = "Фундамент на винтовых сваях зимой — Гефест";
-$meta_description = "Монтаж свайно-винтового фундамента в зимних условиях: особенности завинчивания в мёрзлый грунт, выбор свай и сравнение с зимним бетонированием.";
+$title = isset($title) ? $title : 'Завинчивание свай зимой — Гефест';
+$meta_description = isset($meta_description) ? $meta_description : '';
 $canonical = "https://zavodsvay.ru/articles/zima/";
+$og_type = 'article';
+$schema_type = 'Article';
+$article_published = '2024-01-01'; // TODO: уточнить реальную дату
+$article_modified  = '2024-01-01'; // TODO: уточнить реальную дату
 
 ob_start();
 readfile(__DIR__ . '/content.html');

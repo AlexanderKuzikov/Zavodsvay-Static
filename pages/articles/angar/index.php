@@ -2,6 +2,10 @@
 $title = "Фундамент для ангара на винтовых сваях — Гефест";
 $meta_description = "Свайно-винтовой фундамент для бескаркасных и каркасных ангаров: расчёт свай, схемы расстановки, полевые испытания и сравнение стоимости с ленточным фундаментом.";
 $canonical = "https://zavodsvay.ru/articles/angar/";
+$og_type = 'article';
+$schema_type = 'Article';
+$article_published = '2024-01-01'; // TODO: уточнить реальную дату
+$article_modified  = '2024-01-01'; // TODO: уточнить реальную дату
 
 ob_start();
 readfile(__DIR__ . '/content.html');

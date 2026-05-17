@@ -1,7 +1,11 @@
 <?php
-$title = "Преимущества фундамента на винтовых сваях — Гефест";
-$meta_description = "Почему свайно-винтовой фундамент выгоднее ленточного и плитного: скорость монтажа, цена, минимальная нагрузка на грунт. Сравнение для частного строительства.";
-$canonical = "https://zavodsvay.ru/articles/montazh-svay/";
+$title = isset($title) ? $title : 'Преимущества винтовых свай — Гефест';
+$meta_description = isset($meta_description) ? $meta_description : '';
+$canonical = "https://zavodsvay.ru/articles/preimushestva/";
+$og_type = 'article';
+$schema_type = 'Article';
+$article_published = '2024-01-01'; // TODO: уточнить реальную дату
+$article_modified  = '2024-01-01'; // TODO: уточнить реальную дату
 
 ob_start();
 readfile(__DIR__ . '/content.html');

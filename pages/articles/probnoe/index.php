@@ -1,7 +1,11 @@
 <?php
-$title = "Пробное завинчивание винтовой сваи — полевые испытания грунтов";
-$meta_description = "Методика полевых испытаний винтовых свай: состав установки, порядок нагружения, критерии стабилизации деформации и требования к контрольным испытаниям.";
+$title = isset($title) ? $title : 'Пробное завинчивание — Гефест';
+$meta_description = isset($meta_description) ? $meta_description : '';
 $canonical = "https://zavodsvay.ru/articles/probnoe/";
+$og_type = 'article';
+$schema_type = 'Article';
+$article_published = '2024-01-01'; // TODO: уточнить реальную дату
+$article_modified  = '2024-01-01'; // TODO: уточнить реальную дату
 
 ob_start();
 readfile(__DIR__ . '/content.html');

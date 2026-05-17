@@ -1,7 +1,11 @@
 <?php
-$title = "Фундамент для дома из пенобетона на винтовых сваях — Гефест";
-$meta_description = "Свайно-винтовой фундамент под дом из пеноблоков: выбор свай, высокий и повышенный ростверк, технология устройства на ровном участке и на склоне.";
+$title = isset($title) ? $title : 'Сваи для дома из пенобетона — Гефест';
+$meta_description = isset($meta_description) ? $meta_description : '';
 $canonical = "https://zavodsvay.ru/articles/penobeton/";
+$og_type = 'article';
+$schema_type = 'Article';
+$article_published = '2024-01-01'; // TODO: уточнить реальную дату
+$article_modified  = '2024-01-01'; // TODO: уточнить реальную дату
 
 ob_start();
 readfile(__DIR__ . '/content.html');

@@ -1,7 +1,11 @@
 <?php
-$title = "Фундамент для дома из бруса на винтовых сваях — Гефест";
-$meta_description = "Свайно-винтовой фундамент под дом из бруса в Пермском крае: выбор типоразмера свай, шаг установки, ростверк из нижнего венца и монтаж за один день.";
+$title = isset($title) ? $title : 'Сваи для дома из бруса — Гефест';
+$meta_description = isset($meta_description) ? $meta_description : '';
 $canonical = "https://zavodsvay.ru/articles/brus/";
+$og_type = 'article';
+$schema_type = 'Article';
+$article_published = '2024-01-01'; // TODO: уточнить реальную дату
+$article_modified  = '2024-01-01'; // TODO: уточнить реальную дату
 
 ob_start();
 readfile(__DIR__ . '/content.html');

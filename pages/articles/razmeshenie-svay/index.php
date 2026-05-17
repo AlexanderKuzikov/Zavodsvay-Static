@@ -1,7 +1,11 @@
 <?php
-$title = "Размещение винтовых свай в фундаменте — Гефест";
-$meta_description = "Правила расстановки свай под углы, ленту и тяжёлые узлы. Схемы и рекомендации по шагу для жилых домов, бань и хозяйственных построек.";
-$canonical = "https://zavodsvay.ru/articles/vintovye-svai/";
+$title = isset($title) ? $title : 'Размещение свай — Гефест';
+$meta_description = isset($meta_description) ? $meta_description : '';
+$canonical = "https://zavodsvay.ru/articles/razmeshenie-svay/";
+$og_type = 'article';
+$schema_type = 'Article';
+$article_published = '2024-01-01'; // TODO: уточнить реальную дату
+$article_modified  = '2024-01-01'; // TODO: уточнить реальную дату
 
 ob_start();
 readfile(__DIR__ . '/content.html');

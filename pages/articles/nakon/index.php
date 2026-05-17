@@ -1,7 +1,11 @@
 <?php
-$title = "Сваи со сварной и литой лопастью — сравнение — Гефест";
-$meta_description = "Чем отличаются сваи со сварной лопастью от литых: прочность, срок службы и цена. Практические рекомендации по выбору для разных условий эксплуатации.";
-$canonical = "https://zavodsvay.ru/articles/vidy-svay/";
+$title = isset($title) ? $title : 'Наконечник винтовой сваи — Гефест';
+$meta_description = isset($meta_description) ? $meta_description : '';
+$canonical = "https://zavodsvay.ru/articles/nakon/";
+$og_type = 'article';
+$schema_type = 'Article';
+$article_published = '2024-01-01'; // TODO: уточнить реальную дату
+$article_modified  = '2024-01-01'; // TODO: уточнить реальную дату
 
 ob_start();
 readfile(__DIR__ . '/content.html');
