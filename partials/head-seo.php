@@ -143,7 +143,20 @@ if (strpos($og_image, 'http') !== 0) {
                 "isPartOf": {"@id": "<?= $_site_url ?>/#website"},
                 "about": {"@id": "<?= $_site_url ?>/#localbusiness"},
                 "inLanguage": "ru-RU"
-            }
+            }<?php if ($schema_type === 'Article'): ?>,
+            {
+                "@type": "Article",
+                "@id": "<?= htmlspecialchars($_current_url) ?>#article",
+                "headline": "<?= htmlspecialchars($title) ?>",
+                "description": "<?= htmlspecialchars($meta_description) ?>",
+                "url": "<?= htmlspecialchars($_current_url) ?>",
+                <?php if (!empty($article_published)): ?>"datePublished": "<?= htmlspecialchars($article_published) ?>",<?php endif; ?>
+                <?php if (!empty($article_modified)): ?>"dateModified": "<?= htmlspecialchars($article_modified) ?>",<?php endif; ?>
+                "publisher": {"@id": "<?= $_site_url ?>/#organization"},
+                "author": {"@id": "<?= $_site_url ?>/#organization"},
+                "isPartOf": {"@id": "<?= $_site_url ?>/#website"},
+                "inLanguage": "ru-RU"
+            }<?php endif; ?>
         ]
     }
     </script>

@@ -14,7 +14,7 @@
 ![SEO](https://img.shields.io/badge/SEO-first-4CAF50?style=flat-square&logo=googlesearchconsole&logoColor=white)
 ![License](https://img.shields.io/badge/License-Apache_2.0-D22128?style=flat-square&logo=apache&logoColor=white)
 
-> **Статус:** pre-static PHP-версия. Object pages реализованы (пилот 6 страниц). Фильтрация по категориям на карте реализована (общая карта + страница объекта). Локальные шрифты приведены к единому неймингу и подключены через раздельные latin/cyrillic `@font-face`. Целевое состояние — pure static HTML через `build.php` после готовности WebForge-генератора.
+> **Статус:** pre-static PHP-версия. Object pages — 529 страниц programmatically сгенерированы. Фильтрация по категориям на карте реализована (общая карта + страница объекта). Локальные шрифты приведены к единому неймингу и подключены через раздельные latin/cyrillic `@font-face`. SEO-разметка статей реализована в `head-seo.php` (og_type=article, Schema.org Article); даты публикации в index.php статей — TODO. Целевое состояние — pure static HTML через `build.php` после готовности WebForge-генератора.
 
 ---
 
@@ -25,13 +25,12 @@
 ```
 Zavodsvay-Static/
 ├── pages/              ← страницы ({slug}/index.php + content.html)
-│   ├── articles/       ← 28 статей
+│   ├── articles/       ← 31 статья
 │   ├── map/            ← карта выполненных работ (content.php)
 │   └── objects/        ← страницы объектов
 │       ├── _template.php   ← единый шаблон для всех объектов
-│       ├── 3/index.php     ← двустрочник: $object_id + require _template
-│       ├── 10/, 25/, 92/, 371/, 372/
-│       └── ...
+│       ├── 1/index.php     ← двустрочник: $object_id + require _template
+│       └── ... (529 страниц)
 ├── layouts/            ← шаблоны (main, home, wide)
 ├── partials/           ← переиспользуемые компоненты
 ├── assets/
@@ -41,7 +40,7 @@ Zavodsvay-Static/
 ├── source/             ← оригиналы изображений — в git
 ├── data/
 │   ├── media.json      ← SSOT-реестр изображений
-│   ├── map.json        ← данные 500+ точек карты выполненных работ
+│   ├── map.json        ← данные 529 точек карты выполненных работ
 │   └── objects.json    ← реестр объектов (в разработке)
 ├── video/
 ├── tools/              ← медиапайплайн + деплой (Node.js, только локально)
@@ -141,7 +140,7 @@ npm run deploy
 ## Карта выполненных работ
 
 - Яндекс.Карты JS API v3 + `@yandex/ymaps3-clusterer` (jsdelivr CDN)
-- 500+ объектов из `data/map.json`
+- 529 объектов из `data/map.json`
 - Маркеры кластеризуются (`clusterByGrid({ gridSize: 64 })`)
 - Клик на маркер с `url` → страница объекта (через ymaps3 `onClick` prop + `mapEvent.stopPropagation()`)
 - Интерактивная легенда-фильтр под картой: toggle категорий, `solo-click` при состоянии «все включены», reset, счётчик
@@ -199,7 +198,8 @@ require __DIR__ . '/../_template.php';
 - WebP + `srcset` — Core Web Vitals / CLS = 0
 - **`partials/head-seo.php`** — OG, Twitter Cards, JSON-LD Schema.org `@graph`, geo-теги Яндекса
 - Object pages: Schema.org `CreativeWork` + `GeoCoordinates` уже в шаблоне
-- В планах: `og_type=article` + Schema.org Article для статей
+- Article pages: `og_type=article` + Schema.org `Article` реализованы в `head-seo.php`; активируются через `$og_type = 'article'` и `$schema_type = 'Article'` в `index.php` статьи
+- **TODO:** проставить реальные даты публикации (`$article_published`, `$article_modified`) в каждом `pages/articles/*/index.php`
 
 ---
 
@@ -213,9 +213,9 @@ require __DIR__ . '/../_template.php';
 | Нет hash-инвалидации CSS/JS | До `build.php` | `style.{hash8}.css` при сборке |
 | Изображения объектов в `pages/map/img/` | Исторически | При масштабировании — вынести в `assets/img/objects/` |
 | `data/objects.json` в разработке | Контракт данных ещё не зафиксирован | Выделить SSOT расширенных SEO-полей перед programmatic генерацией |
-| 6 object pages из 500+ | Пилот | Programmatic генерация остальных после image pipeline |
 | Нет переключателя типов карты | ymaps3 не поддерживает спутник | Обсуждение с заказчиком |
 | Нет поиска по карте | Архитектура ещё не выбрана | Спроектировать отдельно от фильтрации |
+| Даты публикации статей не заполнены | Контент создавался итерационно | Проставить `$article_published` + `$article_modified` в 31 `index.php` статьи |
 
 ---
 
@@ -228,14 +228,14 @@ require __DIR__ . '/../_template.php';
 - [x] SEO-partial (`partials/head-seo.php`)
 - [x] Данные 500+ объектов карты (Qwen3.5 Flash)
 - [x] Корневые npm-скрипты
-- [x] **Object pages** — шаблон + 6 пилотных страниц, карта + легенда-фильтр на странице объекта
+- [x] **Object pages** — шаблон + 529 страниц programmatically, карта + легенда-фильтр на странице объекта
 - [x] Локальные шрифты — единый нейминг + раздельные latin/cyrillic сабсеты через `unicode-range`
+- [x] **SEO статей** — `og_type=article` + Schema.org `Article` в `head-seo.php` + `$og_type`/`$schema_type` во всех 31 `index.php` статей
+- [ ] **TODO:** проставить реальные даты публикации в `pages/articles/*/index.php` (сейчас заглушка `2024-01-01`)
 - [ ] Доработка дизайна каталога свай
 - [ ] Доработка главной страницы
 - [ ] Поиск на карте
 - [ ] **Image pipeline для объектов** — нарезка, автоматизация, generative-модели
-- [ ] Programmatic генерация остальных object pages
-- [ ] SEO-разметка статей (og_type=article, Schema.org Article)
 - [ ] `build.php` → pure static `/dist/`
 - [ ] Портирование медиапайплайна в WebForge
 
@@ -265,5 +265,5 @@ require __DIR__ . '/../_template.php';
 
 ## Лицензия
 
-Copyright 2024 Alexander Kuzikov  
+Copyright 2024–2026 Alexander Kuzikov  
 Licensed under the [Apache License, Version 2.0](./LICENSE).
