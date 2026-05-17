@@ -14,7 +14,7 @@
 ![SEO](https://img.shields.io/badge/SEO-first-4CAF50?style=flat-square&logo=googlesearchconsole&logoColor=white)
 ![License](https://img.shields.io/badge/License-Apache_2.0-D22128?style=flat-square&logo=apache&logoColor=white)
 
-> **Статус:** pre-static PHP-версия. Object pages — 529 страниц programmatically сгенерированы. Фильтрация по категориям на карте реализована (общая карта + страница объекта). Локальные шрифты приведены к единому неймингу и подключены через раздельные latin/cyrillic `@font-face`. SEO-разметка статей реализована в `head-seo.php` (og_type=article, Schema.org Article); даты публикации в index.php статей — TODO. Целевое состояние — pure static HTML через `build.php` после готовности WebForge-генератора.
+> **Статус:** pre-static PHP-версия. Object pages — 529 страниц programmatically сгенерированы. Фильтрация по категориям на карте реализована (общая карта + страница объекта). Локальные шрифты приведены к единому неймингу и подключены через раздельные latin/cyrillic `@font-face`. SEO-разметка всех 31 статьи полностью реализована: `og_type=article`, Schema.org Article, даты публикации `2026-01-01`. Целевое состояние — pure static HTML через `build.php` после готовности WebForge-генератора.
 
 ---
 
@@ -193,13 +193,12 @@ require __DIR__ . '/../_template.php';
 
 ## SEO
 
-- `sitemap.xml` — ручное обновление до `build.php`
+- `sitemap.xml` — ручное обновление до `build.php`; содержит все статьи и все 529 объектов
 - `robots.txt` — Yandex/Googlebot, Crawl-delay
 - WebP + `srcset` — Core Web Vitals / CLS = 0
 - **`partials/head-seo.php`** — OG, Twitter Cards, JSON-LD Schema.org `@graph`, geo-теги Яндекса
 - Object pages: Schema.org `CreativeWork` + `GeoCoordinates` уже в шаблоне
-- Article pages: `og_type=article` + Schema.org `Article` реализованы в `head-seo.php`; активируются через `$og_type = 'article'` и `$schema_type = 'Article'` в `index.php` статьи
-- **TODO:** проставить реальные даты публикации (`$article_published`, `$article_modified`) в каждом `pages/articles/*/index.php`
+- Article pages: `og_type=article` + Schema.org `Article` + `article:published_time`/`article:modified_time` (`2026-01-01`) — полностью реализованы во всех 31 статьях
 
 ---
 
@@ -215,7 +214,6 @@ require __DIR__ . '/../_template.php';
 | `data/objects.json` в разработке | Контракт данных ещё не зафиксирован | Выделить SSOT расширенных SEO-полей перед programmatic генерацией |
 | Нет переключателя типов карты | ymaps3 не поддерживает спутник | Обсуждение с заказчиком |
 | Нет поиска по карте | Архитектура ещё не выбрана | Спроектировать отдельно от фильтрации |
-| Даты публикации статей не заполнены | Контент создавался итерационно | Проставить `$article_published` + `$article_modified` в 31 `index.php` статьи |
 
 ---
 
@@ -230,8 +228,7 @@ require __DIR__ . '/../_template.php';
 - [x] Корневые npm-скрипты
 - [x] **Object pages** — шаблон + 529 страниц programmatically, карта + легенда-фильтр на странице объекта
 - [x] Локальные шрифты — единый нейминг + раздельные latin/cyrillic сабсеты через `unicode-range`
-- [x] **SEO статей** — `og_type=article` + Schema.org `Article` в `head-seo.php` + `$og_type`/`$schema_type` во всех 31 `index.php` статей
-- [ ] **TODO:** проставить реальные даты публикации в `pages/articles/*/index.php` (сейчас заглушка `2024-01-01`)
+- [x] **SEO статей** — `og_type=article` + Schema.org `Article` + даты публикации `2026-01-01` — все 31 статья
 - [ ] Доработка дизайна каталога свай
 - [ ] Доработка главной страницы
 - [ ] Поиск на карте
