@@ -349,7 +349,9 @@ $CAT_COLORS = [
         <span class="objects-section__count" id="objects-section-count"></span>
     </div>
     <div class="objects-grid" id="objects-grid">
-        <?php foreach ($published as $obj):
+        <?php 
+        /** @var array[] $published */
+        foreach ($published as $obj):
             $color     = $CAT_COLORS[$obj['category']] ?? $CAT_COLORS['other'];
             $cat_label = $CAT_LABELS[$obj['category']] ?? 'Прочее';
             $thumb     = !empty($obj['images']) ? '/pages/map/img/' . $obj['images'][0] : null;
