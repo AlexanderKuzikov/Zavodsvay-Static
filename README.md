@@ -14,7 +14,7 @@
 ![SEO](https://img.shields.io/badge/SEO-first-4CAF50?style=flat-square&logo=googlesearchconsole&logoColor=white)
 ![License](https://img.shields.io/badge/License-Apache_2.0-D22128?style=flat-square&logo=apache&logoColor=white)
 
-> **Статус:** pre-static PHP-версия. Object pages реализованы (пилот 6 страниц). Фильтрация по категориям на карте реализована (общая карта + страница объекта). Целевое состояние — pure static HTML через `build.php` после готовности WebForge-генератора.
+> **Статус:** pre-static PHP-версия. Object pages реализованы (пилот 6 страниц). Фильтрация по категориям на карте реализована (общая карта + страница объекта). Локальные шрифты приведены к единому неймингу и подключены через раздельные latin/cyrillic `@font-face`. Целевое состояние — pure static HTML через `build.php` после готовности WebForge-генератора.
 
 ---
 
@@ -37,7 +37,7 @@ Zavodsvay-Static/
 ├── assets/
 │   ├── css/template.css
 │   ├── img/               ← нарезанные WebP-наборы + icons/ + og/
-│   └── fonts/
+│   └── fonts/             ← локальные woff2-шрифты
 ├── source/             ← оригиналы изображений — в git
 ├── data/
 │   ├── media.json      ← SSOT-реестр изображений
@@ -96,6 +96,17 @@ render_image('logo2');
 ```
 
 > Статичные product-фото можно подключать напрямую через `<picture>` без регистрации в реестре.
+
+---
+
+## Шрифты
+
+Используются локальные семейства `Open Sans Local` и `Roboto Slab Local` из `assets/fonts/`.
+
+- Подключение идёт через раздельные `@font-face` для `latin` и `cyrillic` сабсетов с `unicode-range`
+- Такой режим обязателен: в cyrillic-файле могут отсутствовать цифры, знаки и латиница, даже если кириллица есть
+- Для проверки покрытия glyphs и unicode ranges перед интеграцией используется [wakamaifondue.com](https://wakamaifondue.com)
+- Fallback для заголовков — `serif`, без `Georgia`
 
 ---
 
@@ -201,6 +212,7 @@ require __DIR__ . '/../_template.php';
 | `source/` в git | Пока объём мал | Git LFS при росте |
 | Нет hash-инвалидации CSS/JS | До `build.php` | `style.{hash8}.css` при сборке |
 | Изображения объектов в `pages/map/img/` | Исторически | При масштабировании — вынести в `assets/img/objects/` |
+| `data/objects.json` в разработке | Контракт данных ещё не зафиксирован | Выделить SSOT расширенных SEO-полей перед programmatic генерацией |
 | 6 object pages из 500+ | Пилот | Programmatic генерация остальных после image pipeline |
 | Нет переключателя типов карты | ymaps3 не поддерживает спутник | Обсуждение с заказчиком |
 | Нет поиска по карте | Архитектура ещё не выбрана | Спроектировать отдельно от фильтрации |
@@ -217,6 +229,9 @@ require __DIR__ . '/../_template.php';
 - [x] Данные 500+ объектов карты (Qwen3.5 Flash)
 - [x] Корневые npm-скрипты
 - [x] **Object pages** — шаблон + 6 пилотных страниц, карта + легенда-фильтр на странице объекта
+- [x] Локальные шрифты — единый нейминг + раздельные latin/cyrillic сабсеты через `unicode-range`
+- [ ] Доработка дизайна каталога свай
+- [ ] Доработка главной страницы
 - [ ] Поиск на карте
 - [ ] **Image pipeline для объектов** — нарезка, автоматизация, generative-модели
 - [ ] Programmatic генерация остальных object pages
@@ -244,6 +259,7 @@ require __DIR__ . '/../_template.php';
 | Медиапайплайн | Node.js, Sharp, Express |
 | Деплой | FTP через `tools/deploy.js` (shared hosting) |
 | Карта | Яндекс.Карты JS API v3 + `@yandex/ymaps3-clusterer` (jsdelivr CDN) |
+| Шрифты | Open Sans Local, Roboto Slab Local (локальные woff2, latin + cyrillic через `unicode-range`) |
 
 ---
 
