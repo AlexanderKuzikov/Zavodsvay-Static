@@ -84,7 +84,7 @@ Email:           info@zavodsvay.ru
 ### Что реализовано
 - Файловый PHP-роутер, layouts (main, home, wide), partials
 - Все основные страницы: index, catalog, prices, calc, montage, articles, contacts, map, document, 404
-- 28 страниц статей в `pages/articles/{slug}/`
+- 31 страница статей в `pages/articles/{slug}/`
 - Адаптивная верстка на нативном CSS (один файл `assets/css/template.css`)
 - Hero-видео на главной, WebP-изображения с srcset
 - `sitemap.xml`, `robots.txt`, `.htaccess`
@@ -95,20 +95,20 @@ Email:           info@zavodsvay.ru
 - OG-изображения: `assets/img/og/og-home.jpg` + `og-home.webp`
 - **Карта выполненных работ** — `/map/`, Яндекс.Карты JS API v3, 500+ маркеров, кластеризация, легенда
 - **Фильтр по категориям** — интерактивная легенда с solo-click, toggle, reset, счётчик; реализована на `/map/` **и** на странице объекта
-- **Object pages** — `pages/objects/_template.php` + 6 пилотных страниц (3, 10, 25, 92, 371, 372)
+- **Object pages** — `pages/objects/_template.php` + 529 programmatically сгенерированных страниц объектов
 - **Карта на странице объекта** — центрирование на объекте zoom 13, пульсирующий маркер текущего объекта, навигация по остальным, легенда-фильтр идентична `/map/`
 - Корневые npm-скрипты — `npm run ui/media/deploy` из корня
 - Локальные шрифты `Open Sans Local` и `Roboto Slab Local` подключены через `@font-face`
+- **SEO статей** — все 31 `pages/articles/*/index.php` переведены на `og_type=article`, `schema_type=Article`, `article:published_time` / `article:modified_time` = `2026-01-01`
 
 ### Ближайшие задачи
 
-- [x] Object pages (пилот 6 страниц) — **готово**
+- [x] Object pages (529 страниц) — **готово**
 - [x] Карта на странице объекта — **готово**
 - [x] Фильтрация по категориям — общая карта и страница объекта — **готово**
+- [x] SEO статей — `og_type=article`, Schema.org Article, даты `2026-01-01` — **готово**
 - [ ] **Поиск на карте** — архитектура не выбрана
 - [ ] **Image pipeline для объектов** — нарезка изображений, batch-автоматизация, generative-модели
-- [ ] **Programmatic генерация** остальных object pages (из 500+)
-- [ ] SEO статей — `og_type=article`, Schema.org Article
 - [ ] `build.php` — статическая генерация `/dist/`
 
 ---
@@ -149,7 +149,7 @@ Email:           info@zavodsvay.ru
 
 2. **Git LFS для `source/`.** Порог принятия решения — какой объём оригиналов считается критичным?
 
-3. **Контракт данных объекта.** `data/map.json` — текущий SSOT для объектов. При масштабировании до 500 страниц потребуется отдельный `data/objects.json` с расширенными SEO-полями. Фиксировать структуру до старта programmatic генерации.
+3. **Контракт данных объекта.** `data/map.json` — текущий SSOT для объектов. При масштабировании до 529 страниц потребуется отдельный `data/objects.json` с расширенными SEO-полями. Фиксировать структуру до старта дальнейшей programmatic генерации.
 
 4. **`build.php` в Zavodsvay vs в WebForge.** Писать здесь как прототип или дождаться WebForge?
 
@@ -217,7 +217,7 @@ npm run deploy
 - `partials/head-seo.php` → OG + Twitter Cards + JSON-LD `@graph` + geo-теги
 
 ### Следующий слой SEO
-- `og_type=article` + Schema.org Article для статей
+- Article pages: `og_type=article`, Schema.org `Article`, `article:published_time`, `article:modified_time` — **реализовано** для всех 31 статей, даты = `2026-01-01`
 - Sitemap расширяется при добавлении object pages
 
 ---
@@ -385,3 +385,4 @@ require __DIR__ . '/../_template.php';
 | 2026-05-17 | Intelephense P1008 `$published` в `content.php` — ложная ошибка: переменная приходит через `require` из `index.php`. Фикс: `/** @var array[] $published */` перед `foreach`. Логика не меняется. |
 | 2026-05-17 | Локальные шрифты приведены к единому неймингу: `Open Sans Local` и `Roboto Slab Local`; у заголовков fallback = `serif` без `Georgia` |
 | 2026-05-17 | Для локальных сабсетов шрифтов (`latin` + `cyrillic`) использовать раздельные `@font-face` с `unicode-range`; проверять содержимое файлов через wakamaifondue.com до интеграции |
+| 2026-05-17 | SEO статей завершено: `head-seo.php` поддерживает Schema.org `Article`, все 31 `pages/articles/*/index.php` используют `og_type=article`, `schema_type=Article`, даты `article:published_time` / `article:modified_time` = `2026-01-01` |
