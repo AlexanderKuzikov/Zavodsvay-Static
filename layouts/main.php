@@ -6,6 +6,7 @@ if (!isset($title))            $title            = '';
 if (!isset($meta_description)) $meta_description = '';
 if (!isset($canonical))        $canonical        = '';
 if (!isset($content))          $content          = '';
+if (!isset($extra_css))        $extra_css        = '';
 // SEO page-level опционалы — дефолты внутри head-seo.php
 // $og_image, $og_type, $schema_type, $article_published, $article_modified
 ?>
@@ -16,6 +17,7 @@ if (!isset($content))          $content          = '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title) ?></title>
     <link rel="stylesheet" href="/assets/css/template.css">
+    <?php if (!empty($extra_css)) echo $extra_css; ?>
     <?php if (!empty($canonical)): ?>
     <link rel="canonical" href="<?= htmlspecialchars($canonical) ?>">
     <?php endif; ?>
