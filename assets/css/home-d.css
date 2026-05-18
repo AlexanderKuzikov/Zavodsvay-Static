@@ -2,29 +2,19 @@
    HOME-D.CSS  — Preview D
    ============================================================ */
 
-.hd-page {
-    padding-top: 0 !important;
-}
+.hd-page { padding-top: 0 !important; }
 
 /* кнопки */
 .hd-btn {
-    display: inline-block;
-    padding: .7rem 1.6rem;
-    border-radius: 5px;
-    font-family: 'Open Sans Local', sans-serif;
-    font-weight: 700;
-    font-size: .95rem;
-    text-decoration: none;
-    line-height: 1.2;
-    transition: background .2s, transform .18s, box-shadow .2s;
-    cursor: pointer;
-    border: none;
-    white-space: nowrap;
-    box-sizing: border-box;
+    display: inline-block; padding: .7rem 1.6rem;
+    border-radius: 5px; font-family: 'Open Sans Local', sans-serif;
+    font-weight: 700; font-size: .95rem; text-decoration: none;
+    line-height: 1.2; transition: background .2s, transform .18s, box-shadow .2s;
+    cursor: pointer; border: none; white-space: nowrap; box-sizing: border-box;
 }
 .hd-btn:hover { transform: translateY(-2px); text-decoration: none; }
-.hd-btn--primary   { background: #f97316; color: #fff !important; }
-.hd-btn--primary:hover   { background: #e06210; box-shadow: 0 4px 14px rgba(249,115,22,.35); }
+.hd-btn--primary  { background: #f97316; color: #fff !important; }
+.hd-btn--primary:hover  { background: #e06210; box-shadow: 0 4px 14px rgba(249,115,22,.35); }
 .hd-btn--secondary { background: transparent; color: #fff !important; border: 2px solid rgba(255,255,255,.55); }
 .hd-btn--secondary:hover { background: rgba(255,255,255,.1); border-color: #fff; }
 .hd-btn--dark  { background: #1e3a5f; color: #fff !important; }
@@ -33,44 +23,41 @@
 .hd-btn--accent:hover { background: #e06210; }
 .hd-btn--lg { padding: .85rem 2.25rem; font-size: 1.05rem; }
 
-/* заголовок секций */
 .hd-section-title {
     font-family: 'Roboto Slab Local', serif !important;
-    font-size: 1.5rem !important;
-    font-weight: 700 !important;
-    color: #1e3a5f !important;
-    text-align: center;
-    margin: 0 0 1.5rem !important;
-    line-height: 1.25;
-    border-bottom: none !important;
-    padding-bottom: 0 !important;
-    text-wrap: balance;
+    font-size: 1.5rem !important; font-weight: 700 !important; color: #1e3a5f !important;
+    text-align: center; margin: 0 0 1.5rem !important; line-height: 1.25;
+    border-bottom: none !important; padding-bottom: 0 !important; text-wrap: balance;
 }
 
 /* ============================================================
    HERO
    ============================================================ */
 .hd-hero {
-    position: relative;
-    background: #0a2342;
-    overflow: hidden;
-    margin: 0 -20px 0 -20px;
+    position: relative; background: #0a2342;
+    overflow: hidden; margin: 0 -20px;
 }
 .hd-hero .video-container {
-    margin: 0; border-radius: 0; max-height: 520px; overflow: hidden; line-height: 0;
+    margin: 0; border-radius: 0; line-height: 0;
+    /* Высота = контент + 48px паддинг. На desktop min 480px, mobile auto */
+    min-height: 480px;
 }
 .hd-hero .video-container video {
-    width: 100%; max-height: 520px; object-fit: cover; display: block;
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    position: absolute; inset: 0;
 }
 .hd-hero__overlay {
     position: absolute; inset: 0;
-    background: linear-gradient(160deg,rgba(10,35,66,.85) 0%,rgba(26,58,107,.55) 55%,rgba(10,35,66,.30) 100%);
+    background: linear-gradient(160deg,rgba(10,35,66,.85) 0%,rgba(26,58,107,.55) 55%,rgba(10,35,66,.40) 100%);
     pointer-events: none; z-index: 1;
 }
+/* Ключевое исправление: не center, а flex-start + padding-top
+   чтобы контент сверху не обрезался на малом экране */
 .hd-hero__content {
     position: absolute; inset: 0; z-index: 2;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 2rem 2.5rem; text-align: center; box-sizing: border-box;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    padding: 2.5rem 2.5rem 2rem; text-align: center; box-sizing: border-box;
+    overflow-y: auto;
 }
 .hd-hero__title {
     font-family: 'Roboto Slab Local', serif !important;
@@ -80,9 +67,8 @@
     text-wrap: balance; border-bottom: none !important; padding-bottom: 0 !important;
 }
 .hd-hero__subtitle {
-    font-size: 1rem;
-    color: rgba(210,232,255,.92);
-    margin: 0; line-height: 1.55; max-width: 540px;
+    font-size: 1rem; color: rgba(210,232,255,.92);
+    margin: 0; line-height: 1.55; max-width: 560px;
     text-shadow: 0 1px 4px rgba(0,0,0,.3);
 }
 .hd-hero__stats {
@@ -105,16 +91,13 @@
 /* ============================================================
    СЕКЦИИ
    ============================================================ */
-.hd-section {
-    padding: 2.5rem 0; width: 100%; box-sizing: border-box;
-}
+.hd-section { padding: 2.5rem 0; width: 100%; box-sizing: border-box; }
 .hd-section--gray,
 .hd-section--dark,
 .hd-section--orange,
 .hd-section--cta {
     margin-left: -20px; margin-right: -20px;
-    padding-left: 20px; padding-right: 20px;
-    border-radius: 0;
+    padding-left: 20px; padding-right: 20px; border-radius: 0;
 }
 .hd-section--gray   { background: #f4f7fb; padding-top: 2.5rem; padding-bottom: 2.5rem; }
 .hd-section--dark   { background: linear-gradient(135deg,#1e3a5f 0%,#2a4f80 100%); padding-top: 2.5rem; padding-bottom: 2.5rem; }
@@ -124,9 +107,7 @@
 /* ============================================================
    ДЛЯ КОГО
    ============================================================ */
-.hd-audience__grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
-}
+.hd-audience__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
 .hd-audience__card {
     padding: 1.75rem; border-radius: 10px; border: 2px solid #e2e8f0;
     transition: border-color .25s, box-shadow .25s;
@@ -152,9 +133,7 @@
 /* ============================================================
    ПРЕИМУЩЕСТВА
    ============================================================ */
-.hd-advantages__grid {
-    display: grid; grid-template-columns: repeat(3,1fr); gap: 1.1rem;
-}
+.hd-advantages__grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.1rem; }
 .hd-advantage {
     background: #fff; border-radius: 9px; padding: 1.5rem 1.1rem; text-align: center;
     box-shadow: 0 1px 6px rgba(0,0,0,.06);
@@ -190,7 +169,7 @@
 .hd-service__link:hover { color: #f97316; }
 
 /* ============================================================
-   ПОЧЕМУ СВАИ — с фото
+   ПОЧЕМУ СВАИ + фото
    ============================================================ */
 .hd-why h2 {
     font-family: 'Roboto Slab Local', serif !important;
@@ -198,49 +177,34 @@
     text-align: center; margin: 0 0 1.75rem !important; line-height: 1.3;
     border-bottom: none !important; padding-bottom: 0 !important;
 }
-/* двухколоночный layout: сетка + фото */
 .hd-why__content {
-    display: grid;
-    grid-template-columns: 1fr 380px;
-    gap: 2rem;
-    align-items: start;
+    display: grid; grid-template-columns: 1fr 380px; gap: 2rem; align-items: start;
 }
 .hd-why__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
 .hd-why__item { display: flex; gap: .9rem; align-items: flex-start; }
 .hd-why__icon { font-size: 1.65rem; flex-shrink: 0; margin-top: .05rem; }
 .hd-why__item h4 { font-family: 'Roboto Slab Local', serif; font-size: .97rem; font-weight: 700; color: #f97316; margin: 0 0 .3rem; line-height: 1.3; }
 .hd-why__item p  { margin: 0 !important; font-size: .86rem; color: rgba(200,225,248,.88); line-height: 1.5; }
-
-/* фото */
-.hd-why__photo { }
-.hd-why__figure {
-    margin: 0; padding: 0; line-height: 0;
-    border-radius: 10px; overflow: hidden;
-}
-.hd-why__figure img {
-    width: 100%; height: auto; display: block;
-    border-radius: 10px;
-}
+.hd-why__figure { margin: 0; padding: 0; line-height: 0; border-radius: 10px; overflow: hidden; }
+.hd-why__figure img { width: 100%; height: auto; display: block; border-radius: 10px; }
 .hd-why__caption {
-    display: block;
-    font-size: .77rem;
-    line-height: 1.4;
-    color: rgba(175,210,245,.7);
-    padding: .55rem .25rem 0;
-    text-align: center;
+    display: block; font-size: .77rem; line-height: 1.4;
+    color: rgba(175,210,245,.7); padding: .55rem .25rem 0; text-align: center;
 }
 
 /* ============================================================
    ЧИСЛА
    ============================================================ */
 .hd-numbers__grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; text-align: center; }
-.hd-numbers__num  { display: block; font-family: 'Roboto Slab Local', serif; font-size: 2.1rem; font-weight: 700; color: #1e3a5f; line-height: 1; }
+.hd-numbers__num   { display: block; font-family: 'Roboto Slab Local', serif; font-size: 2.1rem; font-weight: 700; color: #1e3a5f; line-height: 1; }
 .hd-numbers__label { display: block; font-size: .79rem; font-weight: 700; color: rgba(30,58,95,.78); margin-top: .2rem; text-transform: uppercase; letter-spacing: .04em; }
 
 /* ============================================================
-   ПРИМЕРЫ РАБОТ
+   ПРИМЕРЫ РАБОТ — 6 шт.
    ============================================================ */
-.hd-cases__grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.1rem; }
+.hd-cases__grid {
+    display: grid; grid-template-columns: repeat(3,1fr); gap: 1.1rem;
+}
 .hd-case {
     display: block; text-decoration: none; color: inherit;
     border-radius: 9px; overflow: hidden;
@@ -265,6 +229,34 @@
 .hd-case__body > p { font-size: .82rem; color: #64748b; margin: 0 0 .6rem !important; line-height: 1.45; }
 .hd-case__meta { display: flex; gap: .35rem; flex-wrap: wrap; }
 .hd-case__meta span { font-size: .74rem; color: #94a3b8; background: #f4f7fb; padding: .16rem .5rem; border-radius: 4px; }
+/* последняя карточка — ссылка на карту */
+.hd-case--map .hd-case__body h3 { color: #f97316 !important; }
+
+/* ============================================================
+   КАРТА
+   ============================================================ */
+.hd-map-section__sub {
+    text-align: center; font-size: .9rem; color: #64748b;
+    margin: -.75rem 0 1.25rem; line-height: 1.5;
+}
+.hd-map-wrap {
+    position: relative;
+    border-radius: 10px; overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0,0,0,.1);
+    border: 1.5px solid #e2e8f0;
+}
+.hd-map-iframe {
+    display: block; width: 100%; height: 520px; border: none;
+}
+.hd-map-fullscreen {
+    position: absolute; bottom: 1rem; right: 1rem;
+    background: rgba(30,58,95,.88); color: #fff !important;
+    font-size: .78rem; font-weight: 700; text-decoration: none;
+    padding: .4rem .85rem; border-radius: 5px;
+    transition: background .2s;
+    backdrop-filter: blur(4px);
+}
+.hd-map-fullscreen:hover { background: #1e3a5f; text-decoration: none; }
 
 /* ============================================================
    CTA
@@ -277,14 +269,10 @@
 .hd-cta > p { max-width: 500px; margin: 0 auto 1.5rem !important; color: #64748b; font-size: .92rem; line-height: 1.6; }
 .hd-cta__btns { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
 
-/* Preview badge */
 .preview-badge {
-    position: fixed; bottom: 1rem; right: 1rem;
-    background: #7c3aed; color: #fff;
-    padding: .4rem .85rem; border-radius: 20px;
-    font-size: .76rem; font-weight: 700;
-    z-index: 9999; pointer-events: none;
-    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    position: fixed; bottom: 1rem; right: 1rem; background: #7c3aed; color: #fff;
+    padding: .4rem .85rem; border-radius: 20px; font-size: .76rem; font-weight: 700;
+    z-index: 9999; pointer-events: none; box-shadow: 0 2px 8px rgba(0,0,0,.2);
 }
 
 /* ============================================================
@@ -299,18 +287,31 @@
     .hd-why__photo       { max-width: 480px; margin: 0 auto; }
 }
 @media (max-width: 768px) {
-    .hd-hero .video-container { max-height: 320px; }
-    .hd-hero .video-container video { max-height: 320px; }
-    .hd-hero__content { padding: 1.5rem 1rem; }
-    .hd-hero__title   { font-size: 1.5rem !important; }
-    .hd-hero__stats   { gap: 1rem; }
+    /* Hero: убираем фиксированную высоту, берём auto чтобы контент определял высоту */
+    .hd-hero .video-container { min-height: 0; }
+    /* video становится static для пропорций */
+    .hd-hero .video-container video {
+        position: static; width: 100%; height: 220px; object-fit: cover;
+    }
+    /* content — static, под видео */
+    .hd-hero__overlay { display: none; }
+    .hd-hero__content {
+        position: static; background: linear-gradient(135deg,#0f2d55 0%,#1e3a5f 100%);
+        padding: 1.5rem 1.1rem 1.75rem; overflow: visible;
+        justify-content: flex-start;
+    }
+    .hd-hero__title   { font-size: 1.4rem !important; }
+    .hd-hero__subtitle { font-size: .88rem; }
+    .hd-hero__stats   { gap: .85rem; margin: 1.1rem 0; }
     .hd-hero__cta     { flex-direction: column; align-items: center; }
+
     .hd-audience__grid   { grid-template-columns: 1fr; }
     .hd-advantages__grid { grid-template-columns: 1fr; }
     .hd-services__grid   { grid-template-columns: 1fr 1fr; }
-    .hd-cases__grid      { grid-template-columns: 1fr; }
+    .hd-cases__grid      { grid-template-columns: 1fr 1fr; }
     .hd-why__grid        { grid-template-columns: 1fr; }
     .hd-numbers__grid    { grid-template-columns: 1fr 1fr; }
+
     .hd-hero, .hd-section--gray, .hd-section--dark,
     .hd-section--orange, .hd-section--cta {
         margin-left: -15px; margin-right: -15px;
@@ -319,13 +320,15 @@
     .hd-section--orange, .hd-section--cta {
         padding-left: 15px; padding-right: 15px;
     }
+    .hd-map-iframe { height: 360px; }
 }
 @media (max-width: 480px) {
-    .hd-hero__title    { font-size: 1.3rem !important; }
+    .hd-hero__title    { font-size: 1.25rem !important; }
     .hd-hero__stat-num { font-size: 1.55rem; }
     .hd-numbers__num   { font-size: 1.65rem; }
-    .hd-hero__stats    { gap: .7rem; }
+    .hd-hero__stats    { gap: .6rem; }
     .hd-services__grid { grid-template-columns: 1fr; }
     .hd-cases__grid    { grid-template-columns: 1fr; }
     .hd-cta__btns      { flex-direction: column; align-items: center; }
+    .hd-map-iframe     { height: 280px; }
 }
