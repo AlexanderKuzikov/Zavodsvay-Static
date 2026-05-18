@@ -79,7 +79,7 @@ Email:           info@zavodsvay.ru
 
 ## Текущее состояние проекта
 
-**Дата последнего обновления:** 2026-05-17
+**Дата последнего обновления:** 2026-05-18
 
 ### Что реализовано
 - Файловый PHP-роутер, layouts (main, home, wide), partials
@@ -100,6 +100,7 @@ Email:           info@zavodsvay.ru
 - Корневые npm-скрипты — `npm run ui/media/deploy` из корня
 - Локальные шрифты `Open Sans Local` и `Roboto Slab Local` подключены через `@font-face`
 - **SEO статей** — все 31 `pages/articles/*/index.php` переведены на `og_type=article`, `schema_type=Article`, `article:published_time` / `article:modified_time` = `2026-01-01`
+- **Страница каталога** `/catalog/` — карточки свай серии ВСГ, адаптивные таблицы, accordion FAQ, CTA-блок с калькулятором
 
 ### Ближайшие задачи
 
@@ -107,9 +108,54 @@ Email:           info@zavodsvay.ru
 - [x] Карта на странице объекта — **готово**
 - [x] Фильтрация по категориям — общая карта и страница объекта — **готово**
 - [x] SEO статей — `og_type=article`, Schema.org Article, даты `2026-01-01` — **готово**
+- [x] Страница каталога (`/catalog/`) — карточки, таблицы, FAQ, CTA — **готово**
+- [ ] **Главная страница** — текущий этап
 - [ ] **Поиск на карте** — архитектура не выбрана
 - [ ] **Image pipeline для объектов** — нарезка изображений, batch-автоматизация, generative-модели
 - [ ] `build.php` — статическая генерация `/dist/`
+
+---
+
+## Страница каталога `/catalog/` (реализовано)
+
+### Архитектура
+- `pages/catalog/index.php` — подключает `catalog.css` через `$extra_css` паттерн
+- `pages/catalog/content.html` — весь контент: карточки, таблицы, FAQ, CTA
+- `assets/css/catalog.css` — изолированные стили каталога
+- `layouts/main.php` поддерживает `$extra_css` — page-specific CSS без глобального загрязнения
+
+### Структура страницы
+1. Карточки свай серии ВСГ (`.svai-list` / `.svai-card`) — горизонтальные, изображение слева (270px), текст справа
+2. Таблица сравнения серии ВСГ — responsive на мобайле через `catalog-table--responsive` + `data-label`
+3. Таблица технических характеристик — стандартная с горизонтальным скроллом (НЕ responsive)
+4. Особенности / нумерованные блоки (`.catalog-features`)
+5. Accordion FAQ (нативный `<details>`/`<summary>`)
+6. CTA-блок с кнопкой калькулятора
+
+### Паттерн page-specific CSS
+```php
+// pages/catalog/index.php
+$extra_css = '<link rel="stylesheet" href="/assets/css/catalog.css">';
+```
+```php
+// layouts/main.php (в <head>)
+<?php if (!empty($extra_css)) echo $extra_css; ?>
+```
+Использовать для любой другой страницы, которой нужен изолированный CSS.
+
+### Responsive таблицы
+- **Таблица сравнения** (`catalog-table--responsive`): на mobile (`≤768px`) скрывает `<thead>`, каждый `<td>` рендерится как `display: grid; grid-template-columns: 130px 1fr`, лейбл берётся из `data-label` через `::before`
+- **Таблица технических характеристик**: обычная, `overflow-x: auto` — горизонтальный скролл на мобайле
+- Применять `catalog-table--responsive` только для таблиц с 4+ колонками где текст обрезается
+
+### Ключевые решения
+| Дата | Решение |
+|---|---|
+| 2026-05-18 | `$extra_css` паттерн в layouts/main.php — page-specific стили без глобального засорения |
+| 2026-05-18 | Таблица сравнения responsive: `display: grid; grid-template-columns: 130px 1fr` вместо `flex + space-between` (flex срезал текст) |
+| 2026-05-18 | Таблица теххарактеристик (2 колонки): НЕ responsive, стандартный горизонтальный скролл |
+| 2026-05-18 | `.catalog-cta__title`: `color: #fff !important` — перебивает наследование цвета h2 из template.css |
+| 2026-05-18 | Изображения свай: `width: 270px` (×1.5 от исходных 180px), `max-height: 390px` |
 
 ---
 
@@ -162,6 +208,8 @@ Email:           info@zavodsvay.ru
 8. **Переключатель типов карты.** Схема/спутник/гибрид в ymaps3 официально недоступны (см. раздел ниже). Обсудить с заказчиком: нужен ли переключатель, и если да — миграция на ymaps2 или сторонние тайлы?
 
 9. **Поиск на карте.** Нужна отдельная архитектура. Важно не смешивать с фильтрацией: фильтрация = структурные поля (`category`, будущие `type/tags`), поиск = текстовый/адресный запрос пользователя.
+
+10. **Главная страница.** Текущий этап. Структура секций, наличие hero-видео, блоки преимуществ, CTA — требуют обсуждения перед стартом.
 
 ---
 
@@ -334,7 +382,7 @@ require __DIR__ . '/../_template.php';
 ## Шаблоны и партиалы
 
 ### Layouts
-- `layouts/main.php` — стандартный (sidebar + content)
+- `layouts/main.php` — стандартный (sidebar + content), поддерживает `$extra_css`
 - `layouts/home.php` — главная
 - `layouts/wide.php` — без sidebar
 
@@ -386,3 +434,8 @@ require __DIR__ . '/../_template.php';
 | 2026-05-17 | Локальные шрифты приведены к единому неймингу: `Open Sans Local` и `Roboto Slab Local`; у заголовков fallback = `serif` без `Georgia` |
 | 2026-05-17 | Для локальных сабсетов шрифтов (`latin` + `cyrillic`) использовать раздельные `@font-face` с `unicode-range`; проверять содержимое файлов через wakamaifondue.com до интеграции |
 | 2026-05-17 | SEO статей завершено: `head-seo.php` поддерживает Schema.org `Article`, все 31 `pages/articles/*/index.php` используют `og_type=article`, `schema_type=Article`, даты `article:published_time` / `article:modified_time` = `2026-01-01` |
+| 2026-05-18 | Каталог: `$extra_css` паттерн в layouts/main.php — page-specific стили без глобального засорения |
+| 2026-05-18 | Каталог: responsive таблица сравнения — `display: grid; grid-template-columns: 130px 1fr` + `data-label::before` |
+| 2026-05-18 | Каталог: таблица теххарактеристик (2 колонки) — НЕ responsive, горизонтальный скролл |
+| 2026-05-18 | Каталог: `.catalog-cta__title` — `color: #fff !important` для победы над наследованием из template.css |
+| 2026-05-18 | Следующий этап: главная страница (`/`) |
