@@ -1,0 +1,219 @@
+<style>
+/* ── Hero ── */
+.hb-hero {
+    position: relative;
+    margin: 0 -1rem 2.5rem;
+    min-height: 400px;
+    overflow: hidden;
+}
+.hb-hero video {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    min-height: 400px;
+}
+.hb-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,.75) 0%, rgba(0,0,0,.3) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2.5rem 2rem;
+}
+.hb-hero h1 {
+    font-family: 'Roboto Slab Local', serif;
+    color: #fff;
+    font-size: 2.2rem;
+    margin: 0 0 .5rem;
+    max-width: 640px;
+}
+.hb-hero__badge {
+    display: inline-block;
+    background: #f97316;
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 700;
+    padding: .25rem .6rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-bottom: .75rem;
+    width: fit-content;
+}
+.hb-hero__meta { color: rgba(255,255,255,.8); font-size: .9rem; margin: 0; }
+
+/* ── Why ВСГ ── */
+.hb-why-title {
+    font-family: 'Roboto Slab Local', serif;
+    font-size: 1.5rem;
+    color: #1e3a5f;
+    margin: 0 0 1.5rem;
+    text-align: center;
+}
+.hb-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+.hb-compare__col { border-radius: 8px; padding: 1.5rem; }
+.hb-compare__col--them { background: #f1f5f9; border: 1px solid #e2e8f0; }
+.hb-compare__col--us { background: #1e3a5f; color: #fff; }
+.hb-compare__col-title {
+    font-weight: 700;
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: 1rem;
+    color: #64748b;
+}
+.hb-compare__col--us .hb-compare__col-title { color: #f97316; }
+.hb-compare__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: .5rem 0;
+    border-bottom: 1px solid rgba(0,0,0,.07);
+    font-size: .9rem;
+    gap: .5rem;
+}
+.hb-compare__col--us .hb-compare__row { border-bottom-color: rgba(255,255,255,.1); }
+.hb-compare__row:last-child { border-bottom: none; }
+.hb-compare__val { font-weight: 700; white-space: nowrap; }
+.hb-compare__col--us .hb-compare__val { color: #f97316; }
+
+/* ── Категории ── */
+.hb-cats-title {
+    font-family: 'Roboto Slab Local', serif;
+    font-size: 1.5rem;
+    color: #1e3a5f;
+    margin: 0 0 1rem;
+}
+.hb-cats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+.hb-cat {
+    border-radius: 6px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 1rem;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow .2s, border-color .2s;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+.hb-cat:hover { box-shadow: 0 3px 12px rgba(0,0,0,.1); border-color: #f97316; }
+.hb-cat__dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.hb-cat__name { font-weight: 600; font-size: .9rem; color: #1e3a5f; flex: 1; }
+
+/* ── CTA ── */
+.hb-cta {
+    background: linear-gradient(135deg, #1e3a5f, #2d5a96);
+    border-radius: 8px;
+    padding: 2.5rem;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+.hb-cta h2 {
+    font-family: 'Roboto Slab Local', serif;
+    font-size: 1.75rem;
+    margin: 0 0 .75rem;
+    color: #fff;
+}
+.hb-cta p { color: rgba(255,255,255,.85); margin: 0 0 1.5rem; font-size: .95rem; }
+.hb-cta a {
+    background: #f97316;
+    color: #fff;
+    padding: .875rem 2rem;
+    border-radius: 4px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-block;
+    transition: background .2s;
+}
+.hb-cta a:hover { background: #ea6c0a; color: #fff; }
+
+.preview-badge {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    background: #7c3aed;
+    color: #fff;
+    padding: .5rem 1rem;
+    border-radius: 20px;
+    font-size: .8rem;
+    font-weight: 700;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .hb-hero h1 { font-size: 1.4rem; }
+    .hb-compare { grid-template-columns: 1fr; }
+    .hb-cats { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+    .hb-cats { grid-template-columns: 1fr; }
+}
+</style>
+
+<!-- Hero -->
+<div class="hb-hero">
+    <video autoplay loop muted playsinline>
+        <source src="/assets/video/gefest01.mp4" type="video/mp4">
+    </video>
+    <div class="hb-hero__overlay">
+        <span class="hb-hero__badge">Производство · Пермь</span>
+        <h1>Винтовые сваи ВСГ — завод «Гефест»</h1>
+        <p class="hb-hero__meta">Диаметры 60–219 мм · Монтаж от 3 дней · Гарантия 50 лет · С 2012 года</p>
+    </div>
+</div>
+
+<!-- Why ВСГ -->
+<h2 class="hb-why-title">Почему сваи ВСГ, а не обычные</h2>
+<div class="hb-compare">
+    <div class="hb-compare__col hb-compare__col--them">
+        <div class="hb-compare__col-title">Стандартные сваи</div>
+        <div class="hb-compare__row"><span>Материал ствола</span><span class="hb-compare__val">ВГП труба 3,5 мм</span></div>
+        <div class="hb-compare__row"><span>Материал лопасти</span><span class="hb-compare__val">Сталь 3</span></div>
+        <div class="hb-compare__row"><span>Гарантия</span><span class="hb-compare__val">3–5 лет</span></div>
+        <div class="hb-compare__row"><span>Коррозионная стойкость</span><span class="hb-compare__val">Низкая</span></div>
+        <div class="hb-compare__row"><span>Прочность ствола</span><span class="hb-compare__val">Базовая</span></div>
+    </div>
+    <div class="hb-compare__col hb-compare__col--us">
+        <div class="hb-compare__col-title">Сваи ВСГ «Гефест»</div>
+        <div class="hb-compare__row"><span>Материал ствола</span><span class="hb-compare__val">НКТ ГОСТ 633-80, 5,5–7,5 мм</span></div>
+        <div class="hb-compare__row"><span>Материал лопасти</span><span class="hb-compare__val">Сталь 09Г2С (+35%)</span></div>
+        <div class="hb-compare__row"><span>Гарантия</span><span class="hb-compare__val">До 50 лет</span></div>
+        <div class="hb-compare__row"><span>Коррозионная стойкость</span><span class="hb-compare__val">В 7× выше</span></div>
+        <div class="hb-compare__row"><span>Прочность ствола</span><span class="hb-compare__val">В 5× выше</span></div>
+    </div>
+</div>
+
+<!-- Категории -->
+<h2 class="hb-cats-title">529 объектов по Пермскому краю</h2>
+<div class="hb-cats">
+    <a href="/map/" class="hb-cat"><span class="hb-cat__dot" style="background:#2563eb"></span><span class="hb-cat__name">Жилые дома</span></a>
+    <a href="/map/" class="hb-cat"><span class="hb-cat__dot" style="background:#16a34a"></span><span class="hb-cat__name">Бани</span></a>
+    <a href="/map/" class="hb-cat"><span class="hb-cat__dot" style="background:#9333ea"></span><span class="hb-cat__name">Заборы</span></a>
+    <a href="/map/" class="hb-cat"><span class="hb-cat__dot" style="background:#ea580c"></span><span class="hb-cat__name">Коммерция</span></a>
+    <a href="/map/" class="hb-cat"><span class="hb-cat__dot" style="background:#dc2626"></span><span class="hb-cat__name">Промышленные</span></a>
+    <a href="/map/" class="hb-cat"><span class="hb-cat__dot" style="background:#6b7280"></span><span class="hb-cat__name">Все объекты →</span></a>
+</div>
+
+<!-- CTA -->
+<div class="hb-cta">
+    <h2>Рассчитайте фундамент бесплатно</h2>
+    <p>Укажите тип объекта — инженер подберёт сваи под геологию вашего участка</p>
+    <a href="/calc/">Начать расчёт</a>
+</div>
+
+<div class="preview-badge">Вариант B — Product First</div>

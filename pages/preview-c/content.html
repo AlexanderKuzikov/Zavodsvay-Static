@@ -1,0 +1,314 @@
+<style>
+/* ── Hero: текст + карта ── */
+.hc-hero {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 0;
+    min-height: 440px;
+    margin: 0 -1rem 2rem;
+    overflow: hidden;
+}
+.hc-hero__text {
+    background: #1e3a5f;
+    color: #fff;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.hc-hero h1 {
+    font-family: 'Roboto Slab Local', serif;
+    font-size: 1.9rem;
+    color: #fff;
+    margin: 0 0 1rem;
+    line-height: 1.25;
+}
+.hc-hero__tagline {
+    color: rgba(255,255,255,.8);
+    font-size: .9rem;
+    margin: 0 0 2rem;
+    line-height: 1.6;
+}
+.hc-hero__num-row { display: flex; gap: 1.5rem; margin-bottom: 2rem; }
+.hc-hero__num-item { text-align: center; }
+.hc-hero__num {
+    display: block;
+    font-family: 'Roboto Slab Local', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #f97316;
+    line-height: 1;
+}
+.hc-hero__num-label {
+    font-size: .72rem;
+    color: rgba(255,255,255,.65);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+.hc-hero__cta-row { display: flex; flex-direction: column; gap: .5rem; }
+.hc-btn--primary {
+    background: #f97316;
+    color: #fff;
+    padding: .75rem 1.25rem;
+    border-radius: 4px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: .95rem;
+    text-align: center;
+    transition: background .2s;
+    display: block;
+}
+.hc-btn--primary:hover { background: #ea6c0a; color: #fff; }
+.hc-btn--ghost {
+    background: transparent;
+    color: rgba(255,255,255,.85);
+    padding: .6rem 1.25rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: .9rem;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,.3);
+    transition: border-color .2s;
+    display: block;
+}
+.hc-btn--ghost:hover { border-color: rgba(255,255,255,.8); color: #fff; }
+
+/* ── Mini-map ── */
+.hc-map-wrap { position: relative; }
+#hc-map { width: 100%; height: 100%; min-height: 440px; }
+.hc-map-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255,255,255,.95);
+    backdrop-filter: blur(4px);
+    border-radius: 6px;
+    padding: .6rem 1rem;
+    font-size: .8rem;
+    font-weight: 600;
+    color: #1e3a5f;
+    z-index: 10;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+.hc-map-badge span { color: #f97316; font-size: 1.1rem; }
+
+/* ── Video strip ── */
+.hc-video-strip {
+    margin: 0 -1rem 2rem;
+    max-height: 300px;
+    overflow: hidden;
+    position: relative;
+}
+.hc-video-strip video { width: 100%; object-fit: cover; max-height: 300px; display: block; }
+.hc-video-strip__label {
+    position: absolute;
+    bottom: 1rem;
+    left: 1.5rem;
+    color: #fff;
+    font-size: .85rem;
+    font-weight: 600;
+    text-shadow: 0 1px 4px rgba(0,0,0,.8);
+}
+
+/* ── Features ── */
+.hc-features {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.hc-feature {
+    border-left: 3px solid #f97316;
+    padding: .75rem 1rem;
+    background: #f8fafc;
+}
+.hc-feature__title { font-weight: 700; color: #1e3a5f; font-size: .9rem; margin-bottom: .25rem; }
+.hc-feature__text { font-size: .8rem; color: #64748b; line-height: 1.4; }
+
+/* ── CTA cards ── */
+.hc-cta { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+.hc-cta-card {
+    border-radius: 8px;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .75rem;
+}
+.hc-cta-card--calc { background: #1e3a5f; }
+.hc-cta-card--catalog { background: #f97316; }
+.hc-cta-card__title {
+    font-family: 'Roboto Slab Local', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+.hc-cta-card__text { font-size: .875rem; color: rgba(255,255,255,.85); margin: 0; }
+.hc-cta-card__link {
+    background: rgba(255,255,255,.15);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.4);
+    padding: .6rem 1.25rem;
+    border-radius: 4px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: .9rem;
+    margin-top: auto;
+    transition: background .2s;
+}
+.hc-cta-card__link:hover { background: rgba(255,255,255,.25); color: #fff; }
+
+.preview-badge {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    background: #7c3aed;
+    color: #fff;
+    padding: .5rem 1rem;
+    border-radius: 20px;
+    font-size: .8rem;
+    font-weight: 700;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .hc-hero { grid-template-columns: 1fr; }
+    #hc-map { min-height: 260px; }
+    .hc-hero__text { padding: 1.5rem; }
+    .hc-hero h1 { font-size: 1.4rem; }
+    .hc-features { grid-template-columns: repeat(2, 1fr); }
+    .hc-cta { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+    .hc-features { grid-template-columns: 1fr; }
+    .hc-hero__num-row { gap: 1rem; }
+}
+</style>
+
+<!-- Hero: текст + живая карта -->
+<div class="hc-hero">
+    <div class="hc-hero__text">
+        <h1>Винтовые сваи в Перми — завод «Гефест»</h1>
+        <p class="hc-hero__tagline">Производство НКТ-сваи серии ВСГ и монтаж фундаментов с 2012 года. Гарантия до 50 лет.</p>
+        <div class="hc-hero__num-row">
+            <div class="hc-hero__num-item">
+                <span class="hc-hero__num">529</span>
+                <span class="hc-hero__num-label">Объектов</span>
+            </div>
+            <div class="hc-hero__num-item">
+                <span class="hc-hero__num">50</span>
+                <span class="hc-hero__num-label">Лет гарантии</span>
+            </div>
+            <div class="hc-hero__num-item">
+                <span class="hc-hero__num">3</span>
+                <span class="hc-hero__num-label">Дня монтаж</span>
+            </div>
+        </div>
+        <div class="hc-hero__cta-row">
+            <a href="/calc/" class="hc-btn--primary">Рассчитать фундамент</a>
+            <a href="/map/" class="hc-btn--ghost">Смотреть все объекты</a>
+        </div>
+    </div>
+    <div class="hc-map-wrap">
+        <div id="hc-map"></div>
+        <div class="hc-map-badge"><span>529</span>&nbsp;объектов на карте</div>
+    </div>
+</div>
+
+<!-- Video strip -->
+<div class="hc-video-strip">
+    <video autoplay loop muted playsinline>
+        <source src="/assets/video/gefest01.mp4" type="video/mp4">
+    </video>
+    <span class="hc-video-strip__label">Монтаж фундамента — Пермский край</span>
+</div>
+
+<!-- Features -->
+<div class="hc-features">
+    <div class="hc-feature">
+        <div class="hc-feature__title">НКТ труба ГОСТ 633-80</div>
+        <div class="hc-feature__text">Стенка 5,5–7,5 мм. В 5× прочнее ВГП-трубы конкурентов.</div>
+    </div>
+    <div class="hc-feature">
+        <div class="hc-feature__title">Сталь 09Г2С</div>
+        <div class="hc-feature__text">Лопасть на 35% прочнее Ст3. Коррозионная стойкость в 7×.</div>
+    </div>
+    <div class="hc-feature">
+        <div class="hc-feature__title">Монтаж от 3 дней</div>
+        <div class="hc-feature__text">УБМ-85, ямобур КАМАЗ 43101, миниэкскаватор на гусеницах.</div>
+    </div>
+    <div class="hc-feature">
+        <div class="hc-feature__title">ТУ 5264-001-40914750-2012</div>
+        <div class="hc-feature__text">Производство по техническим условиям. Диаметры 60–219 мм.</div>
+    </div>
+</div>
+
+<!-- CTA Cards -->
+<div class="hc-cta">
+    <div class="hc-cta-card hc-cta-card--calc">
+        <h2 class="hc-cta-card__title">Рассчитайте фундамент</h2>
+        <p class="hc-cta-card__text">Онлайн-калькулятор подберёт тип и количество свай под ваш объект</p>
+        <a href="/calc/" class="hc-cta-card__link">Перейти к калькулятору →</a>
+    </div>
+    <div class="hc-cta-card hc-cta-card--catalog">
+        <h2 class="hc-cta-card__title">Каталог свай ВСГ</h2>
+        <p class="hc-cta-card__text">Полный ассортимент с характеристиками, таблицами и диаметрами</p>
+        <a href="/catalog/" class="hc-cta-card__link">Смотреть каталог →</a>
+    </div>
+</div>
+
+<div class="preview-badge">Вариант C — Map First</div>
+
+<script>
+(function() {
+    const mapEl = document.getElementById('hc-map');
+    if (!mapEl) return;
+    let loaded = false;
+    const observer = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting && !loaded) {
+            loaded = true;
+            observer.disconnect();
+            initHcMap();
+        }
+    }, { threshold: 0.1 });
+    observer.observe(mapEl);
+
+    function initHcMap() {
+        // Подставь свой ключ Яндекс.Карт
+        const YMAPS_KEY = '';
+        const script = document.createElement('script');
+        script.src = 'https://api-maps.yandex.ru/v3/?apikey=' + YMAPS_KEY + '&lang=ru_RU';
+        script.onload = async function() {
+            await ymaps3.ready;
+            const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker } = ymaps3;
+            const map = new YMap(mapEl, {
+                location: { center: [56.23, 58.01], zoom: 8 },
+                behaviors: ['drag', 'pinchZoom', 'scrollZoom', 'dblClick']
+            });
+            map.addChild(new YMapDefaultSchemeLayer());
+            map.addChild(new YMapDefaultFeaturesLayer());
+            fetch('/data/map.json')
+                .then(r => r.json())
+                .then(objects => {
+                    const CAT_COLORS = {
+                        house:'#2563eb', banya:'#16a34a', fence:'#9333ea',
+                        commercial:'#ea580c', industrial:'#dc2626',
+                        water:'#0891b2', social:'#ca8a04', agro:'#65a30d', other:'#6b7280'
+                    };
+                    objects.forEach(obj => {
+                        const dot = document.createElement('div');
+                        dot.style.cssText = 'width:8px;height:8px;border-radius:50%;background:' +
+                            (CAT_COLORS[obj.category] || '#6b7280') +
+                            ';border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.4)';
+                        map.addChild(new YMapMarker({ coordinates: obj.coords }, dot));
+                    });
+                });
+        };
+        document.head.appendChild(script);
+    }
+})();
+</script>

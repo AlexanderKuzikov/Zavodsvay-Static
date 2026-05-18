@@ -1,0 +1,269 @@
+<style>
+/* ── Trust Bar ── */
+.home-trust-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: #1e3a5f;
+    color: #fff;
+    margin: 0 -1rem 0;
+}
+.home-trust-bar__item {
+    padding: 1.5rem 1rem;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,.15);
+}
+.home-trust-bar__item:last-child { border-right: none; }
+.home-trust-bar__num {
+    display: block;
+    font-family: 'Roboto Slab Local', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #f97316;
+    line-height: 1;
+}
+.home-trust-bar__label {
+    font-size: .8rem;
+    opacity: .85;
+    margin-top: .35rem;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+/* ── Hero video ── */
+.home-hero {
+    position: relative;
+    margin: 0 -1rem;
+    max-height: 480px;
+    overflow: hidden;
+}
+.home-hero video {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    max-height: 480px;
+}
+.home-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(0,0,0,.7) 50%, rgba(0,0,0,.2));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem 2.5rem;
+}
+.home-hero__title {
+    font-family: 'Roboto Slab Local', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 .75rem;
+    max-width: 560px;
+    line-height: 1.25;
+}
+.home-hero__sub {
+    color: rgba(255,255,255,.9);
+    font-size: 1.05rem;
+    margin: 0 0 1.5rem;
+    max-width: 420px;
+}
+.home-hero__cta { display: flex; gap: .75rem; flex-wrap: wrap; }
+.home-btn--primary {
+    background: #f97316;
+    color: #fff;
+    padding: .75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background .2s;
+}
+.home-btn--primary:hover { background: #ea6c0a; color: #fff; }
+.home-btn--outline {
+    background: transparent;
+    color: #fff;
+    padding: .75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 1rem;
+    border: 2px solid rgba(255,255,255,.7);
+    transition: border-color .2s;
+}
+.home-btn--outline:hover { border-color: #fff; color: #fff; }
+
+/* ── Services ── */
+.home-services {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin: 2rem 0;
+}
+.home-service-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 1.5rem;
+    transition: box-shadow .2s;
+}
+.home-service-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+.home-service-card__icon { font-size: 2rem; margin-bottom: .75rem; display: block; }
+.home-service-card__title {
+    font-family: 'Roboto Slab Local', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 .5rem;
+    color: #1e3a5f;
+}
+.home-service-card__text {
+    font-size: .875rem;
+    color: #64748b;
+    margin: 0 0 1rem;
+    line-height: 1.5;
+}
+.home-service-card__link {
+    font-size: .875rem;
+    color: #f97316;
+    font-weight: 600;
+    text-decoration: none;
+}
+.home-service-card__link:hover { text-decoration: underline; }
+
+/* ── Map promo ── */
+.home-map-promo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 0 0 2rem;
+}
+.home-map-promo__img {
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+}
+.home-map-promo__img img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+.home-map-promo__num {
+    font-family: 'Roboto Slab Local', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #f97316;
+    line-height: 1;
+    margin-bottom: .25rem;
+}
+.home-map-promo__label {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1e3a5f;
+    margin-bottom: 1rem;
+}
+.home-map-promo__desc {
+    color: #64748b;
+    font-size: .9rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+/* ── Preview badge ── */
+.preview-badge {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    background: #7c3aed;
+    color: #fff;
+    padding: .5rem 1rem;
+    border-radius: 20px;
+    font-size: .8rem;
+    font-weight: 700;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .home-trust-bar { grid-template-columns: repeat(2, 1fr); }
+    .home-trust-bar__item:nth-child(2) { border-right: none; }
+    .home-hero__title { font-size: 1.4rem; }
+    .home-services { grid-template-columns: 1fr; }
+    .home-map-promo { grid-template-columns: 1fr; }
+    .home-map-promo__img { display: none; }
+}
+@media (max-width: 480px) {
+    .home-trust-bar { grid-template-columns: repeat(2, 1fr); }
+    .home-hero__overlay { padding: 1.25rem; }
+    .home-hero__title { font-size: 1.2rem; }
+}
+</style>
+
+<!-- Trust Bar -->
+<div class="home-trust-bar">
+    <div class="home-trust-bar__item">
+        <span class="home-trust-bar__num">529</span>
+        <span class="home-trust-bar__label">Объектов сдано</span>
+    </div>
+    <div class="home-trust-bar__item">
+        <span class="home-trust-bar__num">14</span>
+        <span class="home-trust-bar__label">Лет на рынке</span>
+    </div>
+    <div class="home-trust-bar__item">
+        <span class="home-trust-bar__num">50</span>
+        <span class="home-trust-bar__label">Лет гарантии</span>
+    </div>
+    <div class="home-trust-bar__item">
+        <span class="home-trust-bar__num">3</span>
+        <span class="home-trust-bar__label">Дня — срок монтажа</span>
+    </div>
+</div>
+
+<!-- Hero Video -->
+<div class="home-hero">
+    <video autoplay loop muted playsinline>
+        <source src="/assets/video/gefest01.mp4" type="video/mp4">
+    </video>
+    <div class="home-hero__overlay">
+        <h1 class="home-hero__title">Винтовые сваи в Перми — производство и монтаж под ключ</h1>
+        <p class="home-hero__sub">Завод «Гефест» с 2012 года. Диаметры 60–219 мм. Гарантия до 50 лет.</p>
+        <div class="home-hero__cta">
+            <a href="/calc/" class="home-btn--primary">Рассчитать фундамент</a>
+            <a href="/catalog/" class="home-btn--outline">Каталог свай</a>
+        </div>
+    </div>
+</div>
+
+<!-- Services -->
+<div class="home-services">
+    <div class="home-service-card">
+        <span class="home-service-card__icon">🏭</span>
+        <h2 class="home-service-card__title">Производство свай ВСГ</h2>
+        <p class="home-service-card__text">Бесшовная НКТ-труба ГОСТ 633-80, лопасть из стали 09Г2С. Прочность в 5 раз выше, чем у стандартных аналогов.</p>
+        <a href="/catalog/" class="home-service-card__link">Смотреть каталог →</a>
+    </div>
+    <div class="home-service-card">
+        <span class="home-service-card__icon">⚙️</span>
+        <h2 class="home-service-card__title">Монтаж фундамента</h2>
+        <p class="home-service-card__text">Бурильная машина УБМ-85, ямобур КАМАЗ, миниэкскаватор. Монтаж от 3 дней, любой тип грунта.</p>
+        <a href="/montage/" class="home-service-card__link">Подробнее о монтаже →</a>
+    </div>
+    <div class="home-service-card">
+        <span class="home-service-card__icon">📐</span>
+        <h2 class="home-service-card__title">Бесплатный расчёт</h2>
+        <p class="home-service-card__text">Инженер подберёт тип сваи под геологию вашего участка. Расчёт за 2 минуты онлайн или по телефону.</p>
+        <a href="/calc/" class="home-service-card__link">Рассчитать онлайн →</a>
+    </div>
+</div>
+
+<!-- Map Promo -->
+<div class="home-map-promo">
+    <div class="home-map-promo__img">
+        <img src="/assets/img/og/og-home.jpg" alt="Карта объектов завода Гефест в Пермском крае">
+    </div>
+    <div>
+        <div class="home-map-promo__num">529</div>
+        <div class="home-map-promo__label">объектов по Пермскому краю</div>
+        <p class="home-map-promo__desc">Жилые дома, бани, заборы, коммерческие и промышленные объекты — каждый зафиксирован на карте с фотографиями и описанием.</p>
+        <a href="/map/" class="home-btn--primary">Открыть карту объектов</a>
+    </div>
+</div>
+
+<div class="preview-badge">Вариант A — Trust First</div>
