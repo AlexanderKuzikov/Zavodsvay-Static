@@ -3,7 +3,7 @@
 /* ---
    .svai-list / .svai-card
    Горизонтальные карточки свай:
-   картинка ~200px слева, текст справа
+   картинка ~270px слева, текст справа
 --- */
 
 .svai-list {
@@ -31,7 +31,7 @@
 /* колонка с картинкой */
 .svai-card__img-col {
     flex-shrink: 0;
-    width: 180px;
+    width: 270px;
     background-color: #f4f7fb;
     display: flex;
     align-items: center;
@@ -47,7 +47,7 @@
     box-sizing: border-box;
     -webkit-user-drag: none;
     user-select: none;
-    max-height: 260px;
+    max-height: 390px;
 }
 
 /* колонка с текстом */
@@ -291,7 +291,6 @@
     font-weight: 300;
     color: #0a2342;
     line-height: 1;
-    transition: content 0.1s;
 }
 
 .catalog-faq__item[open] .catalog-faq__q {
@@ -323,7 +322,7 @@
 }
 
 .catalog-cta__inner {
-    padding: 36px 32px;
+    padding: 20px 32px 28px;
     text-align: center;
 }
 
@@ -340,7 +339,7 @@
 .catalog-cta__desc {
     color: rgba(255,255,255,0.8);
     font-size: 0.97em;
-    margin: 0 0 24px 0;
+    margin: 0 0 20px 0;
     line-height: 1.5;
 }
 
@@ -376,11 +375,11 @@
 
     .svai-card__img-col {
         width: 100%;
-        max-height: 220px;
+        max-height: 260px;
     }
 
     .svai-card__img-col img {
-        max-height: 200px;
+        max-height: 240px;
         width: auto;
         margin: 0 auto;
     }
@@ -405,7 +404,7 @@
     }
 
     .catalog-cta__inner {
-        padding: 24px 20px;
+        padding: 16px 20px 22px;
     }
 }
 
