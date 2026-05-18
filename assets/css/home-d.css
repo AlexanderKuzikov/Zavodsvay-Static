@@ -22,6 +22,11 @@
 .hd-btn--accent { background: #f97316; color: #fff !important; }
 .hd-btn--accent:hover { background: #e06210; }
 .hd-btn--lg { padding: .85rem 2.25rem; font-size: 1.05rem; }
+.hd-btn--outline {
+    background: transparent; color: #1e3a5f !important;
+    border: 2px solid #1e3a5f;
+}
+.hd-btn--outline:hover { background: #1e3a5f; color: #fff !important; }
 
 .hd-section-title {
     font-family: 'Roboto Slab Local', serif !important;
@@ -39,7 +44,6 @@
 }
 .hd-hero .video-container {
     margin: 0; border-radius: 0; line-height: 0;
-    /* Высота = контент + 48px паддинг. На desktop min 480px, mobile auto */
     min-height: 480px;
 }
 .hd-hero .video-container video {
@@ -51,8 +55,6 @@
     background: linear-gradient(160deg,rgba(10,35,66,.85) 0%,rgba(26,58,107,.55) 55%,rgba(10,35,66,.40) 100%);
     pointer-events: none; z-index: 1;
 }
-/* Ключевое исправление: не center, а flex-start + padding-top
-   чтобы контент сверху не обрезался на малом экране */
 .hd-hero__content {
     position: absolute; inset: 0; z-index: 2;
     display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
@@ -92,12 +94,24 @@
    СЕКЦИИ
    ============================================================ */
 .hd-section { padding: 2.5rem 0; width: 100%; box-sizing: border-box; }
+
+/*
+ * Full-width breakout для цветных секций.
+ * .content-area имеет padding: 20px (desktop) / 15px (mobile).
+ * Используем отрицательные margin + padding для компенсации,
+ * плюс явный width: calc(100% + 40px) чтобы гарантированно
+ * перекрыть оба паддинга независимо от box-sizing родителя.
+ */
 .hd-section--gray,
 .hd-section--dark,
 .hd-section--orange,
 .hd-section--cta {
-    margin-left: -20px; margin-right: -20px;
-    padding-left: 20px; padding-right: 20px; border-radius: 0;
+    width: calc(100% + 40px);
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    box-sizing: border-box;
 }
 .hd-section--gray   { background: #f4f7fb; padding-top: 2.5rem; padding-bottom: 2.5rem; }
 .hd-section--dark   { background: linear-gradient(135deg,#1e3a5f 0%,#2a4f80 100%); padding-top: 2.5rem; padding-bottom: 2.5rem; }
@@ -205,6 +219,9 @@
 .hd-cases__grid {
     display: grid; grid-template-columns: repeat(3,1fr); gap: 1.1rem;
 }
+.hd-cases__more {
+    text-align: center; margin-top: 1.5rem;
+}
 .hd-case {
     display: block; text-decoration: none; color: inherit;
     border-radius: 9px; overflow: hidden;
@@ -229,7 +246,6 @@
 .hd-case__body > p { font-size: .82rem; color: #64748b; margin: 0 0 .6rem !important; line-height: 1.45; }
 .hd-case__meta { display: flex; gap: .35rem; flex-wrap: wrap; }
 .hd-case__meta span { font-size: .74rem; color: #94a3b8; background: #f4f7fb; padding: .16rem .5rem; border-radius: 4px; }
-/* последняя карточка — ссылка на карту */
 .hd-case--map .hd-case__body h3 { color: #f97316 !important; }
 
 /* ============================================================
@@ -241,9 +257,6 @@
 }
 .hd-map-wrap {
     position: relative;
-    border-radius: 10px; overflow: hidden;
-    box-shadow: 0 4px 18px rgba(0,0,0,.1);
-    border: 1.5px solid #e2e8f0;
 }
 .hd-map-iframe {
     display: block; width: 100%; height: 520px; border: none;
@@ -287,13 +300,10 @@
     .hd-why__photo       { max-width: 480px; margin: 0 auto; }
 }
 @media (max-width: 768px) {
-    /* Hero: убираем фиксированную высоту, берём auto чтобы контент определял высоту */
     .hd-hero .video-container { min-height: 0; }
-    /* video становится static для пропорций */
     .hd-hero .video-container video {
         position: static; width: 100%; height: 220px; object-fit: cover;
     }
-    /* content — static, под видео */
     .hd-hero__overlay { display: none; }
     .hd-hero__content {
         position: static; background: linear-gradient(135deg,#0f2d55 0%,#1e3a5f 100%);
@@ -312,13 +322,22 @@
     .hd-why__grid        { grid-template-columns: 1fr; }
     .hd-numbers__grid    { grid-template-columns: 1fr 1fr; }
 
-    .hd-hero, .hd-section--gray, .hd-section--dark,
-    .hd-section--orange, .hd-section--cta {
-        margin-left: -15px; margin-right: -15px;
+    /* На mobile content-area padding = 15px → компенсируем 15px с каждой стороны */
+    .hd-hero,
+    .hd-section--gray,
+    .hd-section--dark,
+    .hd-section--orange,
+    .hd-section--cta {
+        width: calc(100% + 30px);
+        margin-left: -15px;
+        margin-right: -15px;
     }
-    .hd-section--gray, .hd-section--dark,
-    .hd-section--orange, .hd-section--cta {
-        padding-left: 15px; padding-right: 15px;
+    .hd-section--gray,
+    .hd-section--dark,
+    .hd-section--orange,
+    .hd-section--cta {
+        padding-left: 15px;
+        padding-right: 15px;
     }
     .hd-map-iframe { height: 360px; }
 }
