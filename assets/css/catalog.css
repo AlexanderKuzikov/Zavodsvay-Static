@@ -320,12 +320,12 @@
 
 .catalog-cta__title {
     font-family: 'Roboto Slab Local', serif;
-    color: #fff;
+    color: #fff !important;
     font-size: 1.6em;
     margin: 0 0 12px 0;
     text-align: center;
     line-height: 1.2;
-    border-bottom: none;
+    border-bottom: none !important;
 }
 
 .catalog-cta__desc {
@@ -362,7 +362,7 @@
 /* ===== АДАПТИВ ===== */
 
 @media (max-width: 768px) {
-    /* карточки свай */
+    /* --- карточки свай --- */
     .svai-card {
         flex-direction: column;
     }
@@ -379,7 +379,7 @@
         padding: 16px;
     }
 
-    /* таблица — карточный вид */
+    /* --- Таблица сравнения — карточный вид --- */
     .catalog-table--responsive thead {
         display: none;
     }
@@ -389,6 +389,7 @@
     .catalog-table--responsive td {
         display: block;
         width: 100%;
+        box-sizing: border-box;
     }
     .catalog-table--responsive tr {
         border: 1px solid #e0e0e0;
@@ -400,15 +401,15 @@
     .catalog-table--responsive tr:last-child {
         margin-bottom: 0;
     }
-    /* сброс zebra на мобайле */
     .catalog-table--responsive tbody tr:nth-child(even) {
         background-color: #fff;
     }
+    /* grid: лейбл фиксированная ширина, значение — остаток */
     .catalog-table--responsive td {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 130px 1fr;
+        gap: 8px;
         align-items: baseline;
-        gap: 12px;
         padding: 10px 14px;
         border-bottom: 1px solid #f0f0f0;
         font-size: 0.9em;
@@ -420,11 +421,9 @@
         content: attr(data-label);
         font-weight: 600;
         color: #0a2342;
-        flex-shrink: 0;
-        min-width: 110px;
     }
 
-    /* особенности */
+    /* --- особенности --- */
     .catalog-feature {
         flex-direction: column;
         gap: 12px;
@@ -435,7 +434,7 @@
         font-size: 1em;
     }
 
-    /* CTA */
+    /* --- CTA --- */
     .catalog-cta__title {
         font-size: 1.3em;
     }
@@ -455,8 +454,7 @@
     .catalog-stat__val {
         font-size: 1.3em;
     }
-    /* мин. ширина лейбла меньше на узких экранах */
-    .catalog-table--responsive td::before {
-        min-width: 90px;
+    .catalog-table--responsive td {
+        grid-template-columns: 110px 1fr;
     }
 }
