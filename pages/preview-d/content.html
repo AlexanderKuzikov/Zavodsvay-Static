@@ -10,7 +10,7 @@
     <div class="hd-hero__overlay"></div>
     <div class="hd-hero__content">
         <h1 class="hd-hero__title">Фундаменты на винтовых сваях в Перми — под ключ</h1>
-        <p class="hd-hero__subtitle">Собственный завод с 2012 года. Монтаж за 1–3 дня в любых грунтах. Гарантия 50 лет на сваи ВСГ из стали НКТ ГОСТ 633-80.</p>
+        <p class="hd-hero__subtitle">Собственный завод с 2012 года. Монтаж за 1–3 дня в любых грунтах. Гарантия 50 лет на сваи ВСГ из стали НКТ ГОСТ 633-80.</p>
         <div class="hd-hero__stats">
             <div class="hd-hero__stat"><span class="hd-hero__stat-num">600+</span><span class="hd-hero__stat-label">объектов сдано</span></div>
             <div class="hd-hero__stat"><span class="hd-hero__stat-num">14</span><span class="hd-hero__stat-label">лет на рынке</span></div>
@@ -124,7 +124,7 @@
             <div class="hd-case__body"><h3>Каркасный дом 10,9×12,3 м</h3><p>24 сваи ВСГ-3, машинный монтаж. Глина, глубина 2,5 м.</p><div class="hd-case__meta"><span>📍 Пермь</span><span>📅 2023</span></div></div>
         </a>
         <a href="/objects/1/" class="hd-case">
-            <div class="hd-case__img"><img src="/pages/map/img/1_1.webp" alt="Баня на сваях Гефест" loading="lazy" width="400" height="240"></div>
+            <div class="hd-case__img"><img src="/pages/map/img/1_1.webp" alt="Баня на сваях Гефест" loading="lazy" width="400" height="240" onerror="this.src='/assets/img/og/og-home.jpg'"></div>
             <div class="hd-case__body"><h3>Баня с террасой</h3><p>24 сваи диаметром 60 мм. Ручной монтаж, 4 часа.</p><div class="hd-case__meta"><span>📍 Пермь</span><span>📅 2024</span></div></div>
         </a>
         <a href="/objects/5/" class="hd-case">
@@ -139,28 +139,158 @@
             <div class="hd-case__img"><img src="/pages/map/img/10_1.webp" alt="Объект 10 на сваях Гефест" loading="lazy" width="400" height="240" onerror="this.src='/assets/img/og/og-home.jpg'"></div>
             <div class="hd-case__body"><h3>Промышленный объект</h3><p>Крупные сваи диаметром 159 мм. Машинный монтаж.</p><div class="hd-case__meta"><span>📍 Пермь</span><span>📅 2022</span></div></div>
         </a>
-        <a href="/map/" class="hd-case hd-case--map">
-            <div class="hd-case__img"><img src="/assets/img/og/og-home.jpg" alt="Карта объектов винтовых свай — Пермский край" loading="lazy" width="400" height="240"><div class="hd-case__img-badge">600+ объектов</div></div>
-            <div class="hd-case__body"><h3>Все работы на карте</h3><p>Более 600 объектов по Пермскому краю с фотографиями.</p><div class="hd-case__meta"><span>🗺 Открыть карту →</span></div></div>
+        <a href="/objects/2/" class="hd-case">
+            <div class="hd-case__img"><img src="/pages/map/img/2_1.webp" alt="Объект 2 — забор на сваях Гефест" loading="lazy" width="400" height="240" onerror="this.src='/assets/img/og/og-home.jpg'"></div>
+            <div class="hd-case__body"><h3>Забор на сваях</h3><p>Сваи диаметром 57 мм, ручной монтаж. Суглинок.</p><div class="hd-case__meta"><span>📍 Пермский край</span><span>📅 2024</span></div></div>
         </a>
+    </div>
+    <div class="hd-cases__more">
+        <a href="/map/" class="hd-btn hd-btn--outline">Смотреть все 600+ объектов на карте →</a>
     </div>
 </div>
 
 <!-- КАРТА РАБОТ -->
+<style>
+    #hd-map-works {
+        width: 100%;
+        height: 500px;
+        background-color: #f0f0f0;
+        position: relative;
+    }
+
+    @media (max-width: 768px) {
+        #hd-map-works { height: 360px; }
+    }
+
+    @media (max-width: 480px) {
+        #hd-map-works { height: 280px; }
+    }
+
+    #hd-map-works .map-loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        color: #666;
+        font-size: 14px;
+    }
+</style>
+
 <div class="hd-section hd-section--gray hd-map-section">
     <h2 class="hd-section-title">География работ — 600+ объектов по Прикамью</h2>
-    <p class="hd-map-section__sub">Нажмите на метку, чтобы увидеть фотографии и описание объекта</p>
-    <div class="hd-map-wrap">
-        <iframe
-            src="/map/"
-            class="hd-map-iframe"
-            title="Карта выполненных работ — винтовые сваи Гефест"
-            loading="lazy"
-            allowfullscreen>
-        </iframe>
-        <a href="/map/" class="hd-map-fullscreen" target="_blank" rel="noopener">Открыть на полный экран ↗</a>
+    <p class="hd-map-section__sub">Нажмите на метку, чтобы перейти к объекту</p>
+    <div class="hd-map-wrap" style="position:relative;">
+        <div id="hd-map-works">
+            <div class="map-loader">Загрузка карты...</div>
+        </div>
+        <div class="map-legend" aria-label="Обозначения маркеров" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px 0;margin-top:18px;padding:16px 20px;background:#f8f8f8;border:1px solid #e4e4e4;border-radius:10px;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#333;"><span style="width:14px;height:14px;border-radius:50%;background:#2563eb;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);flex-shrink:0;display:inline-block;"></span>Жилой дом</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#333;"><span style="width:14px;height:14px;border-radius:50%;background:#16a34a;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);flex-shrink:0;display:inline-block;"></span>Баня</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#333;"><span style="width:14px;height:14px;border-radius:50%;background:#9333ea;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);flex-shrink:0;display:inline-block;"></span>Забор</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#333;"><span style="width:14px;height:14px;border-radius:50%;background:#ea580c;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);flex-shrink:0;display:inline-block;"></span>Коммерция</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#333;"><span style="width:14px;height:14px;border-radius:50%;background:#dc2626;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);flex-shrink:0;display:inline-block;"></span>Промышленные</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#333;"><span style="width:14px;height:14px;border-radius:50%;background:#0891b2;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);flex-shrink:0;display:inline-block;"></span>Водные объекты</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#333;"><span style="width:14px;height:14px;border-radius:50%;background:#ca8a04;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);flex-shrink:0;display:inline-block;"></span>Социальные</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#333;"><span style="width:14px;height:14px;border-radius:50%;background:#65a30d;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);flex-shrink:0;display:inline-block;"></span>Сельхоз</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#333;"><span style="width:14px;height:14px;border-radius:50%;background:#6b7280;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);flex-shrink:0;display:inline-block;"></span>Прочее</div>
+        </div>
+        <div style="margin-top:12px;text-align:right;">
+            <a href="/map/" class="hd-btn hd-btn--outline" target="_blank" rel="noopener">Открыть карту на полный экран ↗</a>
+        </div>
     </div>
 </div>
+
+<script>
+(function() {
+    const CAT_COLORS = {
+        house: '#2563eb', banya: '#16a34a', fence: '#9333ea',
+        commercial: '#ea580c', industrial: '#dc2626', water: '#0891b2',
+        social: '#ca8a04', agro: '#65a30d', other: '#6b7280'
+    };
+
+    async function initHdMap() {
+        try {
+            if (!window.ymaps3) {
+                const script = document.querySelector('script[src*="api-maps.yandex.ru"]');
+                if (!script) {
+                    const s = document.createElement('script');
+                    s.src = 'https://api-maps.yandex.ru/v3/?apikey=c0204985-1515-44c3-8e4e-1a57f540fd94&lang=ru_RU';
+                    document.head.appendChild(s);
+                    await new Promise(resolve => s.onload = resolve);
+                }
+            }
+
+            await ymaps3.ready;
+
+            const { YMap, YMapDefaultSchemeLayer, YMapDefaultFeaturesLayer, YMapMarker } = ymaps3;
+
+            const map = new YMap(
+                document.getElementById('hd-map-works'),
+                { location: { center: [56.2, 58.0], zoom: 9 }, behaviors: ['drag', 'pinchZoom', 'scrollZoom', 'dblClick'] }
+            );
+
+            map.addChild(new YMapDefaultSchemeLayer({
+                customization: [
+                    { tags: { any: ['food','restaurant','cafe','bar','shop','supermarket','convenience'] }, elements: 'geometry', stylers: [{ visibility: 'off' }] },
+                    { tags: { any: ['poi'] }, elements: 'label.icon', stylers: [{ visibility: 'off' }] }
+                ]
+            }));
+            map.addChild(new YMapDefaultFeaturesLayer());
+
+            ymaps3.import.registerCdn('https://cdn.jsdelivr.net/npm/{package}', '@yandex/ymaps3-clusterer@0.0.1');
+            const { YMapClusterer, clusterByGrid } = await ymaps3.import('@yandex/ymaps3-clusterer');
+
+            let objects = [];
+            try {
+                const res = await fetch('/data/map.json');
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                objects = await res.json();
+            } catch (e) {
+                console.error('[hd-map] fetch error:', e);
+            }
+
+            const points = objects.map(obj => ({
+                type: 'Feature', id: String(obj.id),
+                geometry: { type: 'Point', coordinates: obj.coords },
+                properties: { obj }
+            }));
+
+            const marker = (feature) => {
+                const obj = feature.properties.obj;
+                const el = document.createElement('div');
+                el.style.cssText = 'border:2px solid #fff;border-radius:50%;width:16px;height:16px;cursor:pointer;box-shadow:0 2px 4px rgba(0,0,0,.4);transition:transform .15s;background:' + (CAT_COLORS[obj.category] ?? CAT_COLORS.other);
+                el.title = obj.title || '';
+                el.onmouseenter = () => el.style.transform = 'scale(1.3)';
+                el.onmouseleave = () => el.style.transform = '';
+                el.onclick = () => { window.location.href = '/objects/' + obj.id + '/'; };
+                return new YMapMarker({ coordinates: feature.geometry.coordinates }, el);
+            };
+
+            const cluster = (coordinates, features) => {
+                const el = document.createElement('div');
+                el.style.cssText = 'background:#1e3a5f;color:#fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);cursor:pointer;';
+                el.innerText = features.length;
+                return new YMapMarker({ coordinates }, el);
+            };
+
+            map.addChild(new YMapClusterer({ method: clusterByGrid({ gridSize: 64 }), features: points, marker, cluster }));
+
+        } catch (e) {
+            console.error('[hd-map] error:', e);
+        } finally {
+            const loader = document.querySelector('#hd-map-works .map-loader');
+            if (loader) loader.style.display = 'none';
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHdMap);
+    } else {
+        initHdMap();
+    }
+})();
+</script>
 
 <!-- CTA -->
 <div class="hd-section hd-section--cta hd-cta">
