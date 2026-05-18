@@ -1,11 +1,5 @@
 /* ===== КАТАЛОГ СВАЙ — СТИЛИ ===== */
 
-/* ---
-   .svai-list / .svai-card
-   Горизонтальные карточки свай:
-   картинка ~270px слева, текст справа
---- */
-
 .svai-list {
     display: flex;
     flex-direction: column;
@@ -28,7 +22,6 @@
     box-shadow: 0 4px 16px rgba(10, 35, 66, 0.13);
 }
 
-/* колонка с картинкой */
 .svai-card__img-col {
     flex-shrink: 0;
     width: 270px;
@@ -50,7 +43,6 @@
     max-height: 390px;
 }
 
-/* колонка с текстом */
 .svai-card__body {
     padding: 20px 24px;
     flex-grow: 1;
@@ -100,7 +92,7 @@
     font-size: 0.88em !important;
 }
 
-/* --- Таблица --- */
+/* --- Таблица (desktop) --- */
 .catalog-table-wrap {
     overflow-x: auto;
     margin-bottom: 40px;
@@ -147,7 +139,7 @@
     background-color: #f0f4fa;
 }
 
-/* --- Особенности (нумерованные блоки) --- */
+/* --- Особенности --- */
 .catalog-features {
     display: flex;
     flex-direction: column;
@@ -367,42 +359,86 @@
     color: #0a2342;
 }
 
-/* --- Адаптив --- */
+/* ===== АДАПТИВ ===== */
+
 @media (max-width: 768px) {
+    /* карточки свай */
     .svai-card {
         flex-direction: column;
     }
-
     .svai-card__img-col {
         width: 100%;
         max-height: 260px;
     }
-
     .svai-card__img-col img {
         max-height: 240px;
         width: auto;
         margin: 0 auto;
     }
-
     .svai-card__body {
         padding: 16px;
     }
 
+    /* таблица — карточный вид */
+    .catalog-table--responsive thead {
+        display: none;
+    }
+    .catalog-table--responsive,
+    .catalog-table--responsive tbody,
+    .catalog-table--responsive tr,
+    .catalog-table--responsive td {
+        display: block;
+        width: 100%;
+    }
+    .catalog-table--responsive tr {
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        overflow: hidden;
+        background: #fff;
+    }
+    .catalog-table--responsive tr:last-child {
+        margin-bottom: 0;
+    }
+    /* сброс zebra на мобайле */
+    .catalog-table--responsive tbody tr:nth-child(even) {
+        background-color: #fff;
+    }
+    .catalog-table--responsive td {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+        padding: 10px 14px;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 0.9em;
+    }
+    .catalog-table--responsive td:last-child {
+        border-bottom: none;
+    }
+    .catalog-table--responsive td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #0a2342;
+        flex-shrink: 0;
+        min-width: 110px;
+    }
+
+    /* особенности */
     .catalog-feature {
         flex-direction: column;
         gap: 12px;
     }
-
     .catalog-feature__num {
         width: 36px;
         height: 36px;
         font-size: 1em;
     }
 
+    /* CTA */
     .catalog-cta__title {
         font-size: 1.3em;
     }
-
     .catalog-cta__inner {
         padding: 16px 20px 22px;
     }
@@ -412,13 +448,15 @@
     .catalog-feature__stats {
         gap: 10px;
     }
-
     .catalog-stat {
         padding: 8px 14px;
         min-width: 80px;
     }
-
     .catalog-stat__val {
         font-size: 1.3em;
+    }
+    /* мин. ширина лейбла меньше на узких экранах */
+    .catalog-table--responsive td::before {
+        min-width: 90px;
     }
 }
