@@ -80,12 +80,163 @@ $CAT_COLORS = [
         cursor: pointer;
     }
 
+    /* === Поиск === */
+    .map-search {
+        position: relative;
+        margin-top: 18px;
+    }
+
+    .map-search__input-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background: #fff;
+        transition: border-color 0.15s, box-shadow 0.15s;
+        overflow: hidden;
+    }
+
+    .map-search__input-wrap:focus-within {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .map-search__icon {
+        padding: 0 10px 0 12px;
+        color: #9ca3af;
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        pointer-events: none;
+    }
+
+    .map-search__input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 14px;
+        padding: 10px 4px;
+        background: transparent;
+        color: #111;
+        min-width: 0;
+    }
+
+    .map-search__input::placeholder {
+        color: #9ca3af;
+    }
+
+    .map-search__clear {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0 12px;
+        color: #9ca3af;
+        font-size: 18px;
+        line-height: 1;
+        flex-shrink: 0;
+    }
+
+    .map-search__clear:hover {
+        color: #374151;
+    }
+
+    .map-search__results {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        z-index: 200;
+        max-height: 320px;
+        overflow-y: auto;
+    }
+
+    .map-search__results--open {
+        display: block;
+    }
+
+    .map-search__result-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 14px;
+        cursor: pointer;
+        border-bottom: 1px solid #f3f4f6;
+        text-decoration: none;
+        color: inherit;
+        transition: background 0.1s;
+    }
+
+    .map-search__result-item:last-child {
+        border-bottom: none;
+    }
+
+    .map-search__result-item:hover {
+        background: #f0f6ff;
+    }
+
+    .map-search__result-item--no-link {
+        cursor: default;
+    }
+
+    .map-search__result-item--no-link:hover {
+        background: transparent;
+    }
+
+    .map-search__result-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    .map-search__result-title {
+        font-size: 13px;
+        font-weight: 500;
+        color: #111827;
+        line-height: 1.35;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .map-search__result-desc {
+        font-size: 11px;
+        color: #6b7280;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
+        flex-shrink: 0;
+    }
+
+    .map-search__result-more {
+        padding: 8px 14px;
+        font-size: 12px;
+        color: #6b7280;
+        text-align: center;
+        border-top: 1px solid #f3f4f6;
+    }
+
+    .map-search__no-results {
+        padding: 16px 14px;
+        font-size: 13px;
+        color: #6b7280;
+        text-align: center;
+    }
+
     /* === Легенда-фильтр === */
     .map-legend {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
         gap: 10px 0;
-        margin-top: 18px;
+        margin-top: 12px;
         padding: 16px 20px;
         background: #f8f8f8;
         border: 1px solid #e4e4e4;
@@ -300,6 +451,26 @@ $CAT_COLORS = [
     <div class="map-loader">Загрузка карты...</div>
 </div>
 
+<div class="map-search" id="map-search">
+    <div class="map-search__input-wrap">
+        <span class="map-search__icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+        </span>
+        <input
+            type="search"
+            id="map-search-input"
+            class="map-search__input"
+            placeholder="Поиск по названию объекта, адресу, описанию..."
+            autocomplete="off"
+            aria-label="Поиск по объектам"
+        >
+        <button class="map-search__clear" id="map-search-clear" type="button" aria-label="Очистить поиск">&times;</button>
+    </div>
+    <div class="map-search__results" id="map-search-results" role="listbox"></div>
+</div>
+
 <div class="map-legend" id="map-legend" aria-label="Фильтр по категориям">
     <div class="map-legend-item" data-cat="house">
         <span class="map-legend-dot" style="background:#2563eb"></span>
@@ -412,14 +583,13 @@ $CAT_COLORS = [
     ];
 
     const ALL_CATS = Object.keys(CAT_COLORS);
+    const SEARCH_RESULT_LIMIT = 15;
 
-    // Зеркало PHP-логики: по одному лучшему (с фото) из каждой категории
     function getDefaultCards(published) {
         const result = [];
         for (const cat of CAT_ORDER) {
             const candidates = published.filter(o => o.category === cat);
             if (!candidates.length) continue;
-            // С фото — первым
             const withPhoto = candidates.find(o => o.images && o.images.length);
             result.push(withPhoto || candidates[0]);
         }
@@ -467,6 +637,17 @@ $CAT_COLORS = [
             .replace(/"/g, '&quot;');
     }
 
+    function debounce(fn, ms) {
+        let timer;
+        return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), ms); };
+    }
+
+    function matchesQuery(obj, query) {
+        if (!query) return true;
+        const haystack = ((obj.title || '') + ' ' + (obj.techDescription || '')).toLowerCase();
+        return haystack.includes(query);
+    }
+
     async function initMap() {
         try {
             await ymaps3.ready;
@@ -501,7 +682,6 @@ $CAT_COLORS = [
 
             const allPublished = allObjects.filter(o => o.url);
 
-            // Начальный рендер — зеркало PHP
             renderCards(getDefaultCards(allPublished));
 
             const toFeature = obj => ({
@@ -545,32 +725,131 @@ $CAT_COLORS = [
             });
             map.addChild(clusterer);
 
-            // === Фильтр ===
+            // === Состояние фильтров ===
             const activeCategories = new Set(ALL_CATS);
-            const resetBtn = document.getElementById('map-legend-reset');
-            const counter  = document.getElementById('map-legend-counter');
-            const items    = document.querySelectorAll('.map-legend-item[data-cat]');
+            let searchQuery = '';
 
-            function syncUI() {
+            const resetBtn    = document.getElementById('map-legend-reset');
+            const counter     = document.getElementById('map-legend-counter');
+            const items       = document.querySelectorAll('.map-legend-item[data-cat]');
+            const searchInput = document.getElementById('map-search-input');
+            const searchClear = document.getElementById('map-search-clear');
+            const searchDrop  = document.getElementById('map-search-results');
+
+            // === Единая функция применения фильтров ===
+            function applyFilters() {
+                const filtered = allObjects.filter(o =>
+                    activeCategories.has(o.category) && matchesQuery(o, searchQuery)
+                );
+
+                clusterer.update({ features: filtered.map(toFeature) });
+
+                // Счётчик легенды
+                const catFiltered = activeCategories.size < ALL_CATS.length;
                 items.forEach(item => {
                     item.classList.toggle('map-legend-item--inactive', !activeCategories.has(item.dataset.cat));
                 });
-                const isFiltered = activeCategories.size < ALL_CATS.length;
-                resetBtn.style.display = isFiltered ? 'inline-block' : 'none';
-                const filtered = allObjects.filter(o => activeCategories.has(o.category));
-                counter.textContent = isFiltered ? `показано ${filtered.length} из ${allObjects.length}` : '';
-                clusterer.update({ features: filtered.map(toFeature) });
+                resetBtn.style.display = catFiltered ? 'inline-block' : 'none';
+                counter.textContent = (catFiltered || searchQuery)
+                    ? `показано ${filtered.length} из ${allObjects.length}`
+                    : '';
 
-                if (!isFiltered) {
-                    // Сброс — дефолтные 9 по одному из категории
-                    renderCards(getDefaultCards(allPublished));
-                } else if (activeCategories.size === 1) {
-                    const cat = [...activeCategories][0];
-                    renderCards(allPublished.filter(o => o.category === cat));
+                // Карточки под картой
+                if (!searchQuery) {
+                    if (!catFiltered) {
+                        renderCards(getDefaultCards(allPublished));
+                    } else if (activeCategories.size === 1) {
+                        const cat = [...activeCategories][0];
+                        renderCards(allPublished.filter(o => o.category === cat));
+                    }
+                    // мульти-выбор без поиска — не трогаем карточки
+                } else {
+                    // При поиске — показываем все найденные опубликованные
+                    renderCards(filtered.filter(o => o.url));
                 }
-                // Мульти-выбор — карточки не трогаем
             }
 
+            // === Дропдаун поиска ===
+            function renderDropdown(results, total) {
+                if (!results.length) {
+                    searchDrop.innerHTML = '<div class="map-search__no-results">Ничего не найдено</div>';
+                } else {
+                    const items = results.slice(0, SEARCH_RESULT_LIMIT).map(obj => {
+                        const color = CAT_COLORS[obj.category] || CAT_COLORS.other;
+                        const desc  = obj.techDescription
+                            ? `<span class="map-search__result-desc">${escHtml(obj.techDescription)}</span>`
+                            : '';
+                        if (obj.url) {
+                            return `<a class="map-search__result-item" href="${escHtml(obj.url)}" role="option">
+                                <span class="map-search__result-dot" style="background:${color}"></span>
+                                <span class="map-search__result-title">${escHtml(obj.title)}</span>
+                                ${desc}
+                            </a>`;
+                        }
+                        return `<div class="map-search__result-item map-search__result-item--no-link" role="option">
+                            <span class="map-search__result-dot" style="background:${color}"></span>
+                            <span class="map-search__result-title">${escHtml(obj.title)}</span>
+                            ${desc}
+                        </div>`;
+                    }).join('');
+
+                    const more = total > SEARCH_RESULT_LIMIT
+                        ? `<div class="map-search__result-more">Ещё ${total - SEARCH_RESULT_LIMIT} объект${pluralize(total - SEARCH_RESULT_LIMIT)} — уточните запрос</div>`
+                        : '';
+
+                    searchDrop.innerHTML = items + more;
+                }
+                searchDrop.classList.add('map-search__results--open');
+            }
+
+            function closeDropdown() {
+                searchDrop.classList.remove('map-search__results--open');
+                searchDrop.innerHTML = '';
+            }
+
+            // === Обработчики поиска ===
+            const handleInput = debounce(() => {
+                searchQuery = searchInput.value.trim().toLowerCase();
+                searchClear.style.display = searchQuery ? 'block' : 'none';
+
+                if (!searchQuery) {
+                    closeDropdown();
+                    applyFilters();
+                    return;
+                }
+
+                const results = allObjects.filter(o =>
+                    activeCategories.has(o.category) && matchesQuery(o, searchQuery)
+                );
+                renderDropdown(results, results.length);
+                applyFilters();
+            }, 300);
+
+            searchInput.addEventListener('input', handleInput);
+
+            searchClear.addEventListener('click', () => {
+                searchInput.value = '';
+                searchQuery = '';
+                searchClear.style.display = 'none';
+                closeDropdown();
+                applyFilters();
+                searchInput.focus();
+            });
+
+            searchInput.addEventListener('keydown', e => {
+                if (e.key === 'Escape') {
+                    closeDropdown();
+                    searchInput.blur();
+                }
+            });
+
+            document.addEventListener('click', e => {
+                if (!document.getElementById('map-search').contains(e.target)) {
+                    closeDropdown();
+                }
+            });
+
+            // === Фильтр по категориям ===
             items.forEach(item => {
                 item.addEventListener('click', () => {
                     const cat = item.dataset.cat;
@@ -585,13 +864,22 @@ $CAT_COLORS = [
                         if (activeCategories.has(cat)) activeCategories.delete(cat);
                         else activeCategories.add(cat);
                     }
-                    syncUI();
+                    applyFilters();
+
+                    // Обновить дропдаун с учётом новой категории
+                    if (searchQuery) {
+                        const results = allObjects.filter(o =>
+                            activeCategories.has(o.category) && matchesQuery(o, searchQuery)
+                        );
+                        if (results.length) renderDropdown(results, results.length);
+                        else closeDropdown();
+                    }
                 });
             });
 
             resetBtn.addEventListener('click', () => {
                 ALL_CATS.forEach(c => activeCategories.add(c));
-                syncUI();
+                applyFilters();
             });
 
         } catch (e) {
