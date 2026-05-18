@@ -1,23 +1,24 @@
-<!-- ═══════════════════════════════════════════
-     PREVIEW D — на основе референсного макета
-     Шрифты: Open Sans Local / Roboto Slab Local
-     ═══════════════════════════════════════════ -->
+<!-- ===================================================
+     PREVIEW D
+     Используем стандартные классы лейаута: .video-container,
+     .content-area — без отрицательных margin
+     =================================================== -->
 
-<!-- HERO -->
-<section class="hd-hero">
-    <div class="hd-hero__bg">
-        <video autoplay loop muted playsinline class="hd-hero__video">
+<!-- ===== HERO ===== -->
+<div class="hd-hero">
+    <div class="video-container">
+        <video autoplay loop muted playsinline>
             <source src="/assets/video/gefest01.mp4" type="video/mp4">
         </video>
-        <div class="hd-hero__overlay"></div>
     </div>
+    <div class="hd-hero__overlay"></div>
     <div class="hd-hero__content">
         <h1 class="hd-hero__title">Фундаменты на винтовых сваях «под ключ»</h1>
         <p class="hd-hero__subtitle">Собственное производство. Монтаж в любых грунтах. Гарантия до 50 лет.</p>
         <div class="hd-hero__stats">
             <div class="hd-hero__stat">
                 <span class="hd-hero__stat-num">529</span>
-                <span class="hd-hero__stat-label">объектов сдано</span>
+                <span class="hd-hero__stat-label">объектов</span>
             </div>
             <div class="hd-hero__stat">
                 <span class="hd-hero__stat-num">14</span>
@@ -29,18 +30,18 @@
             </div>
             <div class="hd-hero__stat">
                 <span class="hd-hero__stat-num">3</span>
-                <span class="hd-hero__stat-label">дня — монтаж</span>
+                <span class="hd-hero__stat-label">дня монтаж</span>
             </div>
         </div>
         <div class="hd-hero__cta">
             <a href="/calc/" class="hd-btn hd-btn--primary">Рассчитать фундамент</a>
-            <a href="tel:+73422099800" class="hd-btn hd-btn--secondary">+7 (342) 20-99-800</a>
+            <a href="tel:+73422099800" class="hd-btn hd-btn--secondary">+7 (342) 20-99-800</a>
         </div>
     </div>
-</section>
+</div>
 
-<!-- ДЛЯ КОГО -->
-<section class="hd-audience">
+<!-- ===== ДЛЯ КОГО ===== -->
+<div class="hd-section">
     <h2 class="hd-section-title">Для кого работаем</h2>
     <div class="hd-audience__grid">
         <div class="hd-audience__card hd-audience__card--light">
@@ -66,47 +67,47 @@
             <a href="/contacts/" class="hd-btn hd-btn--accent">Коммерческое предложение</a>
         </div>
     </div>
-</section>
+</div>
 
-<!-- ПРЕИМУЩЕСТВА -->
-<section class="hd-advantages">
+<!-- ===== ПРЕИМУЩЕСТВА ===== -->
+<div class="hd-section hd-section--gray">
     <h2 class="hd-section-title">Почему выбирают «Гефест»</h2>
     <div class="hd-advantages__grid">
         <div class="hd-advantage">
             <div class="hd-advantage__icon">🏭</div>
             <h3>Собственный завод</h3>
-            <p>Производим сваи с 2012 года. Контроль качества на каждом этапе. Ствол НКТ ГОСТ 633-80, лопасть из стали 09Г2С.</p>
+            <p>Производим сваи с 2012 года. Ствол НКТ ГОСТ 633-80, лопасть сталь 09Г2С.</p>
         </div>
         <div class="hd-advantage">
             <div class="hd-advantage__icon">⚡</div>
             <h3>Скорость монтажа</h3>
-            <p>Фундамент для дома за 1–3 дня. Не требует подготовки площадки и выдержки после заливки.</p>
+            <p>Фундамент для дома за 1–3 дня. Без бетона, опалубки и выдержки.</p>
         </div>
         <div class="hd-advantage">
             <div class="hd-advantage__icon">🌡️</div>
-            <h3>Любые грунты и сезоны</h3>
-            <p>Песок, глина, торф, мерзлота. Монтаж круглый год. Подбираем сваю под геологию участка.</p>
+            <h3>Любые грунты</h3>
+            <p>Песок, глина, торф, мерзлота. Монтаж круглый год.</p>
         </div>
         <div class="hd-advantage">
             <div class="hd-advantage__icon">📋</div>
-            <h3>Документы и гарантия</h3>
-            <p>Паспорта на изделия, акты, исполнительная документация. Гарантия до 50 лет.</p>
+            <h3>Документы</h3>
+            <p>Паспорта, акты, исполнительная документация. Гарантия до 50 лет.</p>
         </div>
         <div class="hd-advantage">
             <div class="hd-advantage__icon">🔧</div>
             <h3>Своя техника</h3>
-            <p>УБМ-85, ямобуры КАМАЗ 43101, миниэкскаватор на гусеницах. Не зависим от подрядчиков.</p>
+            <p>УБМ-85, ямобуры КАМАЗ 43101, миниэкскаватор.</p>
         </div>
         <div class="hd-advantage">
             <div class="hd-advantage__icon">🎯</div>
             <h3>Расчёты и испытания</h3>
-            <p>Геология, проектирование свайного поля, статические испытания. Работаем по нормативам.</p>
+            <p>Геология, проектирование, статические испытания.</p>
         </div>
     </div>
-</section>
+</div>
 
-<!-- УСЛУГИ -->
-<section class="hd-services">
+<!-- ===== УСЛУГИ ===== -->
+<div class="hd-section">
     <h2 class="hd-section-title">Основные услуги</h2>
     <div class="hd-services__grid">
         <div class="hd-service">
@@ -118,61 +119,61 @@
         <div class="hd-service">
             <div class="hd-service__icon">⚙️</div>
             <h3>Изготовление свай</h3>
-            <p>Диаметры 60–219 мм, любая длина. Партии от 1 шт. до оптовых. Срок — от 3 дней.</p>
+            <p>Диаметры 60–219 мм, любая длина. Партии от 1 шт. Срок — от 3 дней.</p>
             <a href="/catalog/" class="hd-service__link">Каталог →</a>
         </div>
         <div class="hd-service">
             <div class="hd-service__icon">📐</div>
             <h3>Проектирование</h3>
-            <p>Расчёт свайного поля, чертежи, схемы. Работаем с вашим проектировщиком или сами.</p>
+            <p>Расчёт свайного поля, чертежи, схемы.</p>
             <a href="/calc/" class="hd-service__link">Подробнее →</a>
         </div>
         <div class="hd-service">
             <div class="hd-service__icon">🔩</div>
             <h3>Усиление фундаментов</h3>
-            <p>Подъём просевших домов, усиление старых фундаментов, пристройки. Решаем сложные задачи.</p>
+            <p>Подъём просевших домов, пристройки, сложные задачи.</p>
             <a href="/contacts/" class="hd-service__link">Подробнее →</a>
         </div>
     </div>
-</section>
+</div>
 
-<!-- ПОЧЕМУ СВАИ А НЕ ЛЕНТА -->
-<section class="hd-why">
+<!-- ===== ПОЧЕМУ СВАИ ===== -->
+<div class="hd-section hd-section--dark hd-why">
     <h2>Почему винтовые сваи, а не лента или плита</h2>
     <div class="hd-why__grid">
         <div class="hd-why__item">
             <span class="hd-why__icon">💰</span>
             <div>
                 <h4>Экономия до 40%</h4>
-                <p>Нет земляных работ, бетона, опалубки, арматуры. Не нужна сухая погода.</p>
+                <p>Нет земляных работ, бетона, опалубки, арматуры.</p>
             </div>
         </div>
         <div class="hd-why__item">
             <span class="hd-why__icon">⏱️</span>
             <div>
                 <h4>В 3–5 раз быстрее</h4>
-                <p>Фундамент готов сразу после монтажа. Строительство начинается на следующий день.</p>
+                <p>Фундамент готов сразу после монтажа.</p>
             </div>
         </div>
         <div class="hd-why__item">
             <span class="hd-why__icon">🌨️</span>
             <div>
-                <h4>Круглогодичный монтаж</h4>
-                <p>Зимой сваи вкручиваются в мёрзлый грунт без оттаивания. Мороз не помеха.</p>
+                <h4>Круглогодично</h4>
+                <p>Зимой сваи вкручиваются в мёрзлый грунт.</p>
             </div>
         </div>
         <div class="hd-why__item">
             <span class="hd-why__icon">🌿</span>
             <div>
-                <h4>Минимум воздействия на участок</h4>
-                <p>Не нужно сносить заборы, выкорчёвывать деревья, выравнивать рельеф.</p>
+                <h4>Минимум на участок</h4>
+                <p>Не нужно сносить заборы, выкорчёвывать деревья.</p>
             </div>
         </div>
     </div>
-</section>
+</div>
 
-<!-- ЧИСЛА -->
-<section class="hd-numbers">
+<!-- ===== ЧИСЛА ===== -->
+<div class="hd-section hd-section--orange">
     <div class="hd-numbers__grid">
         <div class="hd-numbers__item">
             <span class="hd-numbers__num">2012</span>
@@ -180,7 +181,7 @@
         </div>
         <div class="hd-numbers__item">
             <span class="hd-numbers__num">529</span>
-            <span class="hd-numbers__label">выполненных объектов</span>
+            <span class="hd-numbers__label">объектов</span>
         </div>
         <div class="hd-numbers__item">
             <span class="hd-numbers__num">50</span>
@@ -188,13 +189,13 @@
         </div>
         <div class="hd-numbers__item">
             <span class="hd-numbers__num">60–219</span>
-            <span class="hd-numbers__label">мм диаметры свай</span>
+            <span class="hd-numbers__label">мм диаметры</span>
         </div>
     </div>
-</section>
+</div>
 
-<!-- ПРИМЕРЫ РАБОТ -->
-<section class="hd-cases">
+<!-- ===== ПРИМЕРЫ РАБОТ ===== -->
+<div class="hd-section">
     <h2 class="hd-section-title">Примеры работ</h2>
     <div class="hd-cases__grid">
         <a href="/objects/3/" class="hd-case">
@@ -202,51 +203,46 @@
                 <img src="/pages/map/img/3_1.webp" alt="Каркасный дом, Пермь" loading="lazy" width="400" height="240">
             </div>
             <div class="hd-case__body">
-                <h3>Каркасный дом 10,9×12,3 м</h3>
-                <p>24 сваи ВСГ-3, машинный монтаж. Глинистые грунты, глубина 2,5 м.</p>
+                <h3>Каркасный дом 10,9×12,3&thinsp;м</h3>
+                <p>24 сваи ВСГ-3, машинный монтаж. Глина, глубина 2,5&thinsp;м.</p>
                 <div class="hd-case__meta">
-                    <span>📍 Пермь</span>
-                    <span>📅 2023</span>
-                    <span>🏠 Жилой дом</span>
+                    <span>📍 Пермь</span><span>📅 2023</span><span>🏠 Жилой дом</span>
                 </div>
             </div>
         </a>
         <a href="/map/" class="hd-case">
-            <div class="hd-case__img hd-case__img--map">
-                <img src="/assets/img/og/og-home.jpg" alt="Карта объектов» loading="lazy" width="400" height="240">
-                <div class="hd-case__img-badge">529 объектов на карте</div>
+            <div class="hd-case__img">
+                <img src="/assets/img/og/og-home.jpg" alt="Карта объектов" loading="lazy" width="400" height="240">
+                <div class="hd-case__img-badge">529 объектов</div>
             </div>
             <div class="hd-case__body">
                 <h3>Карта выполненных работ</h3>
-                <p>529 объектов по Пермскому краю с фотографиями и описаниями.</p>
+                <p>529 объектов по Пермскому краю с фотографиями.</p>
                 <div class="hd-case__meta">
-                    <span>📍 Пермский край</span>
-                    <span>🗺 Открыть карту →</span>
+                    <span>📍 Пермский край</span><span>🗺 Смотреть карту →</span>
                 </div>
             </div>
         </a>
         <a href="/objects/1/" class="hd-case">
             <div class="hd-case__img">
-                <img src="/pages/map/img/1_1.webp" alt="Объект» loading="lazy" width="400" height="240">
+                <img src="/pages/map/img/1_1.webp" alt="Баня" loading="lazy" width="400" height="240">
             </div>
             <div class="hd-case__body">
                 <h3>Баня с террасой</h3>
-                <p>24 сваи диаметром 60 мм. Ручной монтаж, срок — 4 часа.</p>
+                <p>24 сваи диаметром 60&thinsp;мм. Ручной монтаж, 4 часа.</p>
                 <div class="hd-case__meta">
-                    <span>📍 Пермский край</span>
-                    <span>📅 2024</span>
-                    <span>🛁 Баня</span>
+                    <span>📍 Пермь</span><span>📅 2024</span><span>🛁 Баня</span>
                 </div>
             </div>
         </a>
     </div>
-</section>
+</div>
 
-<!-- CTA -->
-<section class="hd-cta">
+<!-- ===== CTA ===== -->
+<div class="hd-section hd-section--cta hd-cta">
     <h2>Оставьте заявку — рассчитаем бесплатно</h2>
-    <p>Инженер свяжется в течение часа, уточнит детали и подготовит предварительный расчёт сметы.</p>
+    <p>Инженер свяжется в течение часа, уточнит детали и подготовит расчёт сметы.</p>
     <a href="/calc/" class="hd-btn hd-btn--primary hd-btn--lg">Рассчитать фундамент</a>
-</section>
+</div>
 
-<div class="preview-badge">Вариант D — референс</div>
+<div class="preview-badge">Вариант D</div>
