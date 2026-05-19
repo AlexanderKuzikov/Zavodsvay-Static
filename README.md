@@ -14,7 +14,7 @@
 ![SEO](https://img.shields.io/badge/SEO-first-4CAF50?style=flat-square&logo=googlesearchconsole&logoColor=white)
 ![License](https://img.shields.io/badge/License-Apache_2.0-D22128?style=flat-square&logo=apache&logoColor=white)
 
-> **Статус:** pre-static PHP-версия. Object pages — 529 страниц programmatically сгенерированы. Фильтрация по категориям на карте реализована (общая карта + страница объекта). Текстовый поиск по карте реализован (title + techDescription, debounced, dropdown с результатами). Локальные шрифты приведены к единому неймингу и подключены через раздельные latin/cyrillic `@font-face`. SEO-разметка всех 31 статьи полностью реализована: `og_type=article`, Schema.org Article, даты публикации `2026-01-01`. Страница каталога свай ВСГ реализована полностью. Страница цен реализована, прайс-лист проаудирован. Целевое состояние — pure static HTML через `build.php` после готовности WebForge-генератора.
+> **Статус:** pre-static PHP-версия. Object pages — 529 страниц programmatically сгенерированы. Фильтрация по категориям на карте реализована (общая карта + страница объекта). Текстовый поиск по карте реализован (title + techDescription, debounced, dropdown с результатами). Локальные шрифты приведены к единому неймингу и подключены через раздельные latin/cyrillic `@font-face`. SEO-разметка всех 31 статьи полностью реализована: `og_type=article`, Schema.org Article, даты публикации `2026-01-01`. Страница каталога свай ВСГ реализована полностью. Страница цен реализована, прайс-лист проаудирован. Страница монтажа реализована: этапы монтажа, техника (`.catalog-features`), таблица стоимости (`.catalog-table--responsive`), FAQ (`.catalog-faq`), CTA — CSS переиспользует `catalog.css` через `$extra_css`. Целевое состояние — pure static HTML через `build.php` после готовности WebForge-генератора.
 
 ---
 
@@ -27,6 +27,7 @@ Zavodsvay-Static/
 ├── pages/              ← страницы ({slug}/index.php + content.html)
 │   ├── catalog/        ← каталог свай ВСГ (content.html + catalog.css)
 │   ├── prices/         ← прайс-лист
+│   ├── montage/        ← монтаж свай (переиспользует catalog.css)
 │   ├── articles/       ← 31 статья
 │   ├── map/            ← карта выполненных работ (content.php)
 │   └── objects/        ← страницы объектов
@@ -38,7 +39,7 @@ Zavodsvay-Static/
 ├── assets/
 │   ├── css/
 │   │   ├── template.css   ← глобальные стили
-│   │   └── catalog.css    ← page-specific стили каталога
+│   │   └── catalog.css    ← page-specific стили (catalog + montage)
 │   ├── img/               ← нарезанные WebP-наборы + icons/ + og/
 │   └── fonts/             ← локальные woff2-шрифты
 ├── source/             ← оригиналы изображений — в git
@@ -107,11 +108,11 @@ render_image('logo2');
 Layouts поддерживают `$extra_css` для подключения изолированных стилей страницы:
 
 ```php
-// pages/catalog/index.php
+// pages/catalog/index.php  (и pages/montage/index.php)
 $extra_css = '<link rel="stylesheet" href="/assets/css/catalog.css">';
 ```
 
-Создавай отдельный CSS-файл для страниц с нетривиальным UI (каталог, калькулятор и т.д.).
+`catalog.css` содержит компоненты `.catalog-faq`, `.catalog-table`, `.catalog-features`, `.catalog-cta` — переиспользуется страницами каталога и монтажа. Создавай отдельный CSS-файл для страниц с нетривиальным UI (калькулятор и т.д.).
 
 ---
 
@@ -260,6 +261,7 @@ require __DIR__ . '/../_template.php';
 - [x] **Каталог свай ВСГ** — карточки, таблицы сравнения/теххарактеристик, FAQ, CTA, page-specific CSS
 - [x] **Страница цен** — прайс-лист по диаметрам/типам, аудит выполнен, баг DOCTYPE исправлен
 - [x] **Поиск на карте** — текстовый поиск по `title`+`techDescription`, debounced dropdown, совместная работа с фильтром категорий
+- [x] **Страница монтажа** — этапы, техника, таблица стоимости, FAQ, CTA; CSS переиспользует `catalog.css`
 - [ ] Главная страница
 - [ ] **Image pipeline для объектов** — нарезка, автоматизация, generative-модели
 - [ ] `build.php` → pure static `/dist/`
