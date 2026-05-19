@@ -79,7 +79,7 @@ Email:           info@zavodsvay.ru
 
 ## Текущее состояние проекта
 
-**Дата последнего обновления:** 2026-05-18
+**Дата последнего обновления:** 2026-05-19
 
 ### Что реализовано
 - Файловый PHP-роутер, layouts (main, home, wide), partials
@@ -103,6 +103,7 @@ Email:           info@zavodsvay.ru
 - **SEO статей** — все 31 `pages/articles/*/index.php` переведены на `og_type=article`, `schema_type=Article`, `article:published_time` / `article:modified_time` = `2026-01-01`
 - **Страница каталога** `/catalog/` — карточки свай серии ВСГ, адаптивные таблицы, accordion FAQ, CTA-блок с калькулятором
 - **Страница цен** `/prices/` — прайс-лист по 7 группам (диаметр/лопасть/грунт), таблицы с весом и надбавками
+- **Страница монтажа** `/montage/` — этапы монтажа, техника (`.catalog-features`), таблица стоимости (`.catalog-table--responsive`), FAQ (`.catalog-faq`), CTA
 
 ### Ближайшие задачи
 
@@ -113,10 +114,39 @@ Email:           info@zavodsvay.ru
 - [x] Страница каталога (`/catalog/`) — карточки, таблицы, FAQ, CTA — **готово**
 - [x] Страница цен (`/prices/`) — прайс-лист, аудит, баг DOCTYPE исправлен — **готово**
 - [x] **Поиск на карте** — `title` + `techDescription`, debounced dropdown, 15 результатов, совместная работа с фильтром — **готово**
+- [x] **Страница монтажа** (`/montage/`) — доработка оформления, FAQ, таблица стоимости — **готово**
 - [ ] **Главная страница** — текущий этап
 - [ ] **Синхронизация номенклатуры** — диаметры в прайсе vs каталоге (ждём ответа заказчика)
 - [ ] **Image pipeline для объектов** — нарезка изображений, batch-автоматизация, generative-модели
 - [ ] `build.php` — статическая генерация `/dist/`
+
+---
+
+## Страница монтажа `/montage/` (реализовано)
+
+### Архитектура
+- `pages/montage/index.php` — подключает `catalog.css` через `$extra_css` паттерн (так же как `/catalog/`)
+- `pages/montage/content.html` — весь контент
+- CSS — переиспользует `assets/css/catalog.css` (классы `.catalog-faq`, `.catalog-table`, `.catalog-features`, `.catalog-cta`)
+
+### Структура страницы
+1. Вводный параграф
+2. Этапы монтажа — нумерованный `<ol>` (6 шагов)
+3. Наша техника — нумерованные карточки `.catalog-features` (4 единицы)
+4. Стоимость работ — таблица `.catalog-table catalog-table--responsive` в `.catalog-table-wrap`, `data-label` на каждой `<td>`, пояснения в `<small>`
+5. Частые вопросы — `.catalog-faq` / `<details class="catalog-faq__item">` / `<summary class="catalog-faq__q">` / `<div class="catalog-faq__a"><p>` (6 вопросов)
+6. CTA-блок `.catalog-cta` с кнопкой на калькулятор
+
+### Ключевые решения
+| Дата | Решение |
+|---|---|
+| 2026-05-19 | `$extra_css = catalog.css` добавлен в `pages/montage/index.php` — без него `.catalog-faq` рендерился как голый `<details>` со стрелкой `▶` |
+| 2026-05-19 | Таблица стоимости: `.catalog-table--responsive` + `data-label` на `<td>` + `<small>` для пояснений |
+| 2026-05-19 | Секция техники переведена с `<ul>` на `.catalog-features` — визуально единообразно с каталогом |
+| 2026-05-19 | FAQ: разметка идентична `/catalog/` — 2-space indent, `<details>` без лишних переносов |
+
+### Диагностика: почему FAQ выглядел иначе
+Корневая причина: `catalog.css` не был подключён. Разметка HTML была правильной, но CSS-классы не работали — браузер рендерил нативный `<details>` без стилей.
 
 ---
 
@@ -160,14 +190,14 @@ Email:           info@zavodsvay.ru
 
 ### Паттерн page-specific CSS
 ```php
-// pages/catalog/index.php
+// pages/catalog/index.php  (и pages/montage/index.php)
 $extra_css = '<link rel="stylesheet" href="/assets/css/catalog.css">';
 ```
 ```php
 // layouts/main.php (в <head>)
 <?php if (!empty($extra_css)) echo $extra_css; ?>
 ```
-Использовать для любой другой страницы, которой нужен изолированный CSS.
+Использовать для любой другой страницы, которой нужны те же классы.
 
 ### Responsive таблицы
 - **Таблица сравнения** (`catalog-table--responsive`): на mobile (`≤768px`) скрывает `<thead>`, каждый `<td>` рендерится как `display: grid; grid-template-columns: 130px 1fr`, лейбл берётся из `data-label` через `::before`
@@ -486,3 +516,8 @@ require __DIR__ . '/../_template.php';
 | 2026-05-18 | Поиск и фильтр объединены через `applyFilters()` — единая точка фильтрации clusterer + карточек + счётчика |
 | 2026-05-18 | При активном поиске `renderCards()` показывает все найденные опубликованные объекты (не «по одному из категории») |
 | 2026-05-18 | Следующий этап: главная страница (`/`) |
+| 2026-05-19 | Монтаж: `$extra_css = catalog.css` — корневая причина сломанного FAQ: CSS не был подключён |
+| 2026-05-19 | Монтаж: секция техники переведена с `<ul>` на `.catalog-features` |
+| 2026-05-19 | Монтаж: таблица стоимости — `.catalog-table--responsive` + `data-label` + `<small>` для пояснений |
+| 2026-05-19 | Монтаж: FAQ — `.catalog-faq` / `<details class="catalog-faq__item">` — разметка 1:1 с каталогом |
+| 2026-05-19 | Страница монтажа завершена; следующий этап — главная страница (`/`) |
