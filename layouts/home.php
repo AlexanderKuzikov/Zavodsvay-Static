@@ -16,7 +16,7 @@ if (!isset($content))          $content          = '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title) ?></title>
     <link rel="stylesheet" href="/assets/css/template.css">
-    <!-- <link rel="stylesheet" href="/assets/css/splash.css"> -->
+    <link rel="stylesheet" href="/assets/css/home-d.css">
     <?php if (!empty($canonical)): ?>
     <link rel="canonical" href="<?= htmlspecialchars($canonical) ?>">
     <?php endif; ?>
@@ -28,13 +28,12 @@ if (!isset($content))          $content          = '';
 </head>
 <body>
 
-<!-- <?php include __DIR__ . '/../partials/splash.php'; ?> -->
 <?php include __DIR__ . '/../partials/components/icons-svg.php'; ?>
 <?php include __DIR__ . '/../partials/header.php'; ?>
 
 <div class="main-layout-container">
     <?php include __DIR__ . '/../partials/sidebar.php'; ?>
-    <main class="content-area">
+    <main class="content-area hd-page">
         <?= $content ?>
     </main>
 </div>
