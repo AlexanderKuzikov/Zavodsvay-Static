@@ -10,4 +10,4 @@ ob_start();
 readfile(__DIR__ . '/content.html');
 $content = ob_get_clean();
 
-include __DIR__ . '/../../layouts/preview-d.php';
+include __DIR__ . '/../../layouts/home.php';
