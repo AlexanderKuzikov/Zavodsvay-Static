@@ -22,7 +22,7 @@
 
 ```
 Название:        Завод винтовых свай «Гефест»
-Юр. название:   ООО "Завод Винтовых Свай "Гефест""
+Юр. название:   ООО "Завод Винтовых Свай \"Гефест\""
 Сайт:            https://zavodsvay.ru/
 Телефон:         +7 (342) 20-99-800  →  +73422099800
 Email:           info@zavodsvay.ru
@@ -79,7 +79,7 @@ Email:           info@zavodsvay.ru
 
 ## Текущее состояние проекта
 
-**Дата последнего обновления:** 2026-05-20
+**Дата последнего обновления:** 2026-05-21
 
 ### Что реализовано
 - Файловый PHP-роутер, layouts (main, home, wide), partials
@@ -100,7 +100,7 @@ Email:           info@zavodsvay.ru
 - **Карта на странице объекта** — центрирование на объекте zoom 13, пульсирующий маркер текущего объекта, навигация по остальным, легенда-фильтр идентична `/map/`
 - Корневые npm-скрипты — `npm run ui/media/deploy` из корня
 - Локальные шрифты `Open Sans Local` и `Roboto Slab Local` подключены через `@font-face`
-- **SEO статей** — все 31 `pages/articles/*/index.php` переведены на `og_type=article`, `schema_type=Article`, `article:published_time` / `article:modified_time` = `2026-01-01`
+- **SEO статей** — все 29 `pages/articles/*/index.php` переведены на `og_type=article`, `schema_type=Article`, реалистичные `article_published` / `article_modified` по тематике (2022–2026)
 - **Страница каталога** `/catalog/` — карточки свай серии ВСГ, адаптивные таблицы, accordion FAQ, CTA-блок с калькулятором
 - **Страница цен** `/prices/` — прайс-лист по 7 группам (диаметр/лопасть/грунт), таблицы с весом и надбавками
 - **Страница монтажа** `/montage/` — этапы монтажа, техника (`.catalog-features`), таблица стоимости (`.catalog-table--responsive`), FAQ (`.catalog-faq`), CTA
@@ -111,7 +111,7 @@ Email:           info@zavodsvay.ru
 - [x] Object pages (529 страниц) — **готово**
 - [x] Карта на странице объекта — **готово**
 - [x] Фильтрация по категориям — общая карта и страница объекта — **готово**
-- [x] SEO статей — `og_type=article`, Schema.org Article, даты `2026-01-01` — **готово**
+- [x] SEO статей — `og_type=article`, Schema.org Article, реалистичные даты по тематике — **готово (2026-05-21)**
 - [x] Страница каталога (`/catalog/`) — карточки, таблицы, FAQ, CTA — **готово**
 - [x] Страница цен (`/prices/`) — прайс-лист, аудит, баг DOCTYPE исправлен — **готово**
 - [x] **Поиск на карте** — `title` + `techDescription`, debounced dropdown, 15 результатов, совместная работа с фильтром — **готово**
@@ -120,6 +120,67 @@ Email:           info@zavodsvay.ru
 - [ ] **Синхронизация номенклатуры** — диаметры в прайсе vs каталоге (ждём ответа заказчика)
 - [ ] **Image pipeline для объектов** — нарезка изображений, batch-автоматизация, generative-модели
 - [ ] `build.php` — статическая генерация `/dist/`
+
+---
+
+## SEO статей — даты публикации (реализовано, 2026-05-21)
+
+### Статус
+Все 29 статей получили реалистичные даты `article_published` / `article_modified` вместо заглушки `2026-01-01`.  
+Коммит: `1493012399923367b463605da2c7c68a5a5d36fb`
+
+### Логика дат
+
+| Группа | Примеры slugов | published | modified |
+|---|---|---|---|
+| Evergreen-база | `vidy`, `tehnologiy`, `preimushestva` | 2022 | 2024 |
+| История | `history` | 2022-11 | 2023-10 |
+| Технические | `grunt`, `raschet`, `stroitelstvo-fundamenta` | 2023 | 2025 |
+| Материалы домов | `brevno`, `brus`, `karkasny`, `penobeton`, `beton` | 2023 | 2024 |
+| Монтаж (весна) | `ruchnoy`, `mashin`, `rostverk`, `razmeshenie-svay` | апр–июнь 2024 | 2025 |
+| Сезонные | `zima` | декабрь 2024 | ноябрь 2025 |
+| Объекты/применения | `angar`, `bania`, `podpornaystena` | авг–июль 2024 | 2025 |
+| Диагностика/испытания | `ispytaniy`, `probnoe`, `oshibki` | окт–нояб 2024 | 2025 |
+| Коммерческие (цены) | `stoimost-svay`, `dostavka-svay`, `arenda-yamobura` | 2025 | 2026 |
+| Свежие | `otzyvy`, `nakon` | 2025–2026 | 2026 |
+
+### Правило
+- `published < modified` всегда
+- `modified` ≤ дата последнего коммита
+- Сезонный slug (`zima`) → published в декабре, `arenda-yamobura` → апрель
+
+---
+
+## Структура данных объектов
+
+### Текущий SSOT: `data/map.json`
+
+Массив объектов для карты и object pages:
+```json
+{
+  "id": 3,
+  "coords": [56.5178955, 57.9237226],
+  "category": "house",
+  "title": "...",
+  "techDescription": "...",
+  "images": ["3_1.webp"],
+  "url": "/objects/3/"
+}
+```
+
+> ⚠️ **Координаты в `data/map.json`** хранятся как `[latitude, longitude]`.  
+> ymaps3 JS API также принимает их в формате `[latitude, longitude]` — **перевод НЕ нужен**.  
+> Не делать swap `[coords[1], coords[0]]` — проверено эмпирически.
+
+### `data/objects.json` — **не создан** (открытый архитектурный вопрос)
+
+`data/objects.json` в репозитории **отсутствует**. В `data/` находятся:
+- `data/map.json` — SSOT карты и object pages (209 KB, 500+ объектов)
+- `data/media.json` — реестр медиафайлов
+- `data/components/` — компоненты данных
+- PDF-документация (ГОСТ, СП и др.)
+
+Решение о создании `data/objects.json` как расширенного SEO-реестра (с `metaTitle`, `metaDescription`, `schema` и пр.) **отложено** до проработки контракта данных. Текущий `data/map.json` является единственным источником истины для объектов. Вопрос открыт — см. «Открытые архитектурные вопросы» п. 3.
 
 ---
 
@@ -252,7 +313,7 @@ $extra_css = '<link rel="stylesheet" href="/assets/css/catalog.css">';
 
 2. **Git LFS для `source/`.** Порог принятия решения — какой объём оригиналов считается критичным?
 
-3. **Контракт данных объекта.** `data/map.json` — текущий SSOT. При масштабировании потребуется `data/objects.json` с расширенными SEO-полями.
+3. **Контракт данных объекта.** `data/map.json` — текущий SSOT. Файл `data/objects.json` **не создан** — в `data/` он отсутствует. При масштабировании потребуется отдельный реестр с расширенными SEO-полями (`metaTitle`, `metaDescription`, Schema.org-специфика). До принятия решения по контракту данных — не создавать.
 
 4. **`build.php` в Zavodsvay vs в WebForge.** Писать здесь как прототип или дождаться WebForge?
 
@@ -312,7 +373,7 @@ partials/image.php          ← render_image()
 - `partials/head-favicon.php` → подключён во все layouts
 - `assets/img/og/og-home.jpg` (primary, 1200×630) + `og-home.webp`
 - `partials/head-seo.php` → OG + Twitter Cards + JSON-LD `@graph` + geo-теги
-- Article pages: `og_type=article`, Schema.org `Article`, `article:published_time`, `article:modified_time` — **реализовано** для всех 31 статей, даты = `2026-01-01`
+- Article pages: `og_type=article`, Schema.org `Article`, `article:published_time`, `article:modified_time` — **реализовано** для всех 29 статей, реалистичные даты 2022–2026 по тематике (2026-05-21)
 
 ---
 
@@ -445,3 +506,5 @@ require __DIR__ . '/../_template.php';
 | 2026-05-19 | Монтаж: `$extra_css = catalog.css` — корневая причина сломанного FAQ |
 | 2026-05-19 | Страница монтажа завершена |
 | 2026-05-20 | **Главная страница завершена.** Вариант `/preview-d/` (`layouts/preview-d.php`, `.hd-*`) согласован и принят заказчиком |
+| 2026-05-21 | **SEO статей: даты исправлены.** 29 `pages/articles/*/index.php` — реалистичные `published/modified` по тематике, коммит `14930123` |
+| 2026-05-21 | `data/objects.json` отсутствует в репо; SSOT объектов — `data/map.json`; создание отложено до проработки контракта данных |
