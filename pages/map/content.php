@@ -525,7 +525,7 @@ $CAT_COLORS = [
         foreach ($published as $obj):
             $color     = $CAT_COLORS[$obj['category']] ?? $CAT_COLORS['other'];
             $cat_label = $CAT_LABELS[$obj['category']] ?? 'Прочее';
-            $thumb     = !empty($obj['images']) ? '/pages/map/img/' . $obj['images'][0] : null;
+            $thumb     = !empty($obj['images']) ? '/assets/img/objects/' . $obj['id'] . '/' . $obj['images'][0] : null;
         ?>
         <a class="object-card" href="<?= htmlspecialchars($obj['url']) ?>" data-id="<?= $obj['id'] ?>">
             <?php if ($thumb): ?>
@@ -604,7 +604,7 @@ $CAT_COLORS = [
             const color = CAT_COLORS[obj.category] || CAT_COLORS.other;
             const label = CAT_LABELS[obj.category] || 'Прочее';
             const thumb = obj.images && obj.images.length
-                ? `/pages/map/img/${obj.images[0]}`
+                ? `/assets/img/objects/${obj.id}/${obj.images[0]}`
                 : null;
             const thumbHtml = thumb
                 ? `<img class="object-card__thumb" src="${thumb}" alt="${escHtml(obj.title)}" loading="lazy" width="440" height="330">`
