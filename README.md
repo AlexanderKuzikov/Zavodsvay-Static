@@ -4,12 +4,12 @@
 Первый production-кейс [WebForge](https://github.com/AlexanderKuzikov/WebForge).
 
 ![PHP](https://img.shields.io/badge/PHP-8.x-777BB4?style=flat-square&logo=php&logoColor=white)
-![CSS](https://img.shields.io/badge/CSS-нативный-1572B6?style=flat-square&logo=css3&logoColor=white)
+![CSS](https://img.shields.io/badge/CSS-%D0%BD%D0%B0%D1%82%D0%B8%D0%B2%D0%BD%D1%8B%D0%B9-1572B6?style=flat-square&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JS-Vanilla-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
-![Node.js](https://img.shields.io/badge/Node.js-медиапайплайн-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-%D0%BC%D0%B5%D0%B4%D0%B8%D0%B0%D0%BF%D0%B0%D0%B9%D0%BF%D0%BB%D0%B0%D0%B9н-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white)
 ![Sharp](https://img.shields.io/badge/Sharp-WebP-99CC00?style=flat-square&logo=sharp&logoColor=white)
 ![FTP Deploy](https://img.shields.io/badge/Deploy-FTP_deploy.js-0066CC?style=flat-square&logo=filezilla&logoColor=white)
-![Yandex Maps](https://img.shields.io/badge/Яндекс.Карты-JS_API_v3-FF0000?style=flat-square&logo=yandex&logoColor=white)
+![Yandex Maps](https://img.shields.io/badge/%D0%AF%D0%BD%D0%B4%D0%B5%D0%BA%D1%81.%D0%9A%D0%B0%D1%80%D1%82%D1%8B-JS_API_v3-FF0000?style=flat-square&logo=yandex&logoColor=white)
 ![WebP](https://img.shields.io/badge/Images-WebP_srcset-2196F3?style=flat-square&logo=webp&logoColor=white)
 ![SEO](https://img.shields.io/badge/SEO-first-4CAF50?style=flat-square&logo=googlesearchconsole&logoColor=white)
 ![License](https://img.shields.io/badge/License-Apache_2.0-D22128?style=flat-square&logo=apache&logoColor=white)
@@ -40,13 +40,15 @@ Zavodsvay-Static/
 │   ├── css/
 │   │   ├── template.css   ← глобальные стили
 │   │   └── catalog.css    ← page-specific стили (catalog + montage)
-│   ├── img/               ← нарезанные WebP-наборы + icons/ + og/
+│   ├── img/
+│   │   ├── objects/    ← изображения объектов: {id}/{id}_N.webp
+│   │   └── ...         ← нарезанные WebP-наборы + icons/ + og/
 │   └── fonts/             ← локальные woff2-шрифты
 ├── source/             ← оригиналы изображений — в git
 ├── data/
 │   ├── media.json      ← SSOT-реестр изображений
 │   ├── map.json        ← данные 529 точек карты выполненных работ
-│   └── objects.json    ← реестр объектов (в разработке)
+│   └── components/     ← компоненты данных
 ├── video/
 ├── tools/              ← медиапайплайн + деплой (Node.js, только локально)
 ├── package.json        ← корневые npm-скрипты (прокси к tools/)
@@ -158,6 +160,7 @@ npm run deploy
 - Клик на маркер с `url` → страница объекта
 - Интерактивная легенда-фильтр: toggle категорий, `solo-click`, reset, счётчик
 - Текстовый поиск по `title` + `techDescription`, debounce 300ms, dropdown до 15 результатов
+- Блок «Подробные описания объектов»: карточки опубликованных объектов, изображения из `assets/img/objects/{id}/{id}_1.webp`
 - **Object page map:** карта с центрированием на объекте, пульсирующий маркер, легенда-фильтр идентична `/map/`
 
 ### Координаты
@@ -180,7 +183,8 @@ $object_dir = __DIR__;
 require __DIR__ . '/../_template.php';
 ```
 2. Убедиться что объект есть в `data/map.json` с полем `"url": "/objects/{id}/"`
-3. Добавить изображения в `pages/map/img/{id}_1.webp`, `{id}_2.webp`, ...
+3. Добавить изображения в `assets/img/objects/{id}/{id}_1.webp`, `{id}_2.webp`, ...
+4. Обновить `sitemap.xml`
 
 ---
 
@@ -189,7 +193,7 @@ require __DIR__ . '/../_template.php';
 - `sitemap.xml` — ручное обновление до `build.php`; содержит все статьи и все 529 объектов
 - `robots.txt` — Yandex/Googlebot, Crawl-delay
 - WebP + `srcset` — Core Web Vitals / CLS = 0
-- **`partials/head-seo.php`** — OG, Twitter Cards, JSON-LD Schema.org `@graph`, geo-теги Яндекса
+- **`partials/head-seo.php`** — OG, Twitter Cards, JSON-LD Schema.org `@graph`, гео-теги Яндекса
 - Object pages: Schema.org `CreativeWork` + `GeoCoordinates` уже в шаблоне
 - Article pages: `og_type=article` + Schema.org `Article` + даты публикации `2026-01-01` — все 31 статья
 
@@ -203,8 +207,7 @@ require __DIR__ . '/../_template.php';
 | `sitemap.xml` вручную | До генератора | Автогенерация в `build.php` |
 | `source/` в git | Пока объём мал | Git LFS при росте |
 | Нет hash-инвалидации CSS/JS | До `build.php` | `style.{hash8}.css` при сборке |
-| Изображения объектов в `pages/map/img/` | Исторически | При масштабировании — вынести в `assets/img/objects/` |
-| `data/objects.json` в разработке | Контракт данных не зафиксирован | Выделить SSOT расширенных SEO-полей перед programmatic генерацией |
+| `data/objects.json` не нужен | Идея отвергнута | Единственный SSOT — `data/map.json` |
 | Нет переключателя типов карты | ymaps3 не поддерживает спутник | Обсуждение с заказчиком |
 | Диаметры в прайсе и каталоге расходятся | Данные не синхронизированы с заказчиком | Ждём ответа заказчика, обновить либо каталог, либо прайс |
 
@@ -228,6 +231,7 @@ require __DIR__ . '/../_template.php';
 - [x] **Поиск на карте** — debounced dropdown, совместная работа с фильтром
 - [x] **Страница монтажа** — этапы, техника, таблица стоимости, FAQ, CTA
 - [x] **Главная страница** — вариант `/preview-d/` согласован и принят заказчиком (2026-05-20)
+- [x] **Пути изображений объектов** — унифицированы: `assets/img/objects/{id}/` везде (2026-05-22)
 - [ ] **Image pipeline для объектов** — нарезка, batch-автоматизация, generative-модели
 - [ ] `build.php` → pure static `/dist/`
 - [ ] Портирование медиапайплайна в WebForge
