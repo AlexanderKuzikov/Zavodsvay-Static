@@ -84,7 +84,7 @@ Email:           info@zavodsvay.ru
 ### Что реализовано
 - Файловый PHP-роутер, layouts (main, home, wide), partials
 - Все основные страницы: index, catalog, prices, calc, montage, articles, contacts, map, document, 404
-- 31 страница статей в `pages/articles/{slug}/`
+- 29 страниц статей в `pages/articles/{slug}/`
 - Адаптивная вёрстка на нативном CSS (один файл `assets/css/template.css`)
 - Hero-видео на главной, WebP-изображения с srcset
 - `sitemap.xml`, `robots.txt`, `.htaccess`
@@ -503,7 +503,7 @@ require __DIR__ . '/../_template.php';
 | 2026-05-16 | Карта `/map/`: фильтр по категориям реализован |
 | 2026-05-16 | Легенда-фильтр добавлена на страницу объекта — идентична `/map/` |
 | 2026-05-17 | Локальные шрифты приведены к единому неймингу; fallback = `serif` без Georgia |
-| 2026-05-17 | SEO статей завершено: все 31 статья, `og_type=article`, даты `2026-01-01` |
+| 2026-05-17 | SEO статей завершено: все 29 статей, `og_type=article`, даты `2026-01-01` |
 | 2026-05-18 | Каталог: `$extra_css` паттерн — page-specific стили |
 | 2026-05-18 | Страница цен: баг DOCTYPE исправлен; аудит прайса — ждём ответа заказчика |
 | 2026-05-18 | Поиск на карте: `applyFilters()` — единая точка фильтрации |
