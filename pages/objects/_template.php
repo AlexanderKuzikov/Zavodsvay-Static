@@ -28,8 +28,8 @@ $next_obj = ($current_idx !== null && $current_idx < count($published) - 1) ? $p
 $title            = htmlspecialchars($obj['title']) . ' — Завод винтовых свай Гефест';
 $meta_description = 'Выполненный объект: ' . htmlspecialchars($obj['techDescription']) . '. Винтовые фундаменты от завода Гефест, г. Пермь.';
 $canonical        = 'https://zavodsvay.ru/objects/' . $object_id . '/';
-$og_image         = '/pages/map/img/' . $object_id . '_1.webp';
-$img_base         = '/pages/map/img/';
+$og_image         = '/assets/img/objects/' . $object_id . '/' . $object_id . '_1.webp';
+$img_base         = '/assets/img/objects/' . $object_id . '/';
 
 // Координаты хранятся как [lat, lng] — ymaps3 принимает их напрямую
 $obj_coords_js    = json_encode($obj['coords']);
