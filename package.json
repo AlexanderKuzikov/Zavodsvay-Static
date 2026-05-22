@@ -10,6 +10,8 @@
     "deploy:dry": "cd tools && node deploy.js --dry-run",
     "deploy:full": "cd tools && node deploy.js --full",
     "migrate:images": "node tools/migrate-object-images.mjs",
-    "migrate:images:dry": "node tools/migrate-object-images.mjs --dry-run"
+    "migrate:images:dry": "node tools/migrate-object-images.mjs --dry-run",
+    "add-object": "node tools/add-object.mjs",
+    "add-object:dry": "node tools/add-object.mjs --dry-run"
   }
 }
