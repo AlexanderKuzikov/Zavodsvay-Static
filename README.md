@@ -1,267 +1,42 @@
-# Zavodsvay-Static
+<p align="center">
+  <a href="https://www.php.net/"><img alt="PHP 8" src="https://img.shields.io/badge/PHP-8.x-777BB4?logo=php&logoColor=white"></a>
+  <a href="https://nodejs.org/"><img alt="Node" src="https://img.shields.io/badge/Node-tools-339933?logo=node.js&logoColor=white"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-Apache_2.0-blue.svg"></a>
+</p>
 
-Производственный сайт завода свайных фундаментов **«Гефест»** (Пермь).  
-Первый production-кейс [WebForge](https://github.com/AlexanderKuzikov/WebForge).
-
-![PHP](https://img.shields.io/badge/PHP-8.x-777BB4?style=flat-square&logo=php&logoColor=white)
-![CSS](https://img.shields.io/badge/CSS-%D0%BD%D0%B0%D1%82%D0%B8%D0%B2%D0%BD%D1%8B%D0%B9-1572B6?style=flat-square&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JS-Vanilla-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
-![Node.js](https://img.shields.io/badge/Node.js-%D0%BC%D0%B5%D0%B4%D0%B8%D0%B0%D0%BF%D0%B0%D0%B9%D0%BF%D0%BB%D0%B0%D0%B9н-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white)
-![Sharp](https://img.shields.io/badge/Sharp-WebP-99CC00?style=flat-square&logo=sharp&logoColor=white)
-![FTP Deploy](https://img.shields.io/badge/Deploy-FTP_deploy.js-0066CC?style=flat-square&logo=filezilla&logoColor=white)
-![Yandex Maps](https://img.shields.io/badge/%D0%AF%D0%BD%D0%B4%D0%B5%D0%BA%D1%81.%D0%9A%D0%B0%D1%80%D1%82%D1%8B-JS_API_v3-FF0000?style=flat-square&logo=yandex&logoColor=white)
-![WebP](https://img.shields.io/badge/Images-WebP_srcset-2196F3?style=flat-square&logo=webp&logoColor=white)
-![SEO](https://img.shields.io/badge/SEO-first-4CAF50?style=flat-square&logo=googlesearchconsole&logoColor=white)
-![License](https://img.shields.io/badge/License-Apache_2.0-D22128?style=flat-square&logo=apache&logoColor=white)
-
-> **Статус:** pre-static PHP-версия. Object pages — 529 страниц programmatically сгенерированы. Фильтрация и поиск по карте реализованы. SEO-разметка всех 31 статьи полностью реализована. Страницы каталога, цен, монтажа — реализованы. **Главная страница — выполнена** (вариант `/preview-d/` согласован и принят заказчиком, 2026-05-20). Целевое состояние — pure static HTML через `build.php`.
+<h1 align="center">Zavodsvay-Static</h1>
+<p align="center">Производственный сайт завода свайных фундаментов «Гефест» (Пермь)</p>
 
 ---
 
-## Архитектура
+Production-сайт zavodsvay.ru. Первый кейс [WebForge](https://github.com/AlexanderKuzikov/WebForge). PHP file-router для разработки, чистая статика для деплоя. 529 программно сгенерированных страниц объектов, 29 SEO-статей, интерактивная карта на 500+ маркеров.
 
-**Текущий режим:** pre-static PHP-сайт без фреймворков и зависимостей на хостинге.
+- **PHP 8.x file-router** — layouts/, pages/, partials/
+- **Vanilla CSS/JS** — без фреймворков, Mobile-First
+- **Node.js ESM tooling** — медиапайплайн (Sharp → WebP), генерация страниц, sitemap
+- **Yandex Maps v3** — интерактивная карта выполненных работ
+- **FTP-деплой** — tools/deploy.js (dry-run, full)
+- **SEO-first** — Schema.org, OG-теги, sitemap.xml, robots.txt
 
-```
-Zavodsvay-Static/
-├── pages/              ← страницы ({slug}/index.php + content.html)
-│   ├── catalog/        ← каталог свай ВСГ (content.html + catalog.css)
-│   ├── prices/         ← прайс-лист
-│   ├── montage/        ← монтаж свай (переиспользует catalog.css)
-│   ├── articles/       ← 31 статья
-│   ├── map/            ← карта выполненных работ (content.php)
-│   └── objects/        ← страницы объектов
-│       ├── _template.php   ← единый шаблон для всех объектов
-│       ├── 1/index.php     ← двустрочник: $object_id + require _template
-│       └── ... (529 страниц)
-├── layouts/            ← шаблоны (main, home, wide, preview-d)
-├── partials/           ← переиспользуемые компоненты
-├── assets/
-│   ├── css/
-│   │   ├── template.css   ← глобальные стили
-│   │   └── catalog.css    ← page-specific стили (catalog + montage)
-│   ├── img/
-│   │   ├── objects/    ← изображения объектов: {id}/{id}_N.webp
-│   │   └── ...         ← нарезанные WebP-наборы + icons/ + og/
-│   └── fonts/             ← локальные woff2-шрифты
-├── source/             ← оригиналы изображений — в git
-├── data/
-│   ├── media.json      ← SSOT-реестр изображений
-│   ├── map.json        ← данные 529 точек карты выполненных работ
-│   └── components/     ← компоненты данных
-├── video/
-├── tools/              ← медиапайплайн + деплой (Node.js, только локально)
-├── package.json        ← корневые npm-скрипты (прокси к tools/)
-├── index.php           ← файловый роутер
-├── sitemap.xml
-├── robots.txt
-├── .htaccess
-├── CONTEXT.md          ← живой документ разработки для AI + разработчика
-└── README.md
-```
-
----
-
-## Медиапайплайн
-
-Локальный инструмент для работы с изображениями. На хостинг **не деплоится**.
-
-### Первый запуск
+## Быстрый старт
 
 ```bash
-cd tools && npm install   # установить зависимости — один раз
+git clone https://github.com/AlexanderKuzikov/Zavodsvay-Static.git
+cd Zavodsvay-Static
+npm run media          # обработка медиа (Sharp → WebP)
+npm run ui             # локальный сервер
+npm run deploy:dry     # dry-run деплой
 ```
 
-### Команды (из корня репозитория)
+## Документация
 
-```bash
-npm run ui       # Media UI → http://localhost:3010
-npm run media    # CLI-нарезка без UI
-npm run deploy   # FTP-деплой на хостинг
-npm run deploy:dry   # деплой — dry run (ничего не отправляет)
-npm run deploy:full  # принудительный полный деплой
-```
+- [`docs/CONTEXT.md`](docs/CONTEXT.md) — состояние проекта
+- [`docs/DECISIONS.md`](docs/DECISIONS.md) — архитектурные решения
 
-### Как работает
+## Статус
 
-1. Бросаешь оригинал в `source/`
-2. **«Сканировать»** в UI — регистрируется в `data/media.json`
-3. **«Нарезать всё»** — генерируются WebP-варианты
-4. Заполняешь `alt` и `caption` в интерфейсе
-5. При замене файла — чекбокс **«Перегенерировать»**
-6. **«Найти мусор»** — удаляет orphan WebP-файлы без записи в реестре
-
-### Использование в PHP
-
-```php
-require_once __DIR__ . '/partials/image.php';
-render_image('logo2');
-// генерирует <picture> с srcset, width, height из реестра
-```
-
----
-
-## Page-specific CSS
-
-Layouts поддерживают `$extra_css` для подключения изолированных стилей страницы:
-
-```php
-// pages/catalog/index.php  (и pages/montage/index.php)
-$extra_css = '<link rel="stylesheet" href="/assets/css/catalog.css">';
-```
-
-`catalog.css` содержит компоненты `.catalog-faq`, `.catalog-table`, `.catalog-features`, `.catalog-cta` — переиспользуется страницами каталога и монтажа.
-
----
-
-## Шрифты
-
-Используются локальные семейства `Open Sans Local` и `Roboto Slab Local` из `assets/fonts/`.
-
-- Подключение идёт через раздельные `@font-face` для `latin` и `cyrillic` сабсетов с `unicode-range`
-- Для проверки покрытия glyphs и unicode ranges перед интеграцией используется [wakamaifondue.com](https://wakamaifondue.com)
-- Fallback для заголовков — `serif`, без `Georgia`
-
----
-
-## Деплой
-
-Локальный FTP-деплой через `tools/deploy.js`.
-
-```bash
-npm run deploy
-```
-
----
-
-## Страницы
-
-| URL | Файл |
-|---|---|
-| `/` | `pages/index/` → `layouts/preview-d.php` |
-| `/catalog/` | `pages/catalog/` |
-| `/prices/` | `pages/prices/` |
-| `/calc/` | `pages/calc/` |
-| `/montage/` | `pages/montage/` |
-| `/articles/` | `pages/articles/` |
-| `/contacts/` | `pages/contacts/` |
-| `/map/` | `pages/map/` |
-| `/document/` | `pages/document/` |
-| `/articles/{slug}/` | `pages/articles/{slug}/` |
-| `/objects/{id}/` | `pages/objects/{id}/index.php` → `pages/objects/_template.php` |
-
----
-
-## Карта выполненных работ
-
-- Яндекс.Карты JS API v3 + `@yandex/ymaps3-clusterer` (jsdelivr CDN)
-- 529 объектов из `data/map.json`
-- Маркеры кластеризуются (`clusterByGrid({ gridSize: 64 })`)
-- Клик на маркер с `url` → страница объекта
-- Интерактивная легенда-фильтр: toggle категорий, `solo-click`, reset, счётчик
-- Текстовый поиск по `title` + `techDescription`, debounce 300ms, dropdown до 15 результатов
-- Блок «Подробные описания объектов»: карточки опубликованных объектов, изображения из `assets/img/objects/{id}/{id}_1.webp`
-- **Object page map:** карта с центрированием на объекте, пульсирующий маркер, легенда-фильтр идентична `/map/`
-
-### Координаты
-> `data/map.json` хранит `coords` в формате `[latitude, longitude]`.  
-> ymaps3 JS API принимает их в том же порядке — **перевод не нужен**.  
-> ⚠️ Не делать swap `[coords[1], coords[0]]` — проверено эмпирически.
-
----
-
-## Object Pages
-
-Страницы объектов `/objects/{id}/` — SEO-страницы с галереей, навигацией prev/next и мини-картой с легендой.
-
-### Добавление нового объекта
-1. Создать `pages/objects/{id}/index.php`:
-```php
-<?php
-$object_id  = {id};
-$object_dir = __DIR__;
-require __DIR__ . '/../_template.php';
-```
-2. Убедиться что объект есть в `data/map.json` с полем `"url": "/objects/{id}/"`
-3. Добавить изображения в `assets/img/objects/{id}/{id}_1.webp`, `{id}_2.webp`, ...
-4. Обновить `sitemap.xml`
-
----
-
-## SEO
-
-- `sitemap.xml` — ручное обновление до `build.php`; содержит все статьи и все 529 объектов
-- `robots.txt` — Yandex/Googlebot, Crawl-delay
-- WebP + `srcset` — Core Web Vitals / CLS = 0
-- **`partials/head-seo.php`** — OG, Twitter Cards, JSON-LD Schema.org `@graph`, гео-теги Яндекса
-- Object pages: Schema.org `CreativeWork` + `GeoCoordinates` уже в шаблоне
-- Article pages: `og_type=article` + Schema.org `Article` + даты публикации `2026-01-01` — все 31 статья
-
----
-
-## Известный технический долг
-
-| Проблема | Причина | Решение |
-|---|---|---|
-| `template.css` — монолит | Осознанно до `build.php` | Декомпозиция при миграции на WebForge |
-| `sitemap.xml` вручную | До генератора | Автогенерация в `build.php` |
-| `source/` в git | Пока объём мал | Git LFS при росте |
-| Нет hash-инвалидации CSS/JS | До `build.php` | `style.{hash8}.css` при сборке |
-| `data/objects.json` не нужен | Идея отвергнута | Единственный SSOT — `data/map.json` |
-| Нет переключателя типов карты | ymaps3 не поддерживает спутник | Обсуждение с заказчиком |
-| Диаметры в прайсе и каталоге расходятся | Данные не синхронизированы с заказчиком | Ждём ответа заказчика, обновить либо каталог, либо прайс |
-
----
-
-## Роадмап
-
-- [x] Favicon + `site.webmanifest`
-- [x] Карта выполненных работ (Яндекс.Карты v3 + кластеризация + легенда)
-- [x] Фильтрация по категориям на карте (общая карта + страница объекта)
-- [x] Поиск по карте (`title` + `techDescription`, debounced dropdown)
-- [x] OG-изображения
-- [x] SEO-partial (`partials/head-seo.php`)
-- [x] Данные 500+ объектов карты (Qwen3.5 Flash)
-- [x] Корневые npm-скрипты
-- [x] **Object pages** — шаблон + 529 страниц, карта + легенда-фильтр на странице объекта
-- [x] Локальные шрифты — единый нейминг + раздельные latin/cyrillic `@font-face`
-- [x] **SEO статей** — `og_type=article`, Schema.org Article, даты `2026-01-01`, все 31 статья
-- [x] **Каталог свай ВСГ** — карточки, таблицы, FAQ, CTA, page-specific CSS
-- [x] **Страница цен** — прайс-лист, аудит, баг DOCTYPE исправлен
-- [x] **Поиск на карте** — debounced dropdown, совместная работа с фильтром
-- [x] **Страница монтажа** — этапы, техника, таблица стоимости, FAQ, CTA
-- [x] **Главная страница** — вариант `/preview-d/` согласован и принят заказчиком (2026-05-20)
-- [x] **Пути изображений объектов** — унифицированы: `assets/img/objects/{id}/` везде (2026-05-22)
-- [ ] **Image pipeline для объектов** — нарезка, batch-автоматизация, generative-модели
-- [ ] `build.php` → pure static `/dist/`
-- [ ] Портирование медиапайплайна в WebForge
-- [ ] Синхронизация номенклатуры диаметров: прайс ↔ каталог (ждём заказчика)
-
----
-
-## AI в проекте
-
-| Инструмент | Применение |
-|---|---|
-| Perplexity (Space: Zavodsvay) | Основной AI-ассистент разработки, работа с репо через GitHub MCP |
-| Qwen3.5 Flash (облачный) | Подготовка данных карты: восстановление полей, нормализация, категоризация 500+ объектов |
-| Generative-модели (планируется) | Подготовка и дополнение изображений объектов |
-
----
-
-## Стек
-
-| Слой | Технология |
-|---|---|
-| Сайт | PHP 8.x, нативный CSS, vanilla JS |
-| Медиапайплайн | Node.js, Sharp, Express |
-| Деплой | FTP через `tools/deploy.js` (shared hosting) |
-| Карта | Яндекс.Карты JS API v3 + `@yandex/ymaps3-clusterer` (jsdelivr CDN) |
-| Шрифты | Open Sans Local, Roboto Slab Local (локальные woff2, latin + cyrillic через `unicode-range`) |
-
----
+**Production** — zavodsvay.ru работает. 529 объектов, 29 статей, карта.
 
 ## Лицензия
 
-Copyright 2024–2026 Alexander Kuzikov  
-Licensed under the [Apache License, Version 2.0](./LICENSE).
+[Apache-2.0](LICENSE) © Alexander Kuzikov
