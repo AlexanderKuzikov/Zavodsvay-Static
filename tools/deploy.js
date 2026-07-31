@@ -36,6 +36,8 @@ const EXCLUDE = [
   'source',
   'tools',
   'node_modules',
+  'docs',
+  'AGENTS.md',
   'README.md',
   'CONTEXT.md',
   'nginx.conf',

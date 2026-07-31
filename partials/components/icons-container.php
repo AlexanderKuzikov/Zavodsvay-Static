@@ -10,11 +10,6 @@ $contacts = json_decode(file_get_contents(__DIR__ . '/../../data/components/cont
         <svg aria-hidden="true"><use href="#icon-phone"></use></svg>
     </a>
     <?php endif; ?>
-    <?php if (!empty($contacts['telegram'])): ?>
-    <a href="<?= htmlspecialchars($contacts['telegram']['url']) ?>" class="icon-link" aria-label="Telegram" target="_blank" rel="noopener">
-        <svg aria-hidden="true"><use href="#icon-telegram"></use></svg>
-    </a>
-    <?php endif; ?>
     <?php if (!empty($contacts['max'])): ?>
     <a href="<?= htmlspecialchars($contacts['max']['url']) ?>" class="icon-link" aria-label="MAX" target="_blank" rel="noopener">
         <svg aria-hidden="true"><use href="#icon-max"></use></svg>
@@ -23,6 +18,11 @@ $contacts = json_decode(file_get_contents(__DIR__ . '/../../data/components/cont
     <?php if (!empty($contacts['vk'])): ?>
     <a href="<?= htmlspecialchars($contacts['vk']['url']) ?>" class="icon-link" aria-label="VK" target="_blank" rel="noopener">
         <svg aria-hidden="true"><use href="#icon-vk"></use></svg>
+    </a>
+    <?php endif; ?>
+    <?php if (!empty($contacts['telegram'])): ?>
+    <a href="<?= htmlspecialchars($contacts['telegram']['url']) ?>" class="icon-link" aria-label="Telegram" target="_blank" rel="noopener">
+        <svg aria-hidden="true"><use href="#icon-telegram"></use></svg>
     </a>
     <?php endif; ?>
 </div>

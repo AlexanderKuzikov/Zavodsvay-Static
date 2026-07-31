@@ -516,3 +516,5 @@ require __DIR__ . '/../_template.php';
 | 2026-05-21 | **`data/objects.json` — идея отвергнута на стадии обсуждения.** Единственный SSOT объектов — `data/map.json`; SEO генерируется из него программно в `_template.php` |
 | 2026-05-22 | **Пути изображений объектов унифицированы.** `pages/map/img/` → `assets/img/objects/{id}/` во всех точках: `_template.php`, `content.php` (PHP + JS). Старый путь не используется. |
 | 2026-07-31 | **Каналы связи обновлены.** Telegram: `t.me/zavodsvay` → `t.me/GefestPermBot` (бот); добавлен мессенджер MAX (`max.ru/id5902229415_bot`). SSOT — `data/components/contacts.json`; иконка MAX (градиент брендбука + белый знак) добавлена в `icons-svg.php` как `icon-max`; MAX добавлен в `sameAs` Schema.org (head-seo.php). |
+| 2026-07-31 | **Деплой: исключены `docs/`, `AGENTS.md`** (README.md был); SEO-PLAN.md перенесён в `docs/SEO-PLAN.md`. |
+| 2026-07-31 | **Фикс спрайта иконок.** `display:none` на спрайте ломал url()-резолвинг градиентов из shadow tree `<use>` (иконка рендерилась белой на фоне страницы) → заменён на `position:absolute;width:0;height:0;overflow:hidden`. Градиент MAX вынесен в корневой `<defs>` спрайта. |
