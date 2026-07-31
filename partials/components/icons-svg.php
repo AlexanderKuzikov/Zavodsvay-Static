@@ -1,11 +1,10 @@
 <!-- SVG Sprite с иконками -->
 <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;">
     <defs>
-        <linearGradient id="grad-max" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#00BFFF"/>
-            <stop offset="0.5" stop-color="#471AFF"/>
-            <stop offset="1" stop-color="#9500FF"/>
-        </linearGradient>
+        <linearGradient id="maxgrad-a"><stop offset="0" stop-color="#4cf"/><stop offset=".662" stop-color="#53e"/><stop offset="1" stop-color="#93d"/></linearGradient>
+        <linearGradient id="maxgrad-b"><stop offset="0" stop-color="#00f"/><stop offset="1" stop-opacity="0"/></linearGradient>
+        <linearGradient id="maxgrad-c" x1="117.847" x2="1000" y1="760.536" y2="500" gradientUnits="userSpaceOnUse" href="#maxgrad-a"/>
+        <radialGradient id="maxgrad-d" cx="-87.392" cy="1166.116" r="500" fx="-87.392" fy="1166.116" gradientTransform="rotate(51.356 1551.478 559.3)scale(2.42703433 1)" gradientUnits="userSpaceOnUse" href="#maxgrad-b"/>
     </defs>
     <symbol id="icon-phone" aria-label="Phone" role="img" viewBox="0 0 512 512">
                 <rect width="512" height="512" rx="15%" fill="#999999"/>
@@ -21,8 +20,9 @@
                 <rect width="512" height="512" rx="15%" fill="#5281b8"/>
                 <path fill="#ffffff" d="M274 363c5-1 14-3 14-15 0 0-1-30 13-34s32 29 51 42c14 9 25 8 25 8l51-1s26-2 14-23c-1-2-9-15-39-42-31-30-26-25 11-76 23-31 33-50 30-57-4-7-20-6-20-6h-57c-6 0-9 1-12 6 0 0-9 25-21 45-25 43-35 45-40 42-9-5-7-24-7-37 0-45 7-61-13-65-13-2-59-4-73 3-7 4-11 11-8 12 3 0 12 1 17 7 8 13 9 75-2 81-15 11-53-62-62-86-2-6-5-7-12-9H79c-6 0-15 1-11 13 27 56 83 193 184 192z"/>
               </symbol>
-              <symbol id="icon-max" aria-label="MAX" role="img" viewBox="0 0 512 512">
-                <rect width="512" height="512" rx="15%" style="fill: url(#grad-max)"/>
-                <path transform="scale(5.12)" style="fill: #ffffff" d="M50.7571 0.261719C78.2929 0.261719 99.8857 22.5974 99.8857 50.1474C99.8857 77.6974 77.6071 99.4903 51.0214 99.4903C41.5857 99.4903 37.0143 98.1617 29.65 92.9474C29.1429 92.5903 28.45 92.6831 28.0214 93.1403C22.3571 99.1831 7.85 103.426 7.18571 95.176C7.18571 80.7903 0 71.4474 0 49.876C0 21.5546 23.2214 0.261719 50.7571 0.261719ZM51.5286 24.8117C38.4643 24.126 28.2643 33.1974 26.0143 47.3831C24.15 59.1332 27.45 73.4546 30.2786 74.176C31.4786 74.4832 34.3571 72.276 36.4571 70.2974C36.85 69.926 37.45 69.8617 37.9071 70.1474C41.1786 72.1474 44.8786 73.6474 48.9571 73.8617C62.3714 74.5617 74.2571 64.0617 74.9643 50.6474C75.6643 37.2331 64.9429 25.5046 51.5286 24.8046V24.8117Z"/>
+              <symbol id="icon-max" aria-label="MAX" role="img" viewBox="0 0 1000 1000">
+                <rect width="1000" height="1000" ry="249.681" style="fill: url(#maxgrad-c)"/>
+                <rect width="1000" height="1000" ry="249.681" style="fill: url(#maxgrad-d)"/>
+                <path style="fill: #ffffff" fill-rule="evenodd" d="M508.211 878.328c-75.007 0-109.864-10.95-170.453-54.75-38.325 49.275-159.686 87.783-164.979 21.9 0-49.456-10.95-91.248-23.36-136.873-14.782-56.21-31.572-118.807-31.572-209.508 0-216.626 177.754-379.597 388.357-379.597 210.785 0 375.947 171.001 375.947 381.604.707 207.346-166.595 376.118-373.94 377.224m3.103-571.585c-102.564-5.292-182.499 65.7-200.201 177.024-14.6 92.162 11.315 204.398 33.397 210.238 10.585 2.555 37.23-18.98 53.837-35.587a189.8 189.8 0 0 0 92.71 33.032c106.273 5.112 197.08-75.794 204.215-181.95 4.154-106.382-77.67-196.486-183.958-202.574Z"/>
               </symbol>
 </svg>
