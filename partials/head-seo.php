@@ -24,6 +24,7 @@ $_postal        = '614000';
 $_lat           = '58.014746';
 $_lng           = '56.228500';
 $_vk            = 'https://vk.com/club236711949';
+$_max           = 'https://max.ru/id5902229415_bot';
 $_founded       = '2012';
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -92,7 +93,7 @@ if (strpos($og_image, 'http') !== 0) {
                 "telephone": "<?= $_phone ?>",
                 "email": "<?= $_email ?>",
                 "foundingDate": "<?= $_founded ?>",
-                "sameAs": ["<?= $_vk ?>"]
+                "sameAs": ["<?= $_vk ?>", "<?= $_max ?>"]
             },
             {
                 "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],

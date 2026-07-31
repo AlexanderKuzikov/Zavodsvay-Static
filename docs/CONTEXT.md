@@ -42,6 +42,8 @@ Email:           info@zavodsvay.ru
 
 Соцсети:
   VK:            https://vk.com/club236711949
+  Telegram:      https://t.me/GefestPermBot (бот)
+  MAX:           https://max.ru/id5902229415_bot (бот)
 
 На рынке с:      2012 года
 Гарантия:        до 50 лет
@@ -513,3 +515,4 @@ require __DIR__ . '/../_template.php';
 | 2026-05-21 | **SEO статей: даты исправлены.** 29 `pages/articles/*/index.php` — реалистичные `published/modified` по тематике, коммит `14930123` |
 | 2026-05-21 | **`data/objects.json` — идея отвергнута на стадии обсуждения.** Единственный SSOT объектов — `data/map.json`; SEO генерируется из него программно в `_template.php` |
 | 2026-05-22 | **Пути изображений объектов унифицированы.** `pages/map/img/` → `assets/img/objects/{id}/` во всех точках: `_template.php`, `content.php` (PHP + JS). Старый путь не используется. |
+| 2026-07-31 | **Каналы связи обновлены.** Telegram: `t.me/zavodsvay` → `t.me/GefestPermBot` (бот); добавлен мессенджер MAX (`max.ru/id5902229415_bot`). SSOT — `data/components/contacts.json`; иконка MAX (градиент брендбука + белый знак) добавлена в `icons-svg.php` как `icon-max`; MAX добавлен в `sameAs` Schema.org (head-seo.php). |

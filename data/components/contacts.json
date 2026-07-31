@@ -5,6 +5,7 @@
   },
   "email": "info@zavodsvay.ru",
   "address": "г. Пермь, ул. Монастырская, 14, офис 502",
-  "telegram": { "url": "https://t.me/zavodsvay" },
+  "telegram": { "url": "https://t.me/GefestPermBot" },
+  "max": { "url": "https://max.ru/id5902229415_bot" },
   "vk": { "url": "https://vk.com/club236711949" }
 }
