@@ -8281,19 +8281,5 @@
             "529_2.webp"
         ],
         "url": "/objects/529/"
-    },
-    {
-        "id": 530,
-        "coords": [
-            58.0105,
-            56.2502
-        ],
-        "category": "house",
-        "title": "Жилой дом",
-        "techDescription": "Ø89, 6 свай",
-        "images": [
-            "530_1.webp"
-        ],
-        "url": "/objects/530/"
     }
 ]
