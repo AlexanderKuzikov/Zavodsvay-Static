@@ -29,6 +29,7 @@ if (!isset($extra_css))        $extra_css        = '';
 </head>
 <body>
 
+<?php include __DIR__ . '/../partials/metrika.php'; ?>
 <?php include __DIR__ . '/../partials/components/icons-svg.php'; ?>
 <?php include __DIR__ . '/../partials/header.php'; ?>
 
