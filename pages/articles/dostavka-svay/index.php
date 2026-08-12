@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Доставка свай — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Доставка винтовых свай по Перми и краю';
+$meta_description = isset($meta_description) ? $meta_description : 'Доставка винтовых свай: подготовка участка к разгрузке, вместимость машины, хранение на объекте. Логистика завода Гефест по Пермскому краю.';
 $canonical = "https://zavodsvay.ru/articles/dostavka-svay/";
 $og_type = 'article';
 $schema_type = 'Article';

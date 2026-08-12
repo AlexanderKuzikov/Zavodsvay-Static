@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Завинчивание свай зимой — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Монтаж винтовых свай зимой: можно ли ставить';
+$meta_description = isset($meta_description) ? $meta_description : 'Можно ли ставить винтовые сваи зимой: монтаж в мёрзлый грунт, плюсы зимнего строительства, защита от морозного пучения. Опыт Перми.';
 $canonical = "https://zavodsvay.ru/articles/zima/";
 $og_type = 'article';
 $schema_type = 'Article';

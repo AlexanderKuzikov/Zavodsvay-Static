@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Сваи для бревенчатого дома — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Фундамент для дома из бревна на винтовых сваях';
+$meta_description = isset($meta_description) ? $meta_description : 'Винтовые сваи под дом из бревна: расчёт нагрузки, шаг свай, обвязка и защита от пучения. Разбор решений для срубов в Пермском крае.';
 $canonical = "https://zavodsvay.ru/articles/brevno/";
 $og_type = 'article';
 $schema_type = 'Article';

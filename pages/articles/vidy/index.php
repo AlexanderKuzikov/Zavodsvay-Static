@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Виды винтовых свай — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Виды винтовых свай: диаметр, длина и размеры';
+$meta_description = isset($meta_description) ? $meta_description : 'Какие бывают винтовые сваи: диаметр, длина, толщина стенки и лопасти. Как выбрать правильную сваю под дом, баню, каркасник или забор.';
 $canonical = "https://zavodsvay.ru/articles/vidy/";
 $og_type = 'article';
 $schema_type = 'Article';

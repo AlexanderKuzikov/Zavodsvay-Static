@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Ошибки при завинчивании свай — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Типичные ошибки монтажа винтовых свай и как их избежать';
+$meta_description = isset($meta_description) ? $meta_description : 'Ошибки при устройстве фундамента на винтовых сваях: неверный шаг, недостаточная глубина, слабая обвязка. Разбор и способы предотвратить.';
 $canonical = "https://zavodsvay.ru/articles/oshibki/";
 $og_type = 'article';
 $schema_type = 'Article';

@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Сваи для бани — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Фундамент для бани на винтовых сваях: выбор и монтаж';
+$meta_description = isset($meta_description) ? $meta_description : 'Винтовые сваи для бани: диаметр и длина под сруб 3х4 и 6х6, шаг установки, обвязка и полы. Советы по монтажу в Перми.';
 $canonical = "https://zavodsvay.ru/articles/bania/";
 $og_type = 'article';
 $schema_type = 'Article';

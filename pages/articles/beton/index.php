@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Сваи и бетон — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Бетонирование винтовых свай: зачем и как';
+$meta_description = isset($meta_description) ? $meta_description : 'Нужно ли бетонировать винтовые сваи: когда бетон внутри ствола обязателен, какая марка подходит, технология заполнения и ошибки.';
 $canonical = "https://zavodsvay.ru/articles/beton/";
 $og_type = 'article';
 $schema_type = 'Article';

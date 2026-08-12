@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Испытания свай — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Испытания винтовых свай нагрузкой: как проводят';
+$meta_description = isset($meta_description) ? $meta_description : 'Испытание винтовых свай: зачем проверять несущую способность, статическая и динамическая нагрузка, нормы и оформление результатов.';
 $canonical = "https://zavodsvay.ru/articles/ispytaniy/";
 $og_type = 'article';
 $schema_type = 'Article';

@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'История винтовых свай — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'История винтовых свай: от маяков до фундаментов';
+$meta_description = isset($meta_description) ? $meta_description : 'История винтовых свай: изобретение в XIX веке, первые маяки и мосты, приход технологии в Россию. Почему сваи прижились в частном строительстве.';
 $canonical = "https://zavodsvay.ru/articles/history/";
 $og_type = 'article';
 $schema_type = 'Article';

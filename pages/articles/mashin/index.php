@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Машины для завинчивания свай — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Механизированный монтаж винтовых свай техникой';
+$meta_description = isset($meta_description) ? $meta_description : 'Монтаж винтовых свай техникой: ямобур, сваевёрт или мини-экскаватор. Сроки, ограничения на участке, сравнение с ручным монтажом.';
 $canonical = "https://zavodsvay.ru/articles/mashin/";
 $og_type = 'article';
 $schema_type = 'Article';

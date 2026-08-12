@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Технология винтовых свай — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Монтаж винтовых свай своими руками: технология';
+$meta_description = isset($meta_description) ? $meta_description : 'Установка винтовых свай своими руками: разметка свайного поля, вкручивание сваекрутом, подрезка, бетонирование. Пошаговая инструкция, подъём дома на сваи.';
 $canonical = "https://zavodsvay.ru/articles/tehnologiy/";
 $og_type = 'article';
 $schema_type = 'Article';

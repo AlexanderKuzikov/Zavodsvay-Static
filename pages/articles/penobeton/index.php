@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Сваи для дома из пенобетона — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Фундамент для дома из пеноблоков на винтовых сваях';
+$meta_description = isset($meta_description) ? $meta_description : 'Винтовые сваи под дом из пеноблока: расчёт нагрузки, шаг свай, ростверк и защита стен от трещин. Что учесть перед строительством.';
 $canonical = "https://zavodsvay.ru/articles/penobeton/";
 $og_type = 'article';
 $schema_type = 'Article';

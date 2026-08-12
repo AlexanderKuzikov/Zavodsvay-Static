@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Аренда ямобура — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Аренда ямобура в Перми для винтовых свай';
+$meta_description = isset($meta_description) ? $meta_description : 'Аренда ямобура завода Гефест для монтажа винтовых свай: когда нужна техника, подача на объект, стеснённые условия. Пермь и край.';
 $canonical = "https://zavodsvay.ru/articles/arenda-yamobura/";
 $og_type = 'article';
 $schema_type = 'Article';

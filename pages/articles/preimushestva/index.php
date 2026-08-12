@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Преимущества винтовых свай — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Преимущества винтовых свай: плюсы и минусы';
+$meta_description = isset($meta_description) ? $meta_description : 'Плюсы и минусы винтовых свай: срок службы, монтаж зимой, работа на склоне и в торфе. Разбор для дома, бани и забора, сравнение с лентой.';
 $canonical = "https://zavodsvay.ru/articles/preimushestva/";
 $og_type = 'article';
 $schema_type = 'Article';

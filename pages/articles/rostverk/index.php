@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Ростверк на сваях — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Обвязка винтовых свай: оголовки и ростверк';
+$meta_description = isset($meta_description) ? $meta_description : 'Обвязка свайно-винтового фундамента: оголовок, брус, швеллер или профтруба. Как крепить обвязку, защитить узлы и вывести уровень в ноль.';
 $canonical = "https://zavodsvay.ru/articles/rostverk/";
 $og_type = 'article';
 $schema_type = 'Article';

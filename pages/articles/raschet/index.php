@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Расчёт свайного фундамента — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Как рассчитать количество винтовых свай на фундамент';
+$meta_description = isset($meta_description) ? $meta_description : 'Расчёт винтовых свай: сколько нужно под дом, баню или забор, свайное поле, шаг и нагрузка. Примеры расчёта для строений разных размеров.';
 $canonical = "https://zavodsvay.ru/articles/raschet/";
 $og_type = 'article';
 $schema_type = 'Article';

@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Сваи для каркасного дома — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Фундамент для каркасного дома на винтовых сваях';
+$meta_description = isset($meta_description) ? $meta_description : 'Винтовые сваи для каркасного дома: какой диаметр выбрать, шаг установки, обвязка брусом и крепление нижней рамы каркаса. Опыт из Перми.';
 $canonical = "https://zavodsvay.ru/articles/karkasny/";
 $og_type = 'article';
 $schema_type = 'Article';

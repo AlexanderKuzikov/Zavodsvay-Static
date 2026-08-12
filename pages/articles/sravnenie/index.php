@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Сравнение типов фундаментов — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Лучшие винтовые сваи: сравнение ВСГ-1 89 и 108';
+$meta_description = isset($meta_description) ? $meta_description : 'Что лучше: винтовая свая ВСГ-1 89/300 или 108/300. Несущая способность, толщина стенки, область применения и для каких строений подходит.';
 $canonical = "https://zavodsvay.ru/articles/sravnenie/";
 $og_type = 'article';
 $schema_type = 'Article';

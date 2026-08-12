@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Отзывы о сваях Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Отзывы о винтовых сваях: что пишут владельцы';
+$meta_description = isset($meta_description) ? $meta_description : 'Отзывы владельцев о винтовых сваях Гефест: плюсы и минусы для дома, бани и забора. На что жалуются и что хвалят спустя годы.';
 $canonical = "https://zavodsvay.ru/articles/otzyvy/";
 $og_type = 'article';
 $schema_type = 'Article';

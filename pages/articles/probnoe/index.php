@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Пробное завинчивание — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Пробное вкручивание винтовых свай: зачем нужно';
+$meta_description = isset($meta_description) ? $meta_description : 'Пробное вкручивание свай: как найти плотный грунт и подобрать длину до покупки фундамента. Услуга завода Гефест в Перми и крае.';
 $canonical = "https://zavodsvay.ru/articles/probnoe/";
 $og_type = 'article';
 $schema_type = 'Article';

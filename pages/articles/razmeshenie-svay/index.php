@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Размещение свай — Гефест';
-$meta_description = isset($meta_description) ? $meta_description : '';
+$title = isset($title) ? $title : 'Расстояние между винтовыми сваями: шаг и схема';
+$meta_description = isset($meta_description) ? $meta_description : 'Какое расстояние между винтовыми сваями выбрать: максимальный шаг, раскладка под стены, углы и лаги пола. Схемы свайного поля для дома и бани.';
 $canonical = "https://zavodsvay.ru/articles/razmeshenie-svay/";
 $og_type = 'article';
 $schema_type = 'Article';
