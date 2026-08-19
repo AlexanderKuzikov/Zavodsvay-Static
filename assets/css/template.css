@@ -1081,3 +1081,196 @@ footer ul li a:hover {
         gap: 8px;
     }
 }
+
+/* === CALLBACK (кнопка + модалка) === */
+/* Стиль — как .hd-btn--primary на главной (#f97316 / #e06210) */
+/* Ширина = 4 иконки мессенджеров (40px) + 3 зазора (10px) = 190px */
+.callback-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 190px;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 10px auto 20px;
+    padding: 6px 12px;
+    background: #f97316;
+    color: #fff !important;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.95em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.18s, box-shadow 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.callback-btn:hover {
+    background: #e06210;
+    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
+    transform: translateY(-2px);
+}
+
+.callback-btn:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+.callback-btn__icon {
+    width: 40px;
+    height: 40px;
+    display: block;
+    flex-shrink: 0;
+}
+
+.callback-btn__text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.callback-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.callback-modal[hidden] {
+    display: none;
+}
+
+.callback-modal__overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(10, 35, 66, 0.55);
+}
+
+.callback-modal__dialog {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+    color: #0a2342;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    padding: 28px 24px 24px;
+    box-sizing: border-box;
+}
+
+.callback-modal__close {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.8em;
+    line-height: 1;
+    color: #0a2342;
+    padding: 4px;
+}
+
+.callback-modal__close:hover {
+    color: #f7b267;
+}
+
+.callback-modal__title {
+    margin: 0 0 8px;
+    font-size: 1.4em;
+}
+
+.callback-modal__desc {
+    margin: 0 0 18px;
+    font-size: 0.95em;
+    color: #555;
+}
+
+.callback-modal__label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9em;
+    font-weight: 700;
+}
+
+.callback-modal__input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    font-size: 1.05em;
+    border: 2px solid #d3d3d3;
+    border-radius: 4px;
+    color: #0a2342;
+}
+
+.callback-modal__input:focus {
+    outline: none;
+    border-color: #f7b267;
+}
+
+.callback-modal__error {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.9em;
+    color: #dc2626;
+}
+
+.callback-modal__error[hidden],
+.callback-modal__status[hidden] {
+    display: none;
+}
+
+.callback-modal__submit {
+    width: 100%;
+    margin-top: 16px;
+    padding: 14px 20px;
+    background-color: #f7b267;
+    color: #0a2342;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.callback-modal__submit:hover {
+    background-color: #0a2342;
+    color: #fff;
+}
+
+.callback-modal__submit:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.callback-modal__status {
+    display: block;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background-color: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    border-radius: 4px;
+    font-size: 0.95em;
+}
+
+.callback-hp {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.callback-modal-open {
+    overflow: hidden;
+}

@@ -39,6 +39,7 @@ if (!isset($content))          $content          = '';
 
 <?php include __DIR__ . '/../partials/footer.php'; ?>
 <?php include __DIR__ . '/../partials/back-to-top.php'; ?>
+<?php include __DIR__ . '/../partials/callback-modal.php'; ?>
 
 <script src="/assets/js/template.js"></script>
 </body>

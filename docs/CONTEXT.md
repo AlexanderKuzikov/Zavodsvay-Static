@@ -80,7 +80,7 @@ Email:           info@zavodsvay.ru
 
 ## Текущее состояние проекта
 
-**Дата последнего обновления:** 2026-08-12
+**Дата последнего обновления:** 2026-08-19
 
 ### Что реализовано
 - Файловый PHP-роутер, layouts (main, home, wide), partials
@@ -108,6 +108,7 @@ Email:           info@zavodsvay.ru
 - **Главная страница** — согласована с заказчиком и **выполнена** (2026-05-20)
 - **Пути изображений объектов унифицированы** — `assets/img/objects/{id}/` везде: `_template.php`, `pages/map/content.php` (PHP + JS) (2026-05-22)
 - **Апгрейд статей** — новые меты 29 статей (title ≤60 + description ≤160), фикс дубля title на /articles/, 8 новых статей по неохваченным запросам (ворота, гараж, пристройка, веранда, беседка, навес, теплица, терраса) с FAQ и фото объектов (2026-08-12)
+- **Обратный звонок** — широкая кнопка «Обратный звонок» в сайдбаре под иконками мессенджеров + модалка с одним полем телефона; POST `/callback/` шлёт уведомление на stas@zavodsvay.ru через `mail()`; honeypot + rate-limit (120 с/сессия + 5/сутки по IP) (2026-08-19)
 
 ### Ближайшие задачи
 
@@ -560,3 +561,4 @@ require __DIR__ . '/../_template.php';
 | 2026-08-05 | **Удалён мусорный объект 530.** «Жилой дом» без локации, coords = центр Перми рядом с офисом, techDescription вне формата, битая ссылка на изображение. Добавлен одним коммитом `0ae9ad5` (22.05, «.»). Удалено: запись из map.json, pages/objects/530/index.php, блок из sitemap.xml. Проверено: 529 объектов = 529 страниц, sitemap валиден, упоминаний 530 в коде нет |
 | 2026-08-05 | **SEO-данные вынесены в отдельный проект** `SEO-Zavodsvay` (github.com/AlexanderKuzikov/SEO-Zavodsvay): Wordstat-выгрузки, семантическое ядро (SSOT — `data/core/core.csv`), аудиты, скрипты (normalize_wordstat.py, gen_serpwatcher.py). Здесь осталось зеркало `docs/SEO-keywords.csv`. Сайт привязан к Яндекс.Вебмастер (файл подтверждения `yandex_*.html` в корне) |
 | 2026-08-12 | **Апгрейд статей.** Новые меты 29 статей + фикс дубля title `/articles/` + 8 новых статей (vorota, garazh, pristroyka, veranda, besedka, naves, teplitsa, terrasa). FAQ в статьях — `.catalog-faq` через `$extra_css = catalog.css` (паттерн montage). Фото в статьях — напрямую `assets/img/objects/{id}/` через `<figure class="content-image-wrapper">`, без media.json |
+| 2026-08-19 | **Обратный звонок реализован.** Кнопка — широкая, в сайдбаре под иконками мессенджеров (не в шапке — был отвергнут вариант с шапкой). Иконка — `icon-phone-callback` (новая в спрайте, трубка без серой подложки, `fill="currentColor"`). Модалка (`partials/callback-modal.php`, все 3 layouts) + POST `/callback/` (`pages/callback/index.php`): валидация телефона 10–15 цифр, honeypot (`company`), rate-limit сессия 120 с + файловый лог IP 5/сутки (`data/leads-callback.log`, в .gitignore через `*.log`), `mail()` → stas@zavodsvay.ru, From `webmaster@zavodsvay.ru` (совпадение домена), в письме телефон/страница/время/IP. Успех — цель Метрики `callback_submit`. Плюсы/минусы: `mail()` надо проверить на проде — если письма не приходят, fallback на SMTP. |
