@@ -43,6 +43,11 @@ const EXCLUDE = [
   'nginx.conf',
   'var_domain.record.csv',
   'old',
+  'qwen38-articles-rewrite.md',
+  'qwen38-articles-upgrade.md',
+  'qwen38-seo-audit.md',
+  'qwen38-articles-rewrite-result.md',
+  'qwen38-seo-audit-result.md',
 ];
 
 const isDryRun = process.argv.includes('--dry-run');
@@ -50,6 +55,7 @@ const isFull = process.argv.includes('--full');
 
 function isExcluded(filePath) {
   const top = filePath.split('/')[0];
+  if (top.startsWith('qwen')) return true;
   return EXCLUDE.includes(top) || EXCLUDE.includes(filePath);
 }
 
