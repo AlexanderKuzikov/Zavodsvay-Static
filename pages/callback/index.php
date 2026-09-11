@@ -25,16 +25,27 @@ function respond(int $code, bool $ok, string $error = ''): void
 }
 
 /**
- * Отправка письма через SMTP/SSL без зависимостей.
- * true — только если сервер принял письмо (250 после точки).
+ * Отправка письма через SMTP без зависимостей: сначала implicit SSL (465),
+ * затем STARTTLS (587). true — только если сервер принял письмо (250 после точки).
  */
-function smtp_send(string $host, int $port, string $user, string $pass, string $envelopeFrom, string $to, string $subject, string $body, string $headers): bool
+function smtp_send(string $host, string $user, string $pass, string $envelopeFrom, string $to, string $subject, string $body, string $headers): bool
 {
+    foreach ([['ssl', 465], ['tcp', 587]] as [$scheme, $port]) {
+        if (smtp_attempt($scheme, $host, $port, $user, $pass, $envelopeFrom, $to, $subject, $body, $headers)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function smtp_attempt(string $scheme, string $host, int $port, string $user, string $pass, string $envelopeFrom, string $to, string $subject, string $body, string $headers): bool
+{
+    $tag = "{$scheme}:{$port}";
     $err = error_reporting(0);
-    $fp = @stream_socket_client("ssl://{$host}:{$port}", $errno, $errstr, 10);
+    $fp = @stream_socket_client("{$scheme}://{$host}:{$port}", $errno, $errstr, 8);
     error_reporting($err);
     if (!$fp) {
-        error_log('callback smtp fail at connect');
+        error_log("callback smtp fail at {$tag}.connect errno={$errno} err={$errstr}");
         return false;
     }
     stream_set_timeout($fp, 10);
@@ -57,8 +68,8 @@ function smtp_send(string $host, int $port, string $user, string $pass, string $
         return false;
     };
     $stage = 'greet';
-    $fail = static function () use ($fp, &$stage): bool {
-        error_log('callback smtp fail at ' . $stage);
+    $fail = static function () use ($fp, &$stage, $tag): bool {
+        error_log("callback smtp fail at {$tag}.{$stage}");
         fclose($fp);
         return false;
     };
@@ -69,6 +80,25 @@ function smtp_send(string $host, int $port, string $user, string $pass, string $
     fwrite($fp, "EHLO zavodsvay.ru\r\n");
     if (!$expect($read(), '250')) {
         return $fail();
+    }
+    if ($scheme === 'tcp') {
+        $stage = 'starttls';
+        fwrite($fp, "STARTTLS\r\n");
+        if (!$expect($read(), '220')) {
+            return $fail();
+        }
+        $stage = 'tlshandshake';
+        $cerr = error_reporting(0);
+        $cok = @stream_socket_enable_crypto($fp, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+        error_reporting($cerr);
+        if (!$cok) {
+            return $fail();
+        }
+        $stage = 'ehlo2';
+        fwrite($fp, "EHLO zavodsvay.ru\r\n");
+        if (!$expect($read(), '250')) {
+            return $fail();
+        }
     }
     $stage = 'auth';
     fwrite($fp, "AUTH LOGIN\r\n");
@@ -189,7 +219,7 @@ if (is_file($cfgFile)) {
 $sent = false;
 if (!empty($smtpCfg['user']) && isset($smtpCfg['pass'])) {
     // Конвертный отправитель = существующий ящик (sender verification на MX)
-    $sent = smtp_send('kompleks-s.ru', 465, (string) $smtpCfg['user'], (string) $smtpCfg['pass'], (string) $smtpCfg['user'], $to, $subject, $body, $headers);
+    $sent = smtp_send('kompleks-s.ru', (string) $smtpCfg['user'], (string) $smtpCfg['pass'], (string) $smtpCfg['user'], $to, $subject, $body, $headers);
 }
 if (!$sent) {
     $sent = @mail($to, $subject, $body, $headers);
