@@ -20,6 +20,6 @@ RewriteRule ^ index.php [L]
 </IfModule>
 
 # Защита файлов
-<FilesMatch "\.(json|md)$">
+<FilesMatch "\.(json|md|log)$">
   Require all denied
 </FilesMatch>

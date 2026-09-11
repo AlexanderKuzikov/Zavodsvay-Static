@@ -1,9 +1,12 @@
 <?php
 /**
  * pages/callback/index.php — POST /callback/ «Заказать звонок»
- * Валидация, rate-limit, уведомление через mail().
+ * Валидация, rate-limit, уведомление через SMTP (kompleks-s.ru:465/SSL),
+ * fallback — mail(). Ответ всегда JSON.
  * Получатель — ТЕСТ: site@zavodsvay.ru (прод: stas@zavodsvay.ru).
- * Ответ всегда JSON.
+ * SMTP-логин/пароль — ВНЕ git и ВНЕ webroot:
+ *   <home>/callback-smtp-config.php  (залит по FTP вручную)
+ *   возвращает ['user' => ..., 'pass' => ...]
  */
 
 header('Content-Type: application/json; charset=utf-8');
@@ -19,6 +22,91 @@ function respond(int $code, bool $ok, string $error = ''): void
     http_response_code($code);
     echo json_encode(['ok' => $ok, 'error' => $error]);
     exit;
+}
+
+/**
+ * Отправка письма через SMTP/SSL без зависимостей.
+ * true — только если сервер принял письмо (250 после точки).
+ */
+function smtp_send(string $host, int $port, string $user, string $pass, string $envelopeFrom, string $to, string $subject, string $body, string $headers): bool
+{
+    $err = error_reporting(0);
+    $fp = @stream_socket_client("ssl://{$host}:{$port}", $errno, $errstr, 10);
+    error_reporting($err);
+    if (!$fp) {
+        error_log('callback smtp fail at connect');
+        return false;
+    }
+    stream_set_timeout($fp, 10);
+    $read = static function () use ($fp): string {
+        $out = '';
+        while (($line = fgets($fp, 512)) !== false) {
+            $out .= $line;
+            if (preg_match('/^\d{3} /', $line)) {
+                break;
+            }
+        }
+        return $out;
+    };
+    $expect = static function (string $resp, string ...$codes): bool {
+        foreach ($codes as $c) {
+            if (str_starts_with($resp, $c)) {
+                return true;
+            }
+        }
+        return false;
+    };
+    $stage = 'greet';
+    $fail = static function () use ($fp, &$stage): bool {
+        error_log('callback smtp fail at ' . $stage);
+        fclose($fp);
+        return false;
+    };
+    if (!$expect($read(), '220')) {
+        return $fail();
+    }
+    $stage = 'ehlo';
+    fwrite($fp, "EHLO zavodsvay.ru\r\n");
+    if (!$expect($read(), '250')) {
+        return $fail();
+    }
+    $stage = 'auth';
+    fwrite($fp, "AUTH LOGIN\r\n");
+    if (!$expect($read(), '334')) {
+        return $fail();
+    }
+    fwrite($fp, base64_encode($user) . "\r\n");
+    if (!$expect($read(), '334')) {
+        return $fail();
+    }
+    fwrite($fp, base64_encode($pass) . "\r\n");
+    if (!$expect($read(), '235')) {
+        return $fail();
+    }
+    $stage = 'mailfrom';
+    fwrite($fp, "MAIL FROM:<{$envelopeFrom}>\r\n");
+    if (!$expect($read(), '250')) {
+        return $fail();
+    }
+    $stage = 'rcptto';
+    fwrite($fp, "RCPT TO:<{$to}>\r\n");
+    if (!$expect($read(), '250', '251')) {
+        return $fail();
+    }
+    $stage = 'data';
+    fwrite($fp, "DATA\r\n");
+    if (!$expect($read(), '354')) {
+        return $fail();
+    }
+    $msg = "To: {$to}\r\nSubject: {$subject}\r\n{$headers}\r\n{$body}";
+    $msg = str_replace("\r\n", "\n", $msg);
+    $msg = str_replace("\n", "\r\n", $msg);
+    $msg = (string) preg_replace('/^\./m', '..', $msg);
+    fwrite($fp, $msg . "\r\n.\r\n");
+    $ok = $expect($read(), '250');
+    fwrite($fp, "QUIT\r\n");
+    fclose($fp);
+    return $ok;
 }
 
 $input = json_decode(file_get_contents('php://input'), true);
@@ -42,42 +130,70 @@ $digits = preg_replace('/\D/', '', $phone);
 if ($digits === '' || strlen($digits) < 10 || strlen($digits) > 15) {
     respond(422, false, 'invalid_phone');
 }
+// Санитизация для письма: только безопасные символы (защита от инъекции заголовков)
+$phone = substr((string) preg_replace('/[^\d+()\-\s]/', '', $phone), 0, 30);
 
-// Анти-спам по числу отправок с IP за сутки (файловый лог, ~1 КБ)
+// Анти-спам: не более 5 заявок с одного IP за сутки (файловый лог)
 $logFile = __DIR__ . '/../../data/leads-callback.log';
 $ip      = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
-$logLine = date('c') . '|' . $ip . '|' . preg_replace('/[^0-9+()\-\s]/', '', $phone) . '|' . substr(preg_replace('/[^\x20-\x7E]/', '', (string) ($_SERVER['HTTP_REFERER'] ?? '')), 0, 500) . "\n";
-if (is_file($logFile) && filemtime($logFile) > time() - 86400) {
-    $todayHits = 0;
-    foreach (file($logFile, FILE_IGNORE_NEW_LINES) as $line) {
-        if (str_ends_with($line, '|' . $ip)) {
-            $todayHits++;
+$ref     = substr((string) preg_replace('/[^\x20-\x7E]/', '', (string) ($_SERVER['HTTP_REFERER'] ?? '')), 0, 500);
+$logLine = date('c') . '|' . $ip . '|' . $phone . '|' . $ref . "\n";
+$dayAgo  = time() - 86400;
+if (is_file($logFile)) {
+    $hits = 0;
+    foreach (file($logFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+        $f = explode('|', $line, 4);
+        if (count($f) < 3) {
+            continue;
+        }
+        if (($f[1] ?? '') === $ip && (strtotime((string) ($f[0] ?? '')) ?: 0) > $dayAgo) {
+            $hits++;
+            if ($hits >= 5) {
+                respond(429, false, 'rate_limited');
+            }
         }
     }
-    if ($todayHits >= 5) {
-        respond(429, false, 'rate_limited');
+    // Ротация: не даём логу расти бесконечно
+    if (filesize($logFile) > 102400) {
+        $lines = file($logFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        @file_put_contents($logFile, implode("\n", array_slice($lines, -500)) . "\n", LOCK_EX);
     }
 }
 @file_put_contents($logFile, $logLine, FILE_APPEND | LOCK_EX);
 
 $_SESSION['callback_last'] = time();
 
-$subject = 'Заказ звонка: ' . $phone;
+// ТЕСТ: заявки шлём на служебный ящик; после проверки вернуть stas@zavodsvay.ru
+$to = 'site@zavodsvay.ru';
+
+$subject = '=?UTF-8?B?' . base64_encode('Заказ звонка: ' . $phone) . '?=';
 $body  = "Поступила заявка на обратный звонок с сайта zavodsvay.ru\n\n";
 $body .= "Телефон:  {$phone}\n";
-$body .= "Страница: " . (preg_replace('/[^\x20-\x7E]/', '', (string) ($_SERVER['HTTP_REFERER'] ?? '')) ?: '-') . "\n";
-$body .= "Время:    " . date('d.m.Y H:i') . "\n";
+$body .= 'Страница: ' . ($ref ?: '-') . "\n";
+$body .= 'Время:    ' . date('d.m.Y H:i') . "\n";
 $body .= "IP:       {$ip}\n";
 
 $headers  = "From: webmaster@zavodsvay.ru\r\n";
 $headers .= "Reply-To: webmaster@zavodsvay.ru\r\n";
 $headers .= "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: text/plain; charset=utf-8\r\n";
+$headers .= "Content-Transfer-Encoding: 8bit\r\n";
 
-// ТЕСТ: заявки шлём на служебный ящик; после проверки вернуть stas@zavodsvay.ru
-$callbackTo = 'site@zavodsvay.ru';
+// SMTP-конфиг — вне webroot (см. шапку). Нет конфига — сразу к mail().
+$smtpCfg = [];
+$cfgFile = dirname(__DIR__, 4) . '/callback-smtp-config.php';
+if (is_file($cfgFile)) {
+    $smtpCfg = (require $cfgFile) ?: [];
+}
 
-$sent = @mail($callbackTo, $subject, $body, $headers);
+$sent = false;
+if (!empty($smtpCfg['user']) && isset($smtpCfg['pass'])) {
+    // Конвертный отправитель = существующий ящик (sender verification на MX)
+    $sent = smtp_send('kompleks-s.ru', 465, (string) $smtpCfg['user'], (string) $smtpCfg['pass'], (string) $smtpCfg['user'], $to, $subject, $body, $headers);
+}
+if (!$sent) {
+    $sent = @mail($to, $subject, $body, $headers);
+}
 if (!$sent) {
     respond(500, false, 'send_failed');
 }
