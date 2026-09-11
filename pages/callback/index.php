@@ -1,7 +1,8 @@
 <?php
 /**
  * pages/callback/index.php — POST /callback/ «Заказать звонок»
- * Валидация, rate-limit, уведомление на stas@zavodsvay.ru через mail().
+ * Валидация, rate-limit, уведомление через mail().
+ * Получатель — ТЕСТ: site@zavodsvay.ru (прод: stas@zavodsvay.ru).
  * Ответ всегда JSON.
  */
 
@@ -73,7 +74,10 @@ $headers .= "Reply-To: webmaster@zavodsvay.ru\r\n";
 $headers .= "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: text/plain; charset=utf-8\r\n";
 
-$sent = @mail('stas@zavodsvay.ru', $subject, $body, $headers);
+// ТЕСТ: заявки шлём на служебный ящик; после проверки вернуть stas@zavodsvay.ru
+$callbackTo = 'site@zavodsvay.ru';
+
+$sent = @mail($callbackTo, $subject, $body, $headers);
 if (!$sent) {
     respond(500, false, 'send_failed');
 }
