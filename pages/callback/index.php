@@ -163,13 +163,15 @@ if ($digits === '' || strlen($digits) < 10 || strlen($digits) > 15) {
 // Санитизация для письма: только безопасные символы (защита от инъекции заголовков)
 $phone = substr((string) preg_replace('/[^\d+()\-\s]/', '', $phone), 0, 30);
 
-// Анти-спам: не более 5 заявок с одного IP за сутки (файловый лог)
+// Анти-спам: лимит заявок с одного IP за сутки.
+// ВРЕМЕННО ВЫКЛЮЧЕН на период отладки доставки (0 = без лимита). Прод: 5.
+$IP_DAILY_LIMIT = 0;
 $logFile = __DIR__ . '/../../data/leads-callback.log';
 $ip      = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
 $ref     = substr((string) preg_replace('/[^\x20-\x7E]/', '', (string) ($_SERVER['HTTP_REFERER'] ?? '')), 0, 500);
 $logLine = date('c') . '|' . $ip . '|' . $phone . '|' . $ref . "\n";
 $dayAgo  = time() - 86400;
-if (is_file($logFile)) {
+if (is_file($logFile) && $IP_DAILY_LIMIT > 0) {
     $hits = 0;
     foreach (file($logFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
         $f = explode('|', $line, 4);
@@ -178,7 +180,7 @@ if (is_file($logFile)) {
         }
         if (($f[1] ?? '') === $ip && (strtotime((string) ($f[0] ?? '')) ?: 0) > $dayAgo) {
             $hits++;
-            if ($hits >= 5) {
+            if ($hits >= $IP_DAILY_LIMIT) {
                 respond(429, false, 'rate_limited');
             }
         }
