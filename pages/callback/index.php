@@ -3,7 +3,8 @@
  * pages/callback/index.php — POST /callback/ «Заказать звонок»
  * Валидация, rate-limit, уведомление через SMTP (см. конфиг),
  * fallback — mail(). Ответ всегда JSON.
- * Получатель заявок: stas@zavodsvay.ru.
+ * Получатель заявок: gefestzavod@mail.ru (ВРЕМЕННО — почта zavodsvay.ru лежит;
+ * вернуть stas@zavodsvay.ru, когда оживёт).
  * SMTP-конфиг — ВНЕ git и ВНЕ webroot:
  *   <home>/callback-smtp-config.php  (залит по FTP вручную)
  *   возвращает ['host' => ..., 'user' => ..., 'pass' => ...]
@@ -195,7 +196,9 @@ if (is_file($logFile) && $IP_DAILY_LIMIT > 0) {
 
 $_SESSION['callback_last'] = time();
 
-$to = 'stas@zavodsvay.ru';
+// ВРЕМЕННО: почта zavodsvay.ru не работает — шлём на ящик-отправитель;
+// вернуть stas@zavodsvay.ru, когда MX оживёт
+$to = 'gefestzavod@mail.ru';
 
 $subject = '=?UTF-8?B?' . base64_encode('Заказ звонка: ' . $phone) . '?=';
 $body  = "Поступила заявка на обратный звонок с сайта zavodsvay.ru\n\n";
