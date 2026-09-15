@@ -1,12 +1,12 @@
 <?php
 /**
  * pages/callback/index.php — POST /callback/ «Заказать звонок»
- * Валидация, rate-limit, уведомление через SMTP (kompleks-s.ru:465/SSL),
+ * Валидация, rate-limit, уведомление через SMTP (см. конфиг),
  * fallback — mail(). Ответ всегда JSON.
  * Получатель — ТЕСТ: site@zavodsvay.ru (прод: stas@zavodsvay.ru).
- * SMTP-логин/пароль — ВНЕ git и ВНЕ webroot:
+ * SMTP-конфиг — ВНЕ git и ВНЕ webroot:
  *   <home>/callback-smtp-config.php  (залит по FTP вручную)
- *   возвращает ['user' => ..., 'pass' => ...]
+ *   возвращает ['host' => ..., 'user' => ..., 'pass' => ...]
  */
 
 header('Content-Type: application/json; charset=utf-8');
@@ -205,9 +205,7 @@ $body .= 'Страница: ' . ($ref ?: '-') . "\n";
 $body .= 'Время:    ' . date('d.m.Y H:i') . "\n";
 $body .= "IP:       {$ip}\n";
 
-$headers  = "From: webmaster@zavodsvay.ru\r\n";
-$headers .= "Reply-To: webmaster@zavodsvay.ru\r\n";
-$headers .= "MIME-Version: 1.0\r\n";
+$headers  = "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: text/plain; charset=utf-8\r\n";
 $headers .= "Content-Transfer-Encoding: 8bit\r\n";
 
@@ -219,9 +217,14 @@ if (is_file($cfgFile)) {
 }
 
 $sent = false;
+$smtpFrom = '';
 if (!empty($smtpCfg['user']) && isset($smtpCfg['pass'])) {
-    // Конвертный отправитель = существующий ящик (sender verification на MX)
-    $sent = smtp_send('kompleks-s.ru', (string) $smtpCfg['user'], (string) $smtpCfg['pass'], (string) $smtpCfg['user'], $to, $subject, $body, $headers);
+    // Конвертный отправитель = ящик из конфига (совпадает с SMTP-логином)
+    $smtpHost = (string) ($smtpCfg['host'] ?? 'kompleks-s.ru');
+    $smtpFrom = (string) $smtpCfg['user'];
+    $fromName = '=?UTF-8?B?' . base64_encode('Заказ звонка zavodsvay.ru') . '?=';
+    $headers  = "From: {$fromName} <{$smtpFrom}>\r\n" . $headers;
+    $sent = smtp_send($smtpHost, $smtpFrom, (string) $smtpCfg['pass'], $smtpFrom, $to, $subject, $body, $headers);
 }
 if (!$sent) {
     $sent = @mail($to, $subject, $body, $headers);
