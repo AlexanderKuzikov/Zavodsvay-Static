@@ -3,8 +3,9 @@
  * pages/callback/index.php — POST /callback/ «Заказать звонок»
  * Валидация, rate-limit, уведомление через SMTP (см. конфиг),
  * fallback — mail(). Ответ всегда JSON.
- * Получатель заявок: gefestzavod@mail.ru (ВРЕМЕННО — почта zavodsvay.ru лежит;
- * вернуть stas@zavodsvay.ru, когда оживёт).
+ * Получатели заявок — дубль на оба ящика (страховка, наблюдаем):
+ * gefestzavod@mail.ru + stas@zavodsvay.ru. Когда MX zavodsvay.ru будет
+ * стабилен — оставить только stas@.
  * SMTP-конфиг — ВНЕ git и ВНЕ webroot:
  *   <home>/callback-smtp-config.php  (залит по FTP вручную)
  *   возвращает ['host' => ..., 'user' => ..., 'pass' => ...]
@@ -196,9 +197,9 @@ if (is_file($logFile) && $IP_DAILY_LIMIT > 0) {
 
 $_SESSION['callback_last'] = time();
 
-// ВРЕМЕННО: почта zavodsvay.ru не работает — шлём на ящик-отправитель;
-// вернуть stas@zavodsvay.ru, когда MX оживёт
-$to = 'gefestzavod@mail.ru';
+// Дубль на оба ящика, пока наблюдаем за MX zavodsvay.ru;
+// когда будет стабилен — оставить только stas@zavodsvay.ru
+$recipients = ['gefestzavod@mail.ru', 'stas@zavodsvay.ru'];
 
 $subject = '=?UTF-8?B?' . base64_encode('Заказ звонка: ' . $phone) . '?=';
 $body  = "Поступила заявка на обратный звонок с сайта zavodsvay.ru\n\n";
@@ -218,20 +219,25 @@ if (is_file($cfgFile)) {
     $smtpCfg = (require $cfgFile) ?: [];
 }
 
-$sent = false;
-$smtpFrom = '';
+$sentAny = false;
 if (!empty($smtpCfg['user']) && isset($smtpCfg['pass'])) {
     // Конвертный отправитель = ящик из конфига (совпадает с SMTP-логином)
     $smtpHost = (string) ($smtpCfg['host'] ?? 'kompleks-s.ru');
     $smtpFrom = (string) $smtpCfg['user'];
     $fromName = '=?UTF-8?B?' . base64_encode('Заказ звонка zavodsvay.ru') . '?=';
     $headers  = "From: {$fromName} <{$smtpFrom}>\r\n" . $headers;
-    $sent = smtp_send($smtpHost, $smtpFrom, (string) $smtpCfg['pass'], $smtpFrom, $to, $subject, $body, $headers);
+    foreach ($recipients as $to) {
+        if (smtp_send($smtpHost, $smtpFrom, (string) $smtpCfg['pass'], $smtpFrom, $to, $subject, $body, $headers)) {
+            $sentAny = true;
+        } else {
+            error_log("callback smtp fail recipient {$to}");
+        }
+    }
 }
-if (!$sent) {
-    $sent = @mail($to, $subject, $body, $headers);
+if (!$sentAny) {
+    $sentAny = @mail($recipients[0], $subject, $body, $headers);
 }
-if (!$sent) {
+if (!$sentAny) {
     respond(500, false, 'send_failed');
 }
 respond(200, true);
