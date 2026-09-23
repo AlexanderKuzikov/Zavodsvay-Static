@@ -14,6 +14,12 @@
  *     --images "530_1.webp,530_2.webp" \
  *     --pileCount 6
  *
+ *   Альтернатива --images:
+ *     --images-from <папка>  забрать .webp из папки пакета заявки,
+ *                            разложить в assets/img/objects/{id}/
+ *                            как {id}_1.webp, {id}_2.webp, … (порядок = сортировка имён)
+ *                            (--images и --images-from вместе — ошибка)
+ *
  *   Флаги:
  *     --dry-run   только вывод, без записи файлов
  *     --no-page   не создавать pages/objects/{id}/index.php
@@ -53,6 +59,9 @@ const title     = getArg('title');
 const desc      = getArg('desc') || '';
 const imagesRaw = getArg('images') || '';
 const pileCountRaw = getArg('pileCount');
+const imagesFromRaw = getArg('images-from');
+const hasImagesFlag = args.includes('--images');
+const hasImagesFromFlag = args.includes('--images-from');
 
 // === Валидация ===
 const errors = [];
@@ -85,6 +94,28 @@ if (pileCountRaw !== null) {
     }
 }
 
+let imagesFromMapping = [];
+if (hasImagesFlag && hasImagesFromFlag) {
+    errors.push('--images и --images-from нельзя передавать вместе (выбери один источник фото)');
+} else if (hasImagesFromFlag) {
+    if (!imagesFromRaw) {
+        errors.push('--images-from: укажи существующую папку с .webp (например --images-from "C:/tmp/pkg")');
+    } else if (!fs.existsSync(imagesFromRaw) || !fs.statSync(imagesFromRaw).isDirectory()) {
+        errors.push(`--images-from: папка не найдена "${imagesFromRaw}"`);
+    } else {
+        const webpFiles = fs.readdirSync(imagesFromRaw, { withFileTypes: true })
+            .filter(d => d.isFile())
+            .map(d => d.name)
+            .filter(n => n.toLowerCase().endsWith('.webp'))
+            .sort();
+        if (webpFiles.length === 0) {
+            errors.push(`--images-from: в папке "${imagesFromRaw}" нет .webp файлов`);
+        } else if (id && !isNaN(id) && id > 0) {
+            imagesFromMapping = webpFiles.map((src, i) => ({ src, target: `${id}_${i + 1}.webp` }));
+        }
+    }
+}
+
 if (errors.length) {
     console.error('\n❌ Ошибки валидации:');
     errors.forEach(e => console.error(`   • ${e}`));
@@ -107,7 +138,9 @@ if (mapData.some(o => o.id === id)) {
 }
 
 // === Формируем объект ===
-const images = imagesRaw ? imagesRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+const images = hasImagesFromFlag
+    ? imagesFromMapping.map(m => m.target)
+    : (imagesRaw ? imagesRaw.split(',').map(s => s.trim()).filter(Boolean) : []);
 
 const newObject = {
     id,
@@ -124,13 +157,15 @@ const newObject = {
 const imgObjectDir = path.join(IMG_DIR, String(id));
 const imgWarnings = [];
 
-if (!fs.existsSync(imgObjectDir)) {
-    imgWarnings.push(`⚠️  Папка изображений не найдена: assets/img/objects/${id}/`);
-} else if (images.length > 0) {
-    for (const img of images) {
-        const imgPath = path.join(imgObjectDir, img);
-        if (!fs.existsSync(imgPath)) {
-            imgWarnings.push(`⚠️  Файл не найден: assets/img/objects/${id}/${img}`);
+if (!hasImagesFromFlag) {
+    if (!fs.existsSync(imgObjectDir)) {
+        imgWarnings.push(`⚠️  Папка изображений не найдена: assets/img/objects/${id}/`);
+    } else if (images.length > 0) {
+        for (const img of images) {
+            const imgPath = path.join(imgObjectDir, img);
+            if (!fs.existsSync(imgPath)) {
+                imgWarnings.push(`⚠️  Файл не найден: assets/img/objects/${id}/${img}`);
+            }
         }
     }
 }
@@ -138,6 +173,11 @@ if (!fs.existsSync(imgObjectDir)) {
 // === Вывод preview ===
 console.log('\n📋 Новый объект:');
 console.log(JSON.stringify(newObject, null, 2));
+
+if (hasImagesFromFlag) {
+    console.log('\n🖼️  Изображения (--images-from):');
+    imagesFromMapping.forEach(m => console.log(`   ${m.src} → ${m.target}`));
+}
 
 if (imgWarnings.length) {
     console.log('');
@@ -149,7 +189,17 @@ if (DRY_RUN) {
     console.log('   Будет добавлено в map.json');
     if (!NO_PAGE)    console.log(`   Будет создан: pages/objects/${id}/index.php`);
     if (!NO_SITEMAP) console.log(`   Будет обновлён: sitemap.xml`);
+    if (hasImagesFromFlag) console.log(`   Будет скопировано файлов: ${imagesFromMapping.length} → assets/img/objects/${id}/`);
     process.exit(0);
+}
+
+// === 0. Копируем фото из пакета заявки ===
+if (hasImagesFromFlag) {
+    fs.mkdirSync(imgObjectDir, { recursive: true });
+    for (const m of imagesFromMapping) {
+        fs.copyFileSync(path.join(imagesFromRaw, m.src), path.join(imgObjectDir, m.target));
+    }
+    console.log(`\n✅ Изображения скопированы (${imagesFromMapping.length}) → assets/img/objects/${id}/`);
 }
 
 // === 1. Обновляем map.json ===
