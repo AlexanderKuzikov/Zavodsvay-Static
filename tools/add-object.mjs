@@ -11,12 +11,14 @@
  *     --category house \
  *     --title "Жилой дом, ул. Ленина 12, Пермь" \
  *     --desc "Ø89, 6 свай, 2.5м" \
- *     --images "530_1.webp,530_2.webp"
+ *     --images "530_1.webp,530_2.webp" \
+ *     --pileCount 6
  *
  *   Флаги:
  *     --dry-run   только вывод, без записи файлов
  *     --no-page   не создавать pages/objects/{id}/index.php
  *     --no-sitemap  не обновлять sitemap.xml
+ *     --pileCount целое ≥ 0, опциональный (по умолчанию null)
  */
 
 import fs from 'fs';
@@ -50,6 +52,7 @@ const category  = getArg('category');
 const title     = getArg('title');
 const desc      = getArg('desc') || '';
 const imagesRaw = getArg('images') || '';
+const pileCountRaw = getArg('pileCount');
 
 // === Валидация ===
 const errors = [];
@@ -71,6 +74,15 @@ if (coordsRaw) {
 
 if (category && !CATEGORIES.includes(category)) {
     errors.push(`--category: неизвестная категория "${category}". Допустимые: ${CATEGORIES.join(', ')}`);
+}
+
+let pileCount = null;
+if (pileCountRaw !== null) {
+    if (!/^\d+$/.test(pileCountRaw.trim())) {
+        errors.push('--pileCount: обязательное целое число ≥ 0 (например --pileCount 25)');
+    } else {
+        pileCount = parseInt(pileCountRaw.trim(), 10);
+    }
 }
 
 if (errors.length) {
@@ -101,6 +113,7 @@ const newObject = {
     id,
     coords,
     category,
+    pileCount,
     title,
     techDescription: desc,
     images,
