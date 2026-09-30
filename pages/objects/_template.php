@@ -25,8 +25,10 @@ foreach ($published as $idx => $o) {
 $prev_obj = ($current_idx !== null && $current_idx > 0) ? $published[$current_idx - 1] : null;
 $next_obj = ($current_idx !== null && $current_idx < count($published) - 1) ? $published[$current_idx + 1] : null;
 
-$title            = htmlspecialchars($obj['title']) . ' — Завод винтовых свай Гефест';
-$meta_description = 'Выполненный объект: ' . htmlspecialchars($obj['techDescription']) . '. Винтовые фундаменты от завода Гефест, г. Пермь.';
+// Экранирование — забота head-seo.php: там значения идут и в HTML-атрибуты, и в JSON-LD.
+// Если экранировать здесь, head-seo экранирует повторно и в выдачу уходит «&quot;».
+$title            = $obj['title'] . ' — Завод винтовых свай Гефест';
+$meta_description = 'Выполненный объект: ' . $obj['techDescription'] . '. Винтовые фундаменты от завода Гефест, г. Пермь.';
 $canonical        = 'https://zavodsvay.ru/objects/' . $object_id . '/';
 $og_image         = '/assets/img/objects/' . $object_id . '/' . $object_id . '_1.webp';
 $img_base         = '/assets/img/objects/' . $object_id . '/';
