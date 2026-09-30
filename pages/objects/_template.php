@@ -27,7 +27,9 @@ $next_obj = ($current_idx !== null && $current_idx < count($published) - 1) ? $p
 
 // Экранирование — забота head-seo.php: там значения идут и в HTML-атрибуты, и в JSON-LD.
 // Если экранировать здесь, head-seo экранирует повторно и в выдачу уходит «&quot;».
-$title            = $obj['title'] . ' — Завод винтовых свай Гефест';
+// Хвост с названием завода в title не нужен: он и так есть в og:site_name, а из-за него
+// заголовок выходил за 70 символов, и в сниппет обрезался он, а не адрес объекта.
+$title            = $obj['title'];
 $meta_description = 'Выполненный объект: ' . $obj['techDescription'] . '. Винтовые фундаменты от завода Гефест, г. Пермь.';
 $canonical        = 'https://zavodsvay.ru/objects/' . $object_id . '/';
 $og_image         = '/assets/img/objects/' . $object_id . '/' . $object_id . '_1.webp';

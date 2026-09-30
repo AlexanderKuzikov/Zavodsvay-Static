@@ -1,6 +1,6 @@
 <?php
-$title = isset($title) ? $title : 'Цена винтовых свай: от чего зависит стоимость';
-$meta_description = isset($meta_description) ? $meta_description : 'Сколько стоят винтовые сваи: диаметр, длина, толщина стенки и покрытие влияют на цену. Как собрать смету: сваи, оголовки, доставка, монтаж.';
+$title = isset($title) ? $title : 'Сколько стоит винтовая свая: из чего складывается цена';
+$meta_description = isset($meta_description) ? $meta_description : 'Из чего складывается цена винтовой сваи: диаметр, длина, толщина стенки и лопасти, покрытие. Как собрать смету и не переплатить за лишнее.';
 $canonical = "https://zavodsvay.ru/articles/stoimost-svay/";
 $og_type = 'article';
 $schema_type = 'Article';
