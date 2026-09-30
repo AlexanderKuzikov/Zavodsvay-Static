@@ -14,7 +14,7 @@
 // ─── Глобальные данные компании (SSOT) ───────────────────────────────────────
 $_site_url      = 'https://zavodsvay.ru';
 $_company_name  = 'Завод винтовых свай «Гефест»';
-$_legal_name    = 'ООО "Завод Винтовых Свай "Гефест"';
+$_legal_name    = 'ООО «Завод Винтовых Свай «Гефест»»';
 $_phone         = '+73422099800';
 $_email         = 'info@zavodsvay.ru';
 $_address       = 'ул. Монастырская, 14, офис 502, Пермь, 614000';
@@ -32,6 +32,19 @@ $_founded       = '2012';
 if (!isset($og_image))    $og_image    = $_site_url . '/assets/img/og/og-home.jpg';
 if (!isset($og_type))     $og_type     = 'website';
 if (!isset($schema_type)) $schema_type = 'LocalBusiness';
+
+/**
+ * Экранирование значения для вставки в JSON-LD.
+ * Собирать JSON интерполяцией строк нельзя: кавычка в значении рвёт JSON,
+ * а «</script>» закрывает тег разметки. HTML-экранирование здесь не помогает —
+ * json.loads не понимает &quot;.
+ */
+if (!function_exists('_j')) {
+    function _j($value): string {
+        return json_encode((string) $value, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG
+            | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+    }
+}
 
 // Текущий URL
 $_current_url = !empty($canonical) ? $canonical : $_site_url . '/';
@@ -82,39 +95,39 @@ if (strpos($og_image, 'http') !== 0) {
         "@graph": [
             {
                 "@type": "Organization",
-                "@id": "<?= $_site_url ?>/#organization",
-                "name": "<?= $_company_name ?>",
-                "legalName": "<?= $_legal_name ?>",
-                "url": "<?= $_site_url ?>",
+                "@id": <?= _j($_site_url . '/#organization') ?>,
+                "name": <?= _j($_company_name) ?>,
+                "legalName": <?= _j($_legal_name) ?>,
+                "url": <?= _j($_site_url) ?>,
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "<?= $_site_url ?>/assets/img/og/og-home.jpg"
+                    "url": <?= _j($_site_url . '/assets/img/og/og-home.jpg') ?>
                 },
-                "telephone": "<?= $_phone ?>",
-                "email": "<?= $_email ?>",
-                "foundingDate": "<?= $_founded ?>",
-                "sameAs": ["<?= $_vk ?>", "<?= $_max ?>"]
+                "telephone": <?= _j($_phone) ?>,
+                "email": <?= _j($_email) ?>,
+                "foundingDate": <?= _j($_founded) ?>,
+                "sameAs": [<?= _j($_vk) ?>, <?= _j($_max) ?>]
             },
             {
                 "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
-                "@id": "<?= $_site_url ?>/#localbusiness",
-                "name": "<?= $_company_name ?>",
-                "url": "<?= $_site_url ?>",
-                "telephone": "<?= $_phone ?>",
-                "email": "<?= $_email ?>",
-                "image": "<?= $_site_url ?>/assets/img/og/og-home.jpg",
+                "@id": <?= _j($_site_url . '/#localbusiness') ?>,
+                "name": <?= _j($_company_name) ?>,
+                "url": <?= _j($_site_url) ?>,
+                "telephone": <?= _j($_phone) ?>,
+                "email": <?= _j($_email) ?>,
+                "image": <?= _j($_site_url . '/assets/img/og/og-home.jpg') ?>,
                 "address": {
                     "@type": "PostalAddress",
                     "streetAddress": "ул. Монастырская, 14, офис 502",
-                    "addressLocality": "<?= $_city ?>",
+                    "addressLocality": <?= _j($_city) ?>,
                     "addressRegion": "Пермский край",
-                    "postalCode": "<?= $_postal ?>",
+                    "postalCode": <?= _j($_postal) ?>,
                     "addressCountry": "RU"
                 },
                 "geo": {
                     "@type": "GeoCoordinates",
-                    "latitude": "<?= $_lat ?>",
-                    "longitude": "<?= $_lng ?>"
+                    "latitude": <?= _j($_lat) ?>,
+                    "longitude": <?= _j($_lng) ?>
                 },
                 "openingHoursSpecification": [
                     {
@@ -125,37 +138,37 @@ if (strpos($og_image, 'http') !== 0) {
                     }
                 ],
                 "priceRange": "₽₽",
-                "parentOrganization": {"@id": "<?= $_site_url ?>/#organization"}
+                "parentOrganization": {"@id": <?= _j($_site_url . '/#organization') ?>}
             },
             {
                 "@type": "WebSite",
-                "@id": "<?= $_site_url ?>/#website",
-                "url": "<?= $_site_url ?>",
-                "name": "<?= $_company_name ?>",
-                "publisher": {"@id": "<?= $_site_url ?>/#organization"},
+                "@id": <?= _j($_site_url . '/#website') ?>,
+                "url": <?= _j($_site_url) ?>,
+                "name": <?= _j($_company_name) ?>,
+                "publisher": {"@id": <?= _j($_site_url . '/#organization') ?>},
                 "inLanguage": "ru-RU"
             },
             {
                 "@type": "WebPage",
-                "@id": "<?= htmlspecialchars($_current_url) ?>#webpage",
-                "url": "<?= htmlspecialchars($_current_url) ?>",
-                "name": "<?= htmlspecialchars($title) ?>",
-                "description": "<?= htmlspecialchars($meta_description) ?>",
-                "isPartOf": {"@id": "<?= $_site_url ?>/#website"},
-                "about": {"@id": "<?= $_site_url ?>/#localbusiness"},
+                "@id": <?= _j($_current_url . '#webpage') ?>,
+                "url": <?= _j($_current_url) ?>,
+                "name": <?= _j($title) ?>,
+                "description": <?= _j($meta_description) ?>,
+                "isPartOf": {"@id": <?= _j($_site_url . '/#website') ?>},
+                "about": {"@id": <?= _j($_site_url . '/#localbusiness') ?>},
                 "inLanguage": "ru-RU"
             }<?php if ($schema_type === 'Article'): ?>,
             {
                 "@type": "Article",
-                "@id": "<?= htmlspecialchars($_current_url) ?>#article",
-                "headline": "<?= htmlspecialchars($title) ?>",
-                "description": "<?= htmlspecialchars($meta_description) ?>",
-                "url": "<?= htmlspecialchars($_current_url) ?>",
-                <?php if (!empty($article_published)): ?>"datePublished": "<?= htmlspecialchars($article_published) ?>",<?php endif; ?>
-                <?php if (!empty($article_modified)): ?>"dateModified": "<?= htmlspecialchars($article_modified) ?>",<?php endif; ?>
-                "publisher": {"@id": "<?= $_site_url ?>/#organization"},
-                "author": {"@id": "<?= $_site_url ?>/#organization"},
-                "isPartOf": {"@id": "<?= $_site_url ?>/#website"},
+                "@id": <?= _j($_current_url . '#article') ?>,
+                "headline": <?= _j($title) ?>,
+                "description": <?= _j($meta_description) ?>,
+                "url": <?= _j($_current_url) ?>,
+                <?php if (!empty($article_published)): ?>"datePublished": <?= _j($article_published) ?>,<?php endif; ?>
+                <?php if (!empty($article_modified)): ?>"dateModified": <?= _j($article_modified) ?>,<?php endif; ?>
+                "publisher": {"@id": <?= _j($_site_url . '/#organization') ?>},
+                "author": {"@id": <?= _j($_site_url . '/#organization') ?>},
+                "isPartOf": {"@id": <?= _j($_site_url . '/#website') ?>},
                 "inLanguage": "ru-RU"
             }<?php endif; ?>
         ]
