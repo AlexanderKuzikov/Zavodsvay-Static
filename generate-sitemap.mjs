@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 
 // Настройки (запуск из корня проекта)
 const mapJsonPath = './data/map.json';
@@ -22,6 +23,17 @@ function formatDate(date) {
     return date.toISOString().split('T')[0]; // YYYY-MM-DD
 }
 
+// lastmod = реальная дата правки страницы. Дата генерации обесценивает сигнал
+// свежести: поисковик видит весь сайт обновлённым каждый раз, когда запустили
+// генератор, и перестаёт ему верить.
+function mtimeOf(filePath, fallback) {
+    try {
+        return formatDate(fs.statSync(filePath).mtime);
+    } catch {
+        return fallback;
+    }
+}
+
 function makeLoc(url) {
     return `${BASE_URL}${url}`;
 }
@@ -41,22 +53,39 @@ async function run() {
     const today = formatDate(new Date());
 
     // Статические страницы
-    const staticEntries = staticPages.map(p => makeUrl({ ...p, lastmod: today }));
+    const staticEntries = staticPages.map(p => makeUrl({
+        ...p,
+        lastmod: mtimeOf(path.join('pages', p.url.replace(/^\/|\/$/g, '') || 'index', 'index.php'), today),
+    }));
 
     // Статьи из pages/articles/
     let articleEntries = [];
+    let skipped = [];
     const articlesDir = './pages/articles';
     if (fs.existsSync(articlesDir)) {
         const slugs = fs.readdirSync(articlesDir, { withFileTypes: true })
             .filter(d => d.isDirectory())
             .map(d => d.name);
-        articleEntries = slugs.map(slug => makeUrl({
-            url: `/articles/${slug}/`,
-            lastmod: today,
-            changefreq: 'monthly',
-            priority: '0.7',
-        }));
+        for (const slug of slugs) {
+            // Заготовка в sitemap попадает в индекс как тонкий контент и конкурирует
+            // с нормальными статьями. Пустая страница = сигнал «ещё не готова».
+            const contentPath = path.join(articlesDir, slug, 'content.html');
+            const size = fs.existsSync(contentPath) ? fs.statSync(contentPath).size : 0;
+            if (size < 100) {
+                skipped.push(`${slug} (${size} Б)`);
+                continue;
+            }
+            articleEntries.push(makeUrl({
+                url: `/articles/${slug}/`,
+                lastmod: mtimeOf(contentPath, today),
+                changefreq: 'monthly',
+                priority: '0.7',
+            }));
+        }
         console.log(`Статей: ${articleEntries.length}`);
+        if (skipped.length) {
+            console.log(`Пропущено заготовок: ${skipped.join(', ')}`);
+        }
     }
 
     // Object pages из map.json — только те, у кого есть url
@@ -66,7 +95,9 @@ async function run() {
         const withUrl = mapData.filter(o => o.url);
         objectEntries = withUrl.map(o => makeUrl({
             url: o.url,
-            lastmod: today,
+            lastmod: mtimeOf(
+                path.join('assets', 'img', 'objects', String(o.id ?? ''), `${o.id}_1.webp`),
+                mtimeOf(mapJsonPath, today)),
             changefreq: 'yearly',
             priority: '0.5',
         }));
