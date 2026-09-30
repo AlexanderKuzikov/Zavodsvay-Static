@@ -30,7 +30,12 @@ const FTP_PASS = process.env.FTP_PASS;
 const FTP_REMOTE_DIR = process.env.FTP_REMOTE_DIR || '/';
 
 const EXCLUDE = [
-  '.git',
+    // Скрипты разработки: по описанию проекта «на хостинг не деплоится».
+    // Пока они попадали на сервер, любой мог скачать их по HTTP.
+    'generate-pages.mjs',
+    'generate-sitemap.mjs',
+    'update-map-json.mjs',
+    '.git',
   '.github',
   '.gitignore',
   'source',
