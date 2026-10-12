@@ -1,0 +1,648 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "← СССФР · сообщество строителей свайных фундаментов" [ref=e3] [cursor=pointer]:
+      - /url: /
+    - generic [ref=e4]:
+      - link "Сваи и цены" [ref=e5] [cursor=pointer]:
+        - /url: /svai/
+      - link "Регионы" [ref=e6] [cursor=pointer]:
+        - /url: /regiony/
+      - link "Заводы" [ref=e7] [cursor=pointer]:
+        - /url: /zavody/
+  - banner [ref=e8]:
+    - generic [ref=e16]:
+      - strong [ref=e17]: СваяПроект
+      - generic [ref=e18]: конструктор свайных полей
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e21]: Объект
+        - textbox "Объект" [ref=e22]:
+          - /placeholder: Жилой дом 8,0 × 6,0 м
+          - text: Жилой дом 8,0 × 6,0 м
+      - generic [ref=e23]:
+        - generic [ref=e24]: Адрес
+        - textbox "Адрес" [ref=e25]:
+          - /placeholder: населённый пункт, улица, участок
+          - text: Московская обл., г. Пушкино, СНТ «Рассвет», уч. 14
+    - navigation [ref=e26]:
+      - button "↶" [ref=e27] [cursor=pointer]
+      - button "↷" [ref=e28] [cursor=pointer]
+      - generic [ref=e30]:
+        - button "Новый" [ref=e31] [cursor=pointer]
+        - button "Открыть" [ref=e32] [cursor=pointer]
+        - button "Сохранить" [ref=e33] [cursor=pointer]
+        - button "PNG" [ref=e35] [cursor=pointer]
+        - button "SVG" [ref=e36] [cursor=pointer]
+      - button "Печать / PDF" [ref=e37] [cursor=pointer]
+      - button "Предложить" [ref=e39] [cursor=pointer]
+  - main [ref=e43]:
+    - complementary [ref=e44]:
+      - group [ref=e45]:
+        - generic "▸ Шаблон объекта" [ref=e46] [cursor=pointer]
+        - generic [ref=e47]:
+          - generic [ref=e48]:
+            - button "Дом 8 × 6" [ref=e49] [cursor=pointer]
+            - button "Дом 9 × 6" [ref=e50] [cursor=pointer]
+            - button "Дом 9 × 9" [ref=e51] [cursor=pointer]
+            - button "Баня 6 × 4" [ref=e52] [cursor=pointer]
+            - button "Терраса 6 × 3" [ref=e53] [cursor=pointer]
+            - button "Забор 12 м" [ref=e54] [cursor=pointer]
+            - button "ЖБ сваи 6 × 6" [ref=e55] [cursor=pointer]
+          - paragraph [ref=e56]: Шаблон задаёт габариты, оси и типоразмер свай. Дальше всё правится вручную.
+      - group [ref=e57]:
+        - generic "▸ Оси и габариты" [ref=e58] [cursor=pointer]
+        - generic [ref=e59]:
+          - generic [ref=e60]:
+            - generic [ref=e61]:
+              - generic [ref=e62]: Шаг свай в ряду, не более
+              - spinbutton "Шаг свай в ряду, не более" [ref=e63]: "2500"
+            - generic [ref=e64]:
+              - generic [ref=e65]: Оси рядов
+              - button "Оси рядов" [ref=e66] [cursor=pointer]: Разбить по шагу
+          - generic [ref=e67]:
+            - checkbox "Добивать оси рядов автоматически" [checked] [ref=e68]
+            - generic [ref=e69]: Добивать оси рядов автоматически
+          - generic [ref=e70]:
+            - generic [ref=e71]: Габариты задаются
+            - combobox "Габариты задаются" [ref=e72]:
+              - option "по осям свай" [selected]
+              - option "по наружной грани дома"
+          - paragraph [ref=e74]: "Размеры на чертеже — между осями свай. Если проектируете от наружной грани дома, переключите режим: оси уйдут внутрь на величину привязки."
+          - generic [ref=e75]:
+            - generic [ref=e76]: Цифровые оси
+            - generic [ref=e77]: по горизонтали →
+          - generic [ref=e78]:
+            - generic [ref=e79]:
+              - generic [ref=e80]: "1"
+              - generic [ref=e81]: база
+              - generic [ref=e82]: "0"
+              - button "стена" [ref=e83] [cursor=pointer]
+              - button "×" [ref=e84] [cursor=pointer]
+            - generic [ref=e85]:
+              - generic [ref=e86]: 1/1
+              - spinbutton [ref=e87]: "2000"
+              - generic [ref=e88]: 2 000
+              - button "ряд" [ref=e89] [cursor=pointer]
+              - generic "Добавлена автоматически по шагу" [ref=e90]: авто
+            - generic [ref=e91]:
+              - generic [ref=e92]: "2"
+              - spinbutton [ref=e93]: "2000"
+              - generic [ref=e94]: 4 000
+              - button "стена" [ref=e95] [cursor=pointer]
+              - button "×" [ref=e96] [cursor=pointer]
+            - generic [ref=e97]:
+              - generic [ref=e98]: 2/1
+              - spinbutton [ref=e99]: "2000"
+              - generic [ref=e100]: 6 000
+              - button "ряд" [ref=e101] [cursor=pointer]
+              - generic "Добавлена автоматически по шагу" [ref=e102]: авто
+            - generic [ref=e103]:
+              - generic [ref=e104]: "3"
+              - spinbutton [ref=e105]: "2000"
+              - generic [ref=e106]: 8 000
+              - button "стена" [ref=e107] [cursor=pointer]
+              - button "×" [ref=e108] [cursor=pointer]
+          - button "+ Добавить цифровую ось" [ref=e109] [cursor=pointer]
+          - generic [ref=e110]:
+            - generic [ref=e111]: Буквенные оси
+            - generic [ref=e112]: по вертикали ↑
+          - generic [ref=e113]:
+            - generic [ref=e114]:
+              - generic [ref=e115]: А
+              - generic [ref=e116]: база
+              - generic [ref=e117]: "0"
+              - button "стена" [ref=e118] [cursor=pointer]
+              - button "×" [ref=e119] [cursor=pointer]
+            - generic [ref=e120]:
+              - generic [ref=e121]: А/1
+              - spinbutton [ref=e122]: "1500"
+              - generic [ref=e123]: 1 500
+              - button "ряд" [ref=e124] [cursor=pointer]
+              - generic "Добавлена автоматически по шагу" [ref=e125]: авто
+            - generic [ref=e126]:
+              - generic [ref=e127]: Б
+              - spinbutton [ref=e128]: "1500"
+              - generic [ref=e129]: 3 000
+              - button "стена" [ref=e130] [cursor=pointer]
+              - button "×" [ref=e131] [cursor=pointer]
+            - generic [ref=e132]:
+              - generic [ref=e133]: Б/1
+              - spinbutton [ref=e134]: "1500"
+              - generic [ref=e135]: 4 500
+              - button "ряд" [ref=e136] [cursor=pointer]
+              - generic "Добавлена автоматически по шагу" [ref=e137]: авто
+            - generic [ref=e138]:
+              - generic [ref=e139]: В
+              - spinbutton [ref=e140]: "1500"
+              - generic [ref=e141]: 6 000
+              - button "стена" [ref=e142] [cursor=pointer]
+              - button "×" [ref=e143] [cursor=pointer]
+          - button "+ Добавить буквенную ось" [ref=e144] [cursor=pointer]
+          - paragraph [ref=e145]: "«Стена» — основная ось: сваи стоят по всей её длине. «Ряд» — промежуточная ось: сваи только на пересечениях с основными. Любую ось можно перетащить мышью прямо на чертеже, Alt — сохранить общий габарит."
+      - group [ref=e146]:
+        - generic "▸ Свая по умолчанию" [ref=e147] [cursor=pointer]
+        - generic [ref=e148]:
+          - generic [ref=e149]:
+            - generic [ref=e150]:
+              - generic [ref=e151]: Тип сваи
+              - combobox "Тип сваи" [ref=e152]:
+                - option "Винтовая" [selected]
+                - option "Железобетонная"
+            - generic [ref=e153]:
+              - generic [ref=e154]: Диаметр ствола
+              - combobox "Диаметр ствола" [ref=e155]:
+                - option "Ø 76 мм"
+                - option "Ø 89 мм"
+                - option "Ø 108 мм" [selected]
+                - option "Ø 133 мм"
+          - generic [ref=e156]:
+            - generic [ref=e157]:
+              - generic [ref=e158]: Длина сваи
+              - combobox "Длина сваи" [ref=e159]:
+                - option "1,5 м"
+                - option "2,0 м"
+                - option "2,5 м" [selected]
+                - option "3,0 м"
+                - option "3,5 м"
+                - option "4,0 м"
+                - option "4,5 м"
+                - option "5,0 м"
+                - option "5,5 м"
+                - option "6,0 м"
+            - generic [ref=e160]:
+              - generic [ref=e161]: Цена изделия
+              - textbox "Цена изделия" [ref=e162]: 3 450 ₽
+          - generic [ref=e163]:
+            - generic [ref=e164]: Оголовок
+            - combobox "Оголовок" [ref=e165]:
+              - option "Без оголовка"
+              - option "Оголовок 150×150 для сваи Ø108 — 340 ₽"
+              - option "Оголовок 200×200 для сваи Ø108 — 400 ₽" [selected]
+              - option "Оголовок 250×250 для сваи Ø108 — 520 ₽"
+          - paragraph [ref=e166]: брус, бревно, каркас в 2 этажа · ≈ 5,0 т/сваю
+          - generic [ref=e167]:
+            - button "Применить ко всем сваям" [ref=e168] [cursor=pointer]
+            - button "Сбросить изменения" [ref=e169] [cursor=pointer]
+      - group [ref=e170]:
+        - generic "▸ Выделенные сваи 0" [ref=e171] [cursor=pointer]:
+          - text: ▸ Выделенные сваи
+          - generic [ref=e172]: "0"
+        - generic [ref=e173]:
+          - paragraph [ref=e174]: Ничего не выделено. Кликните сваю на чертеже или выделите рамкой.
+          - generic [ref=e175]:
+            - button "Выделить все" [ref=e176] [cursor=pointer]
+            - button "Выделить изменённые" [ref=e177] [cursor=pointer]
+      - group [ref=e178]:
+        - generic "▸ Калькулятор нагрузок" [ref=e179] [cursor=pointer]
+        - option "Каркасный / СИП" [selected]
+        - option "Брус 150 мм"
+        - option "Брус 200 мм"
+        - option "Бревно оцилиндрованное"
+        - option "Газобетон 300 мм"
+        - option "Газобетон 400 мм"
+        - option "Кирпич 250 мм"
+        - option "Навес / терраса / забор"
+        - option "деревянное" [selected]
+        - option "ж/б плита"
+        - option "по грунту"
+        - option "металлочерепица" [selected]
+        - option "профлист"
+        - option "мягкая кровля"
+        - option "ондулин"
+        - option "керамическая черепица"
+        - option "без кровли"
+        - option "I (80)"
+        - option "II (120)"
+        - option "III — Москва, МО (180)" [selected]
+        - option "IV (240)"
+        - option "V (320)"
+        - option "VI (400)"
+        - option "песок средний / крупный"
+        - option "супесь"
+        - option "суглинок (базовый)" [selected]
+        - option "глина пластичная"
+        - option "насыпной грунт, торф"
+      - group [ref=e180]:
+        - generic "▸ Геологические изыскания" [ref=e181] [cursor=pointer]
+        - option "расчёт по таблицам СП" [selected]
+        - option "статическое зондирование"
+        - option "статические испытания свай"
+        - option "Насыпной грунт" [selected]
+        - option "Торф, заторфованный грунт"
+        - option "Суглинок мягкопластичный (IL 0,5–0,75)"
+        - option "Суглинок тугопластичный (IL 0,25–0,5)"
+        - option "Суглинок полутвёрдый (IL 0–0,25)"
+        - option "Глина мягкопластичная"
+        - option "Глина тугопластичная"
+        - option "Глина полутвёрдая"
+        - option "Супесь пластичная"
+        - option "Супесь твёрдая"
+        - option "Песок пылеватый средней плотности"
+        - option "Песок мелкий средней плотности"
+        - option "Песок средней крупности, плотный"
+        - option "Песок гравелистый, гравийный грунт"
+        - option "Насыпной грунт"
+        - option "Торф, заторфованный грунт"
+        - option "Суглинок мягкопластичный (IL 0,5–0,75)" [selected]
+        - option "Суглинок тугопластичный (IL 0,25–0,5)"
+        - option "Суглинок полутвёрдый (IL 0–0,25)"
+        - option "Глина мягкопластичная"
+        - option "Глина тугопластичная"
+        - option "Глина полутвёрдая"
+        - option "Супесь пластичная"
+        - option "Супесь твёрдая"
+        - option "Песок пылеватый средней плотности"
+        - option "Песок мелкий средней плотности"
+        - option "Песок средней крупности, плотный"
+        - option "Песок гравелистый, гравийный грунт"
+        - option "Насыпной грунт"
+        - option "Торф, заторфованный грунт"
+        - option "Суглинок мягкопластичный (IL 0,5–0,75)"
+        - option "Суглинок тугопластичный (IL 0,25–0,5)" [selected]
+        - option "Суглинок полутвёрдый (IL 0–0,25)"
+        - option "Глина мягкопластичная"
+        - option "Глина тугопластичная"
+        - option "Глина полутвёрдая"
+        - option "Супесь пластичная"
+        - option "Супесь твёрдая"
+        - option "Песок пылеватый средней плотности"
+        - option "Песок мелкий средней плотности"
+        - option "Песок средней крупности, плотный"
+        - option "Песок гравелистый, гравийный грунт"
+        - option "Насыпной грунт"
+        - option "Торф, заторфованный грунт"
+        - option "Суглинок мягкопластичный (IL 0,5–0,75)"
+        - option "Суглинок тугопластичный (IL 0,25–0,5)"
+        - option "Суглинок полутвёрдый (IL 0–0,25)"
+        - option "Глина мягкопластичная"
+        - option "Глина тугопластичная"
+        - option "Глина полутвёрдая"
+        - option "Супесь пластичная"
+        - option "Супесь твёрдая"
+        - option "Песок пылеватый средней плотности"
+        - option "Песок мелкий средней плотности" [selected]
+        - option "Песок средней крупности, плотный"
+        - option "Песок гравелистый, гравийный грунт"
+      - group [ref=e182]:
+        - generic "▸ Цоколь, перепад, усиление" [ref=e183] [cursor=pointer]
+        - option "вправо (к оси с большим номером)" [selected]
+        - option "влево (к оси 1)"
+        - option "вверх по плану (к последней букве)"
+        - option "вниз по плану (к оси А)"
+        - option "Уголок 50×50×5"
+        - option "Уголок 63×63×5" [selected]
+        - option "Уголок 75×75×6"
+        - option "Профильная труба 60×40×3"
+      - group [ref=e184]:
+        - generic "▸ Материалы и масса" [ref=e185] [cursor=pointer]
+        - generic [ref=e186]:
+          - generic [ref=e187]:
+            - generic [ref=e188]:
+              - generic [ref=e189]: Сваи винтовые, 21 шт.
+              - generic [ref=e190]: 567 кг
+            - generic [ref=e191]:
+              - generic [ref=e192]: Оголовки, 21 шт.
+              - generic [ref=e193]: 71 кг
+            - generic [ref=e194]:
+              - generic [ref=e195]: Общая масса материалов
+              - generic [ref=e196]: 1 425 кг
+            - generic [ref=e197]:
+              - generic [ref=e198]: Транспорт
+              - generic [ref=e199]: Газель, 1 рейс
+          - generic [ref=e200]:
+            - generic [ref=e201]:
+              - generic [ref=e202]: Полость одной сваи
+              - generic [ref=e203]: 20 л
+            - generic [ref=e204]:
+              - generic [ref=e205]: Объём полостей (100% длины)
+              - generic [ref=e206]: 0,421 м³
+            - generic [ref=e207]:
+              - generic [ref=e208]: С запасом на уплотнение +10%
+              - generic [ref=e209]: 0,463 м³
+            - generic [ref=e210]:
+              - generic [ref=e211]: ПГС, мешков по 40 кг
+              - generic [ref=e212]: 20 шт.
+            - generic [ref=e213]:
+              - generic [ref=e214]: Масса заполнения
+              - generic [ref=e215]: 787 кг
+          - paragraph [ref=e216]: Полость считается по внутреннему диаметру ствола (Ø − 2 × толщина стенки). Материал заполнения и глубина задаются в панели сметы, мешки попадают в спецификацию.
+      - group [ref=e217]:
+        - generic "▸ Реквизиты и штамп" [ref=e218] [cursor=pointer]
+    - generic [ref=e219]:
+      - generic [ref=e220]:
+        - generic [ref=e221]:
+          - button "Выбор" [ref=e222] [cursor=pointer]
+          - button "+ Свая" [ref=e223] [cursor=pointer]
+          - button "Удалить" [ref=e224] [cursor=pointer]
+        - generic [ref=e225]:
+          - generic [ref=e226] [cursor=pointer]:
+            - checkbox "Размеры" [checked] [ref=e227]
+            - generic [ref=e228]: Размеры
+          - generic [ref=e229] [cursor=pointer]:
+            - checkbox "Диагонали" [checked] [ref=e230]
+            - generic [ref=e231]: Диагонали
+          - generic [ref=e232] [cursor=pointer]:
+            - checkbox "Стены" [checked] [ref=e233]
+            - generic [ref=e234]: Стены
+          - generic [ref=e235] [cursor=pointer]:
+            - checkbox "Номера" [checked] [ref=e236]
+            - generic [ref=e237]: Номера
+          - generic [ref=e238] [cursor=pointer]:
+            - checkbox "Экспликация" [checked] [ref=e239]
+            - generic [ref=e240]: Экспликация
+          - generic [ref=e241] [cursor=pointer]:
+            - checkbox "Спецификация" [checked] [ref=e242]
+            - generic [ref=e243]: Спецификация
+          - generic [ref=e244] [cursor=pointer]:
+            - checkbox "Материалы" [checked] [ref=e245]
+            - generic [ref=e246]: Материалы
+        - generic [ref=e247]:
+          - generic [ref=e248] [cursor=pointer]:
+            - generic [ref=e249]: Лист
+            - combobox "Лист" [ref=e250]:
+              - option "A4"
+              - option "A3" [selected]
+              - option "A2"
+          - generic [ref=e251] [cursor=pointer]:
+            - generic [ref=e252]: Масштаб
+            - combobox "Масштаб" [ref=e253]:
+              - option "авто" [selected]
+              - option "1:50"
+              - option "1:75"
+              - option "1:100"
+              - option "1:150"
+              - option "1:200"
+              - option "1:250"
+          - generic [ref=e254] [cursor=pointer]:
+            - generic [ref=e255]: Привязка
+            - combobox "Привязка" [ref=e256]:
+              - option "1 мм"
+              - option "10 мм"
+              - option "50 мм" [selected]
+              - option "100 мм"
+              - option "250 мм"
+          - button "−" [ref=e257] [cursor=pointer]
+          - button "+" [ref=e258] [cursor=pointer]
+          - button "Вписать" [ref=e259] [cursor=pointer]
+      - generic [ref=e260]:
+        - img [ref=e261]:
+          - generic [ref=e265]:
+            - generic [ref=e274]: "1"
+            - generic [ref=e276]: 1/1
+            - generic [ref=e278]: "2"
+            - generic [ref=e280]: 2/1
+            - generic [ref=e282]: "3"
+            - generic [ref=e284]: А
+            - generic [ref=e286]: А/1
+            - generic [ref=e288]: Б
+            - generic [ref=e290]: Б/1
+            - generic [ref=e292]: В
+            - generic [ref=e295]: 10 000
+            - generic [ref=e296]: 10 000
+            - generic [ref=e299]: 2 000
+            - generic [ref=e302]: 2 000
+            - generic [ref=e305]: 2 000
+            - generic [ref=e308]: 2 000
+            - generic [ref=e311]: 8 000
+            - generic [ref=e314]: 1 500
+            - generic [ref=e317]: 1 500
+            - generic [ref=e320]: 1 500
+            - generic [ref=e323]: 1 500
+            - generic [ref=e326]: 6 000
+            - generic [ref=e327] [cursor=pointer]
+            - generic [ref=e330] [cursor=pointer]
+            - generic [ref=e333] [cursor=pointer]
+            - generic [ref=e336] [cursor=pointer]
+            - generic [ref=e339] [cursor=pointer]
+            - generic [ref=e342] [cursor=pointer]
+            - generic [ref=e345] [cursor=pointer]
+            - generic [ref=e348] [cursor=pointer]
+            - generic [ref=e351] [cursor=pointer]
+            - generic [ref=e354] [cursor=pointer]
+            - generic [ref=e357] [cursor=pointer]
+            - generic [ref=e360] [cursor=pointer]
+            - generic [ref=e363] [cursor=pointer]
+            - generic [ref=e366] [cursor=pointer]
+            - generic [ref=e369] [cursor=pointer]
+            - generic [ref=e372] [cursor=pointer]
+            - generic [ref=e375] [cursor=pointer]
+            - generic [ref=e378] [cursor=pointer]
+            - generic [ref=e381] [cursor=pointer]
+            - generic [ref=e384] [cursor=pointer]
+            - generic [ref=e387] [cursor=pointer]
+            - generic [ref=e390]: "1"
+            - generic [ref=e391]: "2"
+            - generic [ref=e392]: "3"
+            - generic [ref=e393]: "4"
+            - generic [ref=e394]: "5"
+            - generic [ref=e395]: "6"
+            - generic [ref=e396]: "7"
+            - generic [ref=e397]: "8"
+            - generic [ref=e398]: "9"
+            - generic [ref=e399]: "10"
+            - generic [ref=e400]: "11"
+            - generic [ref=e401]: "12"
+            - generic [ref=e402]: "13"
+            - generic [ref=e403]: "14"
+            - generic [ref=e404]: "15"
+            - generic [ref=e405]: "16"
+            - generic [ref=e406]: "17"
+            - generic [ref=e407]: "18"
+            - generic [ref=e408]: "19"
+            - generic [ref=e409]: "20"
+            - generic [ref=e410]: "21"
+          - generic [ref=e411]: ПЛАН СВАЙНОГО ПОЛЯ М 1:50
+          - generic [ref=e412]: 21 свай · габарит 8 000 × 6 000 мм · шаг в ряду до 2 500 мм · цоколь 500 мм
+          - generic [ref=e414]: ЭКСПЛИКАЦИЯ СВАЙ
+          - generic [ref=e417]: СВС-108×2500
+          - generic [ref=e418]: 21 шт.
+          - generic [ref=e420]: СПЕЦИФИКАЦИЯ И СТОИМОСТЬ
+          - generic [ref=e422]: Наименование
+          - generic [ref=e423]: Кол.
+          - generic [ref=e424]: Цена
+          - generic [ref=e425]: Сумма, ₽
+          - generic [ref=e427]: СВС-108×2500
+          - generic [ref=e428]: "21"
+          - generic [ref=e429]: 3 450
+          - generic [ref=e430]: 72 450
+          - generic [ref=e432]: Оголовок 200×200
+          - generic [ref=e433]: "21"
+          - generic [ref=e434]: "400"
+          - generic [ref=e435]: 8 400
+          - generic [ref=e437]: ПГС, мешки по 40 кг
+          - generic [ref=e438]: "20"
+          - generic [ref=e439]: "130"
+          - generic [ref=e440]: 2 600
+          - generic [ref=e442]: Монтаж Ø108
+          - generic [ref=e443]: "21"
+          - generic [ref=e444]: 1 400
+          - generic [ref=e445]: 29 400
+          - generic [ref=e447]: Доставка
+          - generic [ref=e448]: "1"
+          - generic [ref=e449]: 4 500
+          - generic [ref=e450]: 4 500
+          - generic [ref=e452]: ИТОГО
+          - generic [ref=e453]: 117 350 ₽
+          - generic [ref=e454]: 21 свай · 48.0 м² · 5 588 ₽/свая · 2 445 ₽/м² · без НДС
+          - generic [ref=e456]: ВЕДОМОСТЬ МАТЕРИАЛОВ
+          - generic [ref=e458]: Сваи винтовые, 21 шт.
+          - generic [ref=e459]: 567 кг
+          - generic [ref=e461]: Оголовки, 21 шт.
+          - generic [ref=e462]: 71 кг
+          - generic [ref=e464]: "ПГС в полости: 0,46 м³ (20 л/сваю)"
+          - generic [ref=e465]: 20 меш. × 40 кг
+          - generic [ref=e467]: Общая масса материалов
+          - generic [ref=e468]: 1 425 кг
+          - generic [ref=e469]: "Примечания:"
+          - generic [ref=e470]: 1. Отметка «0.000» соответствует уровню верха оголовков свай.
+          - generic [ref=e471]: 2. Сваи погружать до расчётной глубины; контроль — по моменту завинчивания.
+          - generic [ref=e472]: 3. Отклонение оси сваи от проектного положения в плане — не более 50 мм.
+          - generic [ref=e473]: 4. Полости стволов заполнить цементно-песчаным раствором М150.
+          - generic [ref=e474]: 5. До начала работ уточнить расположение подземных коммуникаций на участке.
+          - generic [ref=e476]: Разработал
+          - generic [ref=e477]: 12.10.2026
+          - generic [ref=e478]: Проверил
+          - generic [ref=e479]: Заказчик
+          - generic [ref=e480]: Иванов И. И.
+          - generic [ref=e481]: Масштаб
+          - generic [ref=e482]: "1 : 50"
+          - generic [ref=e483]: Шифр
+          - generic [ref=e484]: ФС-001
+          - generic [ref=e486]: Жилой дом 8,0 × 6,0 м
+          - generic [ref=e487]: Московская обл., г. Пушкино, СНТ «Рассвет»,
+          - generic [ref=e488]: уч. 14
+          - generic [ref=e489]: План свайного поля
+          - generic [ref=e490]: Спецификация. Расчёт стоимости
+          - generic [ref=e492]: Стадия
+          - generic [ref=e493]: П
+          - generic [ref=e495]: Лист
+          - generic [ref=e496]: "1"
+          - generic [ref=e498]: Листов
+          - generic [ref=e499]: "1"
+          - generic [ref=e500]: ООО «Свайный двор»
+          - generic [ref=e501]: +7 (900) 000-00-00
+        - generic [ref=e502]:
+          - generic [ref=e503]: Как работать
+          - generic [ref=e504]: Клик по свае — выделить, Shift — несколько, рамкой — группу.
+          - generic [ref=e505]: Перетаскивайте сваю или любую ось мышью. Delete — убрать сваю.
+          - generic [ref=e506]: Изменённые вручную элементы подсвечиваются оранжевым.
+          - button "Понятно" [ref=e507] [cursor=pointer]
+      - generic [ref=e508]:
+        - generic [ref=e509]: 21 свай
+        - generic [ref=e510]: 0 изменено
+        - generic [ref=e511]: габарит 8 000 × 6 000 мм
+        - generic [ref=e512]: лист A3 · М 1:50
+        - generic [ref=e513]: 117 350 ₽
+    - complementary [ref=e514]:
+      - generic [ref=e515]:
+        - heading "Спецификация и стоимость" [level=2] [ref=e516]
+        - generic [ref=e517]: прайс изделий · цены редактируются в таблице
+      - generic [ref=e518]:
+        - generic [ref=e519]:
+          - generic [ref=e520]:
+            - generic [ref=e521]: Сваи
+            - table [ref=e522]:
+              - rowgroup [ref=e523]:
+                - row [ref=e524]:
+                  - cell "Свая винтовая СВС-108/300/2500, ст. 3.5 мм, наконечник литой" [ref=e525]
+                  - cell "21шт." [ref=e526]
+                  - cell [ref=e527]:
+                    - spinbutton [ref=e528]: "3450"
+                  - cell "72 450" [ref=e529]
+          - generic [ref=e530]:
+            - generic [ref=e531]: Оголовки
+            - table [ref=e532]:
+              - rowgroup [ref=e533]:
+                - row [ref=e534]:
+                  - cell "Оголовок 200×200 для сваи Ø108" [ref=e535]
+                  - cell "21шт." [ref=e536]
+                  - cell [ref=e537]:
+                    - spinbutton [ref=e538]: "400"
+                  - cell "8 400" [ref=e539]
+          - generic [ref=e540]:
+            - generic [ref=e541]: Материалы
+            - table [ref=e542]:
+              - rowgroup [ref=e543]:
+                - row [ref=e544]:
+                  - cell "ПГС для заполнения полостей свай, мешок 40 кг" [ref=e545]
+                  - cell "20меш." [ref=e546]
+                  - cell [ref=e547]:
+                    - spinbutton [ref=e548]: "130"
+                  - cell "2 600" [ref=e549]
+          - generic [ref=e550]:
+            - generic [ref=e551]: Работы и услуги
+            - table [ref=e552]:
+              - rowgroup [ref=e553]:
+                - row [ref=e554]:
+                  - cell "Монтаж винтовой сваи Ø108 мм" [ref=e555]
+                  - cell "21шт." [ref=e556]
+                  - cell [ref=e557]:
+                    - spinbutton [ref=e558]: "1400"
+                  - cell "29 400" [ref=e559]
+                - row [ref=e560]:
+                  - cell "Доставка материалов и техники на объект" [ref=e561]
+                  - cell "1усл." [ref=e562]
+                  - cell [ref=e563]:
+                    - spinbutton [ref=e564]: "4500"
+                  - cell "4 500" [ref=e565]
+        - generic [ref=e567]:
+          - generic [ref=e568]:
+            - checkbox "Монтаж свай" [checked] [ref=e569]
+            - generic [ref=e570]: Монтаж свай
+          - generic [ref=e571]:
+            - checkbox "Доставка" [checked] [ref=e572]
+            - generic [ref=e573]: Доставка
+            - spinbutton [ref=e574]: "4500"
+          - generic [ref=e575]:
+            - checkbox "Заполнение полостей свай" [checked] [ref=e576]
+            - generic [ref=e577]: Заполнение полостей свай
+          - generic [ref=e578]:
+            - generic [ref=e579]:
+              - generic [ref=e580]: Материал
+              - combobox "Материал" [ref=e581]:
+                - option "ПГС" [selected]
+                - option "Песок строительный"
+                - option "ЦПС М150 (сухая смесь)"
+                - option "ЦПС М300 (сухая смесь)"
+                - option "Бетон М200 (миксером)"
+            - generic [ref=e582]:
+              - generic [ref=e583]: Заполнять, % длины
+              - spinbutton "Заполнять, % длины" [ref=e584]: "100"
+          - generic [ref=e585]:
+            - generic [ref=e586]:
+              - generic [ref=e587]: Фасовка мешка, кг
+              - spinbutton "Фасовка мешка, кг" [ref=e588]: "0"
+            - generic [ref=e589]:
+              - generic [ref=e590]: Мешков в смете
+              - textbox "Мешков в смете" [ref=e591]: "20"
+          - generic [ref=e592]:
+            - checkbox "Обвязка (ростверк)" [ref=e593]
+            - generic [ref=e594]: Обвязка (ростверк)
+          - generic [ref=e595]:
+            - generic [ref=e596]:
+              - generic [ref=e597]: Скидка, %
+              - spinbutton "Скидка, %" [ref=e598]: "0"
+            - generic [ref=e599]:
+              - generic [ref=e600]: НДС, %
+              - combobox "НДС, %" [ref=e601]:
+                - option "без НДС" [selected]
+                - option "20%"
+                - option "5%"
+      - generic [ref=e602]:
+        - generic [ref=e603]:
+          - generic [ref=e604]:
+            - generic [ref=e605]: Изделия
+            - generic [ref=e606]: 83 450 ₽
+          - generic [ref=e607]:
+            - generic [ref=e608]: Работы и услуги
+            - generic [ref=e609]: 33 900 ₽
+          - generic [ref=e610]:
+            - generic [ref=e611]: Итого
+            - generic [ref=e612]: 117 350 ₽
+          - generic [ref=e613]:
+            - generic [ref=e614]: 21 свай · 48.0 м²
+            - generic [ref=e615]: 5 588 ₽/свая · 2 445 ₽/м²
+        - generic [ref=e616]:
+          - button "+ Строка" [ref=e617] [cursor=pointer]
+          - button "CSV" [ref=e618] [cursor=pointer]
+          - button "Копировать КП" [ref=e619] [cursor=pointer]
